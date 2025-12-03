@@ -1,0 +1,95 @@
+/* Ajuste geral */
+body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background-color: #f5f5f7;
+}
+
+/* Logo no cabeçalho */
+.logo-img {
+    height: 120px;
+    width: 120px;
+    object-fit: contain;
+}
+
+.tagline {
+    font-size: 0.75rem;
+    color: #cbd5f5;
+}
+
+/* Hero / banner */
+.hero-section {
+    min-height: 55vh;
+    background-image: linear-gradient(
+            rgba(0, 0, 0, 0.55),
+            rgba(0, 0, 0, 0.7)
+        ),
+        url("../img/hero_abanfar1.jpg");
+    background-size: cover;
+    background-position: center;
+}
+
+/* Cards do blog */
+.blog-card {
+    border: none;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.07);
+}
+
+.blog-card img {
+    max-height: 260px;
+    object-fit: cover;
+}
+
+/* Sidebar */
+.sidebar-card {
+    border: none;
+    border-radius: 0.75rem;
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.06);
+}
+
+/* Galeria de fotos */
+.photo-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    background-color: #222;
+}
+
+.photo-card img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    transition: transform 0.35s ease, opacity 0.35s ease;
+}
+
+.photo-card:hover img {
+    transform: scale(1.05);
+    opacity: 0.9;
+}
+
+/* Rodapé */
+.footer {
+    background-color: #111827;
+    color: #e5e7eb;
+}
+
+.footer-title {
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+}
+
+/* Responsividade */
+@media (max-width: 767.98px) {
+    .hero-section {
+        min-height: 45vh;
+        padding: 3rem 0;
+    }
+
+    .blog-card img {
+        max-height: 220px;
+    }
+}

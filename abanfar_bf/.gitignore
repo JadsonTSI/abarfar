@@ -1,3 +1,7 @@
+# =========================================
+# Python / Django .gitignore (Corrigido)
+# =========================================
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -7,17 +11,24 @@ __pycache__/
 env/
 venv/
 .venv/
+ENV/
+env.bak/
 
-# Django database
+# Django database (local)
 db.sqlite3
 *.sqlite3
 
-# Django media
+# Django media uploads (opcional)
 media/
-staticfiles/
-static/
 
-# Django logs
+# Django staticfiles gerados pelo collectstatic
+# (pode ignorar esta pasta)
+staticfiles/
+
+# NÃO ignorar static dos apps !!!
+# static/  <-- REMOVIDO para permitir CSS e JS no repositório
+
+# Logs
 *.log
 
 # System files
@@ -45,6 +56,12 @@ htmlcov/
 # Environment variables
 .env
 *.env
+.env.*
 
 # Local settings
 local_settings.py
+
+# Backup files
+*.bak
+*.swp
+*~
