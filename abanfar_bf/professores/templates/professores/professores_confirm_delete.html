@@ -1,0 +1,16 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'ensaios_pro.css' %}">
+
+<div class="col-12 col-md-9 col-lg-10 p-4">
+    <div class="form-container">
+        <h2 class="titulo-form">Excluir Professor</h2>
+
+    <p class="text-white">Tem certeza que deseja excluir <strong>{{ professor.nome }}</strong>?</p>
+
+    <form method="POST">
+        {% csrf_token %}
+        <button type="btn-submit">Excluir</button>
+        <a href="{% url 'professores:professores_list' %}" class="btn btn-secondary mt-3">Cancelar</a>
+    </form>
+    </div>
+</div>

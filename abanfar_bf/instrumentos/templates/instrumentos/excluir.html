@@ -1,0 +1,15 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'ensaios_pro.css' %}">
+
+{% block content %}
+<div class="form-container">
+    <h2 class="text-danger">Excluir Instrumento</h2>
+    <p>Tem certeza que deseja excluir <strong>{{ instrumento.nome }}</strong> ({{ instrumento.identificador }})?</p>
+
+    <form method="post">
+        {% csrf_token %}
+        <button class="btn btn-danger">Excluir</button>
+        <a href="{% url 'instrumentos:list' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,264 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Blog ABANFAR BF</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+        crossorigin="anonymous"
+    >
+
+    <!-- CSS próprio -->
+    <link rel="stylesheet" href="{% static 'css/blog.css' %}">
+</head>
+<body>
+
+    <!-- CABEÇALHO -->
+    <header class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow-sm">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="{% url 'home' %}">
+                <!-- Logo -->
+                <img src="{% static 'img/logo_abanfar.png' %}" alt="Logo ABANFAR BF" class="logo-img me-2">
+                <div class="d-flex flex-column">
+                    <span class="fw-bold">ABANFAR BF</span>
+                    <small class="tagline">Associação de Bandas, Fanfarras e Regentes de Baía Formosa/RN</small>
+                </div>
+            </a>
+
+            <!-- Botão toggle no mobile -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Menu / Botão Entrar -->
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ms-3 mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'home' %}">Início</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#sobre">Sobre</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#projetos">Projetos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#galeria">Galeria</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contato">Contato</a>
+                    </li>
+                </ul>
+
+                <!-- Canto superior direito -->
+                <div class="ms-auto d-flex align-items-center">
+                    {% if user.is_authenticated %}
+                        <span class="me-3 text-white-50 small">
+                            Olá, {{ user.first_name|default:user.username }}!
+                        </span>
+
+                <!-- login -->
+                        <a href="{% url 'contas:login' %}" class="btn btn-outline-light btn-sm">
+                            Entrar
+                        </a>
+                    {% else %}
+                <!-- logout -->
+                        <a href="{% url 'contas:logout' %}" class="btn btn-outline-light btn-sm">
+                            Sair
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO / BANNER -->
+    <section class="hero-section text-white d-flex align-items-center">
+        <div class="container text-center">
+            <h1 class="display-5 fw-bold mb-3">Música que transforma vidas</h1>
+            <p class="lead mb-4">
+                A ABANFAR BF promove inclusão social, educação musical e cidadania por meio
+                da música, alcançando crianças, jovens e adultos em Baía Formosa/RN.
+            </p>
+            <a href="#projetos" class="btn btn-primary btn-lg shadow-sm">
+                Conheça nossos projetos
+            </a>
+        </div>
+    </section>
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main class="py-5">
+        <div class="container">
+            <div class="row g-4">
+                <!-- COLUNA PRINCIPAL (BLOG) -->
+                <div class="col-lg-8">
+                    <!-- Se quiser depois, use um for para listar posts do Django -->
+                    {# Exemplo:
+                    {% for post in posts %}
+                        ...
+                    {% endfor %}
+                    #}
+
+                    <!-- Post 1 -->
+                    <article class="card blog-card mb-4">
+                        <img src="{% static 'img/post1.jpeg' %}" class="card-img-top" alt="Foto de apresentação musical">
+                        <div class="card-body">
+                            <h2 class="card-title h4">Nossa história</h2>
+                            <p class="card-text">
+                                Fundada em 2014, a ABANFAR BF é uma associação sem fins lucrativos que
+                                oferece iniciação musical, educação e inclusão social por meio de bandas,
+                                fanfarras, orquestras e projetos comunitários.
+                            </p>
+                            <a href="#" class="btn btn-outline-primary btn-sm">Ler mais</a>
+                        </div>
+                        <div class="card-footer text-muted small">
+                            Publicado em 31/05/2025 • Por Equipe ABANFAR BF
+                        </div>
+                    </article>
+
+                    <!-- Post 2 -->
+                    <article class="card blog-card mb-4">
+                        <img src="{% static 'img/post2.jpg' %}" class="card-img-top" alt="Foto da Banda Musical Francisco Magalhães">
+                        <div class="card-body">
+                            <h2 class="card-title h4">Banda Musical Francisco Magalhães</h2>
+                            <p class="card-text">
+                                A banda trabalha cidadania, sensibilidade e habilidades artísticas, reunindo
+                                jovens em um ambiente de disciplina, trabalho em equipe e amor à música.
+                            </p>
+                            <a href="#" class="btn btn-outline-primary btn-sm">Ver detalhes</a>
+                        </div>
+                        <div class="card-footer text-muted small">
+                            Publicado em 12/04/2025 • Projetos em destaque
+                        </div>
+                    </article>
+
+                    <!-- Post 3 -->
+                    <article class="card blog-card mb-4">
+                        <img src="{% static 'img/post3.jpeg' %}" class="card-img-top" alt="Foto da Orquestra de Flautas">
+                        <div class="card-body">
+                            <h2 class="card-title h4">Orquestra de Flautas Doce</h2>
+                            <p class="card-text">
+                                Projeto voltado para musicalização de crianças e adolescentes, utilizando
+                                a flauta doce como instrumento inicial e porta de entrada para o mundo da música.
+                            </p>
+                            <a href="#" class="btn btn-outline-primary btn-sm">Conhecer o projeto</a>
+                        </div>
+                        <div class="card-footer text-muted small">
+                            Publicado em 20/03/2025 • Orquestra de Flautas
+                        </div>
+                    </article>
+                </div>
+
+                <!-- SIDEBAR -->
+                <aside class="col-lg-4">
+                    <!-- Sobre -->
+                    <section id="sobre" class="card sidebar-card mb-4">
+                        <div class="card-body">
+                            <h3 class="h5 card-title">Sobre a ABANFAR BF</h3>
+                            <p class="card-text small">
+                                Associação apartidária, filantrópica e sem fins lucrativos, dedicada à
+                                educação musical, inclusão social e valorização da cultura em Baía Formosa/RN.
+                            </p>
+                        </div>
+                    </section>
+
+                    <!-- Projetos -->
+                    <section id="projetos" class="card sidebar-card mb-4">
+                        <div class="card-body">
+                            <h3 class="h5 card-title">Projetos em destaque</h3>
+                            <ul class="list-unstyled small mb-0">
+                                <li>• Programa de Educação Musical (3 anos)</li>
+                                <li>• Orquestra de Flautas Doce Som</li>
+                                <li>• Banda Musical Francisco Magalhães</li>
+                                <li>• Orquestra Filarmônica da Associação</li>
+                            </ul>
+                        </div>
+                    </section>
+
+                    <!-- Contato -->
+                    <section id="contato" class="card sidebar-card">
+                        <div class="card-body">
+                            <h3 class="h5 card-title">Contato</h3>
+                            <p class="small mb-1">
+                                Quer apoiar nossos projetos ou tirar dúvidas?
+                            </p>
+                            <p class="small mb-1">
+                                <strong>E-mail:</strong> contato@abanfarbf.org
+                            </p>
+                            <p class="small mb-0">
+                                <strong>Local:</strong> Baía Formosa - RN
+                            </p>
+                        </div>
+                    </section>
+                </aside>
+            </div>
+
+            <!-- GALERIA DE FOTOS -->
+            <section id="galeria" class="mt-5">
+                <h2 class="h3 mb-4 text-center">Galeria de Momentos</h2>
+                <div class="row g-4">
+                    <!-- Card de foto 1 -->
+                    <div class="col-6 col-md-4 col-lg-3">
+                        <div class="photo-card">
+                            <img src="{% static 'img/galeria1.jpg' %}" alt="Apresentação ao ar livre">
+                        </div>
+                    </div>
+                    <!-- Card de foto 2 -->
+                    <div class="col-6 col-md-4 col-lg-3">
+                        <div class="photo-card">
+                            <img src="{% static 'img/galeria2.jpg' %}" alt="Ensaio da banda">
+                        </div>
+                    </div>
+                    <!-- Card de foto 3 -->
+                    <div class="col-6 col-md-4 col-lg-3">
+                        <div class="photo-card">
+                            <img src="{% static 'img/galeria3.jpg' %}" alt="Orquestra em apresentação">
+                        </div>
+                    </div>
+                    <!-- Card de foto 4 -->
+                    <div class="col-6 col-md-4 col-lg-3">
+                        <div class="photo-card">
+                            <img src="{% static 'img/galeria4.jpeg' %}" alt="Alunos em aula de música">
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- RODAPÉ -->
+    <footer class="footer mt-5">
+        <div class="container py-4">
+            <div class="row gy-3 align-items-center">
+                <div class="col-md-6 text-center text-md-start">
+                    <p class="mb-1 footer-title">ABANFAR BF</p>
+                    <p class="mb-0 small">
+                        Música, educação e cidadania para transformar vidas em Baía Formosa/RN.
+                    </p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <p class="mb-1 small">
+                        &copy; {% now "Y" %} ABANFAR BF - Todos os direitos reservados.
+                    </p>
+                    <p class="mb-0 small">
+                        Desenvolvido com <span class="fw-semibold">Django</span> &amp; <span class="fw-semibold">Bootstrap</span>.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"
+    ></script>
+</body>
+</html>

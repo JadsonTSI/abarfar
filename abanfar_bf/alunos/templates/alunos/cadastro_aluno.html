@@ -1,0 +1,68 @@
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'cadastro_aluno.css' %}">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<body style="
+    background-image: url('{% static 'fundo_login.jpg' %}');
+    background-size: cover;
+    background-position: center;
+">
+
+<div class="container cadastro-box">
+    <h1 class="titulo">Cadastro do Aluno</h1>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <div class="row">
+            <div class="col-md-6">
+                <label>Nome:</label>
+                <input type="text" name="nome" class="form-control">
+            </div>
+
+            <div class="col-md-6">
+                <label>Sobrenome:</label>
+                <input type="text" name="sobrenome" class="form-control">
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-md-6">
+                <label>Usuário:</label>
+                <input type="text" name="usuario" class="form-control">
+            </div>
+
+            <div class="col-md-6">
+                <label>E-mail:</label>
+                <input type="email" name="email" class="form-control">
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-md-6">
+                <label>Telefone:</label>
+                <input type="text" name="telefone" class="form-control">
+            </div>
+
+            <div class="col-md-6">
+                <label>Senha:</label>
+                <input type="password" name="senha" class="form-control">
+            </div>
+        </div>
+
+        <div class="text-center mt-4">
+            <button class="btn-submit">Cadastrar</button>
+        </div>
+
+    </form>
+
+    {% if form.non_field_errors %}
+    <div class="alert alert-danger mt-3">
+    {{ form.non_field_errors }}
+    </div>
+    {% endif %}
+
+</div>
+
+</body>
