@@ -42,29 +42,20 @@ Sistema web desenvolvido em **Django** para gerenciamento da escola de música *
 
 ---
 
-## 📁 Estrutura do Projeto
-
-abanfar_bf/
+```
+meu_projeto/
 │
-├── blog/
-│ ├── static/img/logo_abanfar.png
-│ └── templates/
+├── pasta1/
+│   ├── arquivo1.py
+│   └── arquivo2.py
 │
-├── professores/
-│ ├── static/professores/professor.css
-│ ├── static/professores/ensaios_pro.css
-│ ├── templates/professores/
-│ ├── models.py
-│ ├── views.py
-│ ├── urls.py
-│ └── forms.py
-│
-├── projeto_abanfar/
-│ ├── settings.py
-│ ├── urls.py
-│ └── ...
+├── pasta2/
+│   ├── subpasta/
+│   │   └── arquivo3.py
+│   └── arquivo4.py
 │
 └── manage.py
+```
 
 yaml
 Copiar código
