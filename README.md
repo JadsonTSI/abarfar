@@ -1,129 +1,136 @@
-<img src="https://github.com/JadsonTSI/abarfar/blob/main/abanfar_bf/blog/static/img/logo_abanfar.png" width="220"/>
-🎵 ABANFAR – BF
-O Silêncio Pede Música
+# ABANFAR – BF  
+## *O Silêncio Pede Música*
 
-Sistema web desenvolvido em Django para gerenciar atividades da escola de música ABANFAR – BF, incluindo controle de professores, alunos, ensaios, cursos e administração geral.
-O objetivo é facilitar a organização e modernizar o ambiente escolar.
+![Logo Abanfar](https://github.com/JadsonTSI/abarfar/blob/main/abanfar_bf/blog/static/img/logo_abanfar.png)
 
-🚀 Tecnologias Utilizadas
+Sistema web desenvolvido em **Django** para gerenciamento da escola de música **ABANFAR – BF**, oferecendo ferramentas para organização de professores, ensaios, alunos e atividades internas.
 
-Python 3.11+
+---
 
-Django 5
+## 🚀 Tecnologias Utilizadas
+- Python 3.11+
+- Django 5
+- Bootstrap 5
+- HTML & CSS
+- SQLite3
+- Git & GitHub
 
-Bootstrap 5
+---
 
-HTML & CSS
+## 📌 Funcionalidades
 
-SQLite3
+### 🔐 Autenticação
+- Login e logout
+- Proteção de páginas
+- Painel restrito
 
-Django Template Language
+### 👨‍🏫 Professores
+- Cadastro
+- Edição
+- Exclusão
+- Listagem completa
 
-Git & GitHub
+### 🥁 Ensaios
+- Registro de ensaios
+- Relacionamento com professor
 
-📌 Funcionalidades do Sistema
-🔐 Autenticação
+### 👥 Alunos *(em desenvolvimento)*
+- Cadastro
+- Listagem
 
-Login e logout
+### 📚 Cursos e Turmas *(em desenvolvimento)*
 
-Controle de acesso
+---
 
-Perfis de usuário (Admin, Professores, etc.)
+## 📁 Estrutura do Projeto
 
-👨‍🏫 Professores
-
-Cadastro
-
-Edição
-
-Exclusão
-
-Listagem completa
-
-🎼 Ensaios / Aulas
-
-Registro de ensaios
-
-Organização por data
-
-Vinculação ao professor
-
-👥 Alunos (futuro módulo)
-
-Cadastro e gerenciamento
-
-📚 Cursos / Turmas (futuro módulo)
-📁 Estrutura do Projeto
 abanfar_bf/
 │
 ├── blog/
-│   ├── static/
-│   │   └── img/
-│   │       └── logo_abanfar.png
-│   ├── templates/
-│   └── ...
+│ ├── static/img/logo_abanfar.png
+│ └── templates/
 │
 ├── professores/
-│   ├── static/professores/
-│   │   ├── professor.css
-│   │   └── ensaios_pro.css
-│   ├── templates/professores/
-│   ├── models.py
-│   ├── views.py
-│   ├── urls.py
-│   └── forms.py
+│ ├── static/professores/professor.css
+│ ├── static/professores/ensaios_pro.css
+│ ├── templates/professores/
+│ ├── models.py
+│ ├── views.py
+│ ├── urls.py
+│ └── forms.py
 │
 ├── projeto_abanfar/
-│   ├── settings.py
-│   ├── urls.py
-│   └── ...
+│ ├── settings.py
+│ ├── urls.py
+│ └── ...
 │
 └── manage.py
 
-⚙️ Como Rodar o Projeto Localmente
-1️⃣ Clone o repositório
+yaml
+Copiar código
+
+---
+
+## ⚙️ Como Rodar o Projeto
+
+### 1️⃣ Clone o repositório
 git clone https://github.com/JadsonTSI/abarfar.git
 cd abarfar
 
-2️⃣ Crie e ative o ambiente virtual
-python -m venv venv
-venv\Scripts\activate     # Windows
-source venv/bin/activate  # Linux/macOS
+shell
+Copiar código
 
-3️⃣ Instale as dependências
+### 2️⃣ Crie e ative o ambiente virtual
+python -m venv venv
+venv/Scripts/activate # Windows
+source venv/bin/activate # Linux/macOS
+
+shell
+Copiar código
+
+### 3️⃣ Instale as dependências
 pip install -r requirements.txt
 
-4️⃣ Aplique as migrações
+shell
+Copiar código
+
+### 4️⃣ Rode as migrações
 python manage.py migrate
 
-5️⃣ Crie um superusuário
+shell
+Copiar código
+
+### 5️⃣ Crie um usuário administrador
 python manage.py createsuperuser
 
-6️⃣ Inicie o servidor
+shell
+Copiar código
+
+### 6️⃣ Inicie o servidor
 python manage.py runserver
 
+yaml
+Copiar código
 
-Acesse em:
-👉 http://127.0.0.1:8000/
+Acesse:  
+**http://127.0.0.1:8000/**
 
-🛠️ Roadmap – Próximos Recursos
+---
 
-Área exclusiva do aluno
+## 🛠️ Roadmap
 
-Módulo financeiro
+- Área do aluno  
+- Controle de presença  
+- Notas e desempenho  
+- Dashboard administrativo  
+- API REST  
+- Exportação de relatórios PDF  
 
-Controle de presença
+---
 
-Registro de notas e desempenho
+## 👤 Autor
 
-Exportação de relatórios em PDF
+**Jadson Leitão**  
+Estudante de Sistemas para Internet • Desenvolvedor Django  
 
-API REST (Django Rest Framework)
-
-Dashboard administrativo
-
-👤 Autor
-
-Jadson Leitão
-Estudante de Sistemas para Internet • Desenvolvedor Backend (Django)
-Projeto oficial da escola ABANFAR – BF
+---
