@@ -41,7 +41,7 @@ Sistema web desenvolvido em **Django** para gerenciamento da escola de música *
 ### 📚 Cursos e Turmas *(em desenvolvimento)*
 
 ---
-
+📁 Estrutura do Projeto
 ```
 meu_projeto/
 │
