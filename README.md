@@ -41,7 +41,7 @@ Sistema web desenvolvido em **Django** para gerenciamento da escola de música *
 ### 📚 Cursos e Turmas *(em desenvolvimento)*
 
 ---
-###📁 Estrutura do Projeto
+### 📁 Estrutura do Projeto
 ```
 meu_projeto/
 │
@@ -64,55 +64,55 @@ meu_projeto/
 
 ### 1️⃣ Clone o repositório
 
-´´´
+```
 git clone https://github.com/JadsonTSI/abarfar.git
-´´´
-´´´
+```
+```
 cd abarfar
-´´´
+```
 
 
 ### 2️⃣ Crie e ative o ambiente virtual
-´´´
+```
 python -m venv venv
-´´´
-´´´
+```
+```
 venv/Scripts/activate # Windows
-´´´
-´´´
+```
+```
 source venv/bin/activate # Linux/macOS
-´´´
+```
 
 ### 3️⃣ Instale as dependências
-´´´
+```
 pip install -r requirements.txt
-´´´
+```
 
 
 ### 4️⃣ Rode as migrações
-´´´
+```
 python manage.py migrate
-´´´
+```
 
 
 ### 5️⃣ Crie um usuário administrador
-´´´
+```
 python manage.py createsuperuser
-´´´
+```
 
 
 
 ### 6️⃣ Inicie o servidor
-´´´
+```
 python manage.py runserver
-´´´
+```
 
 
 
 Acesse:  
-´´´
+```
 **http://127.0.0.1:8000/**
-´´´
+```
 
 ---
 
