@@ -1,0 +1,28 @@
+body {
+    background: #f4f4f4;
+}
+
+.custom-card {
+    background: #1b1919;
+    color: white;
+    border-radius: 15px;
+    padding: 20px;
+}
+
+.custom-card .card-header {
+    background: transparent;
+    border-bottom: 1px solid #444;
+    margin-bottom: 15px;
+}
+
+.lista-musicos li,
+.lista-partituras li {
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+}
+
+.titulo-pagina {
+    color: #000;
+    font-size: 2rem;
+    margin-bottom: 25px;
+}

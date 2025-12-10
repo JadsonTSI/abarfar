@@ -22,7 +22,9 @@ urlpatterns = [
     path("ensaios/<int:id>/cancelar/", views.cancelar_ensaio, name="cancelar_ensaio"),
     path("ensaios/<int:id>/restaurar/", views.restaurar_ensaio, name="restaurar_ensaio"),
     path("professores/", views.professores_list, name="professores_list"),
-path("professores/novo/", views.professores_create, name="professores_create"),
-path("professores/editar/<int:id>/", views.professores_edit, name="professores_edit"),
-path("professores/excluir/<int:id>/", views.professores_delete, name="professores_delete"),
+    path("professores/novo/", views.professores_create, name="professores_create"),
+    path("professores/editar/<int:id>/", views.professores_edit, name="professores_edit"),
+    path("professores/excluir/<int:id>/", views.professores_delete, name="professores_delete"),
+    path("naipes/", views.naipes_view, name="naipes"),
+    path("naipes/<str:nome>/", views.naipe_detalhe, name="naipe_detalhe"),
 ]

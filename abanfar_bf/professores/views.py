@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import EnsaiosproModel, ApresentacaoModel, ProfessorModel
 from .forms import EnsaiosForm, ApresentacaoForm, ProfessorForm, ProfessorEditForm
 from django.http import HttpResponse
+from alunos.models import Aluno, Naipe
 
 # home
 
@@ -162,4 +163,19 @@ def professores_delete(request, id):
         return redirect("professores:professores_list")
 
     return render(request, "professores/professores_confirm_delete.html", {"professor": professor})
+
+
+def naipes_view(request):
+    naipes = Naipe.objects.all().order_by("nome")
+    return render(request, "professores/naipes.html", {"naipes": naipes})
+
+
+def naipe_detalhe(request, nome):
+    naipe = get_object_or_404(Naipe, nome=nome)
+    alunos = Aluno.objects.filter(naipe=naipe)
+
+    return render(request, "professores/naipe_detalhe.html", {
+        "naipe": naipe,
+        "alunos": alunos
+    })
 

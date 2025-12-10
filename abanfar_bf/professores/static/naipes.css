@@ -1,0 +1,131 @@
+/* ========= BASE ========= */
+
+body {
+    background-color: #f5f5f5;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* ========= SIDEBAR ========= */
+
+.sidebar {
+    width: 260px;
+    min-height: 100vh;
+    background-color: #111111;
+    color: #ffffff;
+    border-right: 3px solid #7b4bff;
+    position: fixed;
+    left: 0;
+    top: 0;
+    padding-top: 10px;
+}
+
+/* Topo */
+
+.sidebar-top {
+    border-bottom: 1px solid #222;
+}
+
+.logo-text {
+    font-size: 1.3rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.btn-circle {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: none;
+    background-color: #ffffff;
+    color: #000000;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Perfil */
+
+.profile-icon i {
+    font-size: 3rem;
+    color: #ffffff;
+}
+
+.btn-profile {
+    border-radius: 999px;
+    padding: 0.35rem 2rem;
+    background-color: #ffffff;
+    color: #000000;
+    font-weight: 600;
+    border: none;
+}
+
+/* Menu */
+
+.sidebar-menu ul {
+    padding-left: 0;
+}
+
+.sidebar-menu .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #fff;
+    font-weight: 500;
+    font-size: 1rem;
+    padding: 10px 25px;
+    border-radius: 999px;
+}
+
+.sidebar-menu .nav-link i {
+    font-size: 1.4rem;
+}
+
+.sidebar-menu .nav-link:hover {
+    background-color: #1f1f1f;
+    padding-left: 35px;
+    transition: all 0.2s ease;
+}
+
+/* ======== GRID DE NAIPES ======== */
+
+.naipes-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 35px;
+}
+
+.naipe-box {
+    background: #181818;
+    height: 260px;
+    text-align: center;
+    border-radius: 25px;
+    padding: 25px;
+    text-decoration: none;
+    color: #fff;
+    border: 2px solid #000;
+    transition: 0.2s;
+}
+
+.naipe-box:hover {
+    background: #222;
+    transform: scale(1.03);
+    border-color: #7b4bff;
+}
+
+.naipe-icon img {
+    width: 120px;
+}
+
+.naipe-title {
+    font-weight: bold;
+    font-size: 28px;
+    margin-top: 15px;
+}
+
+/* empurrar conteúdo para a direita por causa do sidebar fixo */
+.content-area {
+    margin-left: 260px; /* mesma largura do sidebar */
+    padding: 40px;
+}

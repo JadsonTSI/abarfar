@@ -1,0 +1,53 @@
+/* ======== GRID ======== */
+.materias-grid {
+    margin-left: 280px; 
+    padding: 40px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 35px;
+}
+
+/* ======== CARD ======== */
+.materia-card {
+    background: #181818;
+    border-radius: 22px;
+    padding: 25px;
+    color: #fff;
+    border: 2px solid #000;
+    transition: 0.25s;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+}
+
+.materia-card:hover {
+    border-color: #7b4bff;
+    transform: translateY(-4px);
+}
+
+/* Título */
+.materia-nome {
+    font-size: 26px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+/* Botão */
+.btn-materia {
+    display: inline-block;
+    background: #7b4bff;
+    padding: 10px 22px;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: .2s;
+}
+
+.btn-materia:hover {
+    background: #9b6aff;
+}
+
+/* Sem link */
+.sem-link {
+    color: #ccc;
+    font-style: italic;
+}

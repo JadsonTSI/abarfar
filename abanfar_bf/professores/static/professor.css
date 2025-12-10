@@ -126,6 +126,10 @@ body {
     line-height: 1.55;
 }
 
+
+
+
+
 /* ========= RESPONSIVO ========= */
 
 @media (max-width: 991.98px) {
@@ -159,3 +163,5 @@ body {
         display: none;
     }
 }
+
+

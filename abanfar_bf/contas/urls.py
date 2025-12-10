@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from .views import perfil_view
 
 app_name = "contas"
 
@@ -14,5 +15,9 @@ urlpatterns = [
     path("gerente/", views.painel_gerente, name="painel_gerente"),
     path("professor/", views.painel_professor, name="painel_professor"),
     path("aluno/", views.painel_aluno, name="painel_aluno"),
+    path("perfil/", perfil_view, name="perfil"),
+    path('alterar-foto/', views.alterar_foto, name="alterar_foto")
+
+
 ]
 

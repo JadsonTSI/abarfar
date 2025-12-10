@@ -45,6 +45,7 @@ class ProfessorForm(forms.Form):
 
         # salvar tabela professor
         professor = ProfessorModel.objects.create(
+            perfil=perfil,  # já liga o perfil ao professor 
             nome=self.cleaned_data["nome"],
             email=self.cleaned_data["email"],
             telefone=self.cleaned_data["telefone"],

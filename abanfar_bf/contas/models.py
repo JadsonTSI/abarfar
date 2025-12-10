@@ -12,6 +12,8 @@ class Perfil(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     tipo = models.CharField(max_length=20, choices=TIPOS)
+    foto = models.ImageField(upload_to="perfil_fotos/", null=True, blank=True)
+
 
     def __str__(self):
         return f"{self.user.username} - {self.tipo}"

@@ -47,11 +47,19 @@ class ApresentacaoModel(models.Model):
 # bd cadastro professor
 
 class ProfessorModel(models.Model):
-    nome = models.CharField(max_length=150)
-    email = models.EmailField(unique=True)
+    perfil = models.OneToOneField(
+        Perfil,
+        on_delete=models.CASCADE,
+        related_name="professor"  # ISSO É ESSENCIAL!!!
+    )
+
+    nome = models.CharField(max_length=100)
+    email = models.EmailField()
     telefone = models.CharField(max_length=20)
     instrumento = models.CharField(max_length=100)
     ativo = models.BooleanField(default=True)
 
     def __str__(self):
         return self.nome
+
+    
