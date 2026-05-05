@@ -3,6 +3,7 @@
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Ensaios do Aluno</title>
 
     <!-- Bootstrap -->
@@ -63,7 +64,7 @@
 
         <!-- ================= CONTEÚDO PRINCIPAL ================= -->
         <main class="col-12 col-md-9 col-lg-10 p-4">
-          <h2 class="mb-4 text-white fw-bold">Ensaios Marcados</h2>
+          <h2 class="mb-4 text-black fw-bold">Ensaios Marcados</h2>
 
           <div class="row g-4">
             {% for ensaio in ensaios %}
@@ -87,13 +88,6 @@
               <p class="text-white">Nenhum ensaio marcado.</p>
             {% endfor %}
           </div>
-
-          {% if ensaio.cancelado %}
-            <div class="alert alert-danger mt-3 p-2 text-center fw-bold" style="border-radius: 15px;">
-              <i class="bi bi-exclamation-octagon-fill me-2"></i>
-              ENSAIO CANCELADO
-            </div>
-          {% endif %}
         </main>
         <!-- ================= FIM DO CONTEÚDO ================= -->
       </div>

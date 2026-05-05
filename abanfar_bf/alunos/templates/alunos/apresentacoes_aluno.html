@@ -3,6 +3,7 @@
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Apresentações</title>
 
     <!-- Bootstrap -->
@@ -54,7 +55,7 @@
               </li>
 
               <li class="nav-item mb-3">
-                <a href="{% url 'alunos:apresentacoes' %}" class="nav-link"><i class="bi bi-calendar-event me-3"></i> APRESENTAÇÕES</a>
+                <a href="{% url 'alunos:apresentacoes' %}" class="nav-link active"><i class="bi bi-calendar-event me-3"></i> APRESENTAÇÕES</a>
               </li>
             </ul>
           </nav>
@@ -62,7 +63,7 @@
 
         <!-- CONTEÚDO -->
         <main class="col-12 col-md-9 col-lg-10 p-4">
-          <h2 class="mb-4 text-white fw-bold">Próximas Apresentações</h2>
+          <h2 class="mb-4 text-black fw-bold">Próximas Apresentações</h2>
 
           <div class="row g-4">
             {% for ap in apresentacoes %}

@@ -36,7 +36,27 @@ class AlunoCadastroForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        # Carrega todos os grupos
         self.fields["grupo"].queryset = GrupoMusical.objects.all()
+
+        # ===========================
+        # FILTRAR INSTRUMENTOS JÁ USADOS
+        # ===========================
+        from alunos.models import Aluno
+
+        # IDs de instrumentos que já estão associados a alunos
+        instrumentos_usados = Aluno.objects.exclude(
+            instrumento__isnull=True
+        ).values_list("instrumento_id", flat=True)
+
+        # Instrumentos ainda disponíveis
+        instrumentos_disponiveis = Instrumento.objects.exclude(
+            id__in=instrumentos_usados
+        )
+
+        self.fields["instrumento"].queryset = instrumentos_disponiveis
+
 
     def save(self):
         username = self.cleaned_data["usuario"]

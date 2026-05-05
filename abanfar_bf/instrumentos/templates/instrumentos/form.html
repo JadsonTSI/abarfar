@@ -29,52 +29,45 @@
 
         <!-- SIDEBAR (mesmo modelo da tela enviada) -->
         <aside class="col-12 col-md-3 col-lg-2 sidebar d-flex flex-column">
+          <div class="d-flex align-items-center justify-content-between px-3 py-3 sidebar-top">
+            <h2 class="logo-text mb-0">ABANFAR-BF</h2>
+            <button class="btn btn-circle"><i class="bi bi-person-fill"></i></button>
+          </div>
 
-            <div class="d-flex align-items-center justify-content-between px-3 py-3 sidebar-top">
-                <h2 class="logo-text mb-0">ABANFAR-BF</h2>
-                <button class="btn btn-circle">
-                    <i class="bi bi-person-fill"></i>
-                </button>
+          <div class="sidebar-profile text-center py-3">
+            <div class="profile-icon mb-2">
+              <i class="bi bi-person-circle"></i>
             </div>
+            <button class="btn btn-profile">Gerente</button>
+          </div>
 
-            <div class="sidebar-profile text-center py-3">
-                <div class="profile-icon mb-2">
-                    <i class="bi bi-person-circle"></i>
-                </div>
-                <button class="btn btn-profile">GERENTE</button>
-            </div>
+          <nav class="sidebar-menu flex-grow-1 mt-3">
+            <ul class="nav flex-column">
+              <li class="nav-item mb-3">
+                <a href="{% url 'contas:painel_gerente' %}" class="nav-link"><i class="bi bi-speedometer2 me-2"></i> Início</a>
+              </li>
 
-            <nav class="sidebar-menu flex-grow-1 mt-4">
-                <ul class="nav flex-column">
-                    <li class="nav-item mb-3">
-                        <a href="{% url 'contas:painel_gerente' %}" class="nav-link d-flex align-items-center">
-                            <i class="bi bi-house-door me-3"></i>
-                            <span>INÍCIO</span>
-                        </a>
-                    </li>
+              <li class="nav-item mb-3">
+                <a href="{% url 'contas:lista_alunos' %}" class="nav-link"><i class="bi bi-people-fill me-2"></i> Alunos</a>
+              </li>
 
-                    <li class="nav-item mb-3">
-                        <a href="{% url 'contas:lista_alunos' %}" class="nav-link d-flex align-items-center">
-                            <i class="bi bi-people-fill me-3"></i>
-                            <span>ALUNOS</span>
-                        </a>
-                    </li>
+              <li class="nav-item mb-3">
+                <a href="{% url 'professores:professores_list' %}" class="nav-link"><i class="bi bi-person-workspace me-2"></i> Professores</a>
+              </li>
 
-                    <li class="nav-item mb-3">
-                        <a href="{% url 'professores:professores_list' %}" class="nav-link d-flex align-items-center">
-                            <i class="bi bi-person-workspace me-3"></i>
-                            <span>PROFESSORES</span>
-                        </a>
-                    </li>
+              <li class="nav-item mb-3">
+                <a href="{% url 'materias:materias_gerente' %}" class="nav-link"><i class="bi bi-journal-text me-2"></i> Matérias</a>
+              </li>
 
-                    <li class="nav-item mb-3">
-                        <a href="{% url 'instrumentos:list' %}" class="nav-link d-flex align-items-center">
-                            <i class="bi bi-music-note-list me-3"></i>
-                            <span>INSTRUMENTOS</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
+              <li class="nav-item mb-3">
+                <a href="{% url 'instrumentos:list' %}" class="nav-link active"><i class="bi bi-music-note-list me-2"></i> Instrumentos</a>
+              </li>
+
+              <li class="nav-item mb-3">
+                <a href="{% url 'grupos:listar' %}" class="nav-link"><i class="bi bi-music-note-list me-2"></i> Grupos Musicais</a>
+              </li>
+            </ul>
+          </nav>
         </aside>
 
 

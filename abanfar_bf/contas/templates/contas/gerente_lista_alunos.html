@@ -1,114 +1,1085 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="pt-br">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Alunos Cadastrados</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alunos Cadastrados — ABANFAR BF</title>
 
     <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Cormorant+Garamond:wght@300;400;600&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 
-    <!-- Seu CSS -->
-    <link rel="stylesheet" href="{% static 'professor.css' %}" />
-  </head>
+    <style>
+        :root {
+            --gold:        #C9A84C;
+            --gold-light:  #E8C96A;
+            --gold-pale:   #F5E9C8;
+            --gold-dim:    #9A7A30;
+            --cream:       #FDFAF3;
+            --white:       #FFFFFF;
+            --ink:         #1A1612;
+            --ink-soft:    #3D3530;
+            --gray-text:   #7A6E65;
+            --gray-line:   #E8E0D4;
+            --section-bg:  #F9F5EC;
+            --sidebar-w:   260px;
+            --sidebar-w-collapsed: 72px;
+            --topbar-h:    64px;
+            --radius-lg:   1.1rem;
+            --radius-sm:   0.55rem;
+            --shadow-gold: 0 4px 24px rgba(201,168,76,0.16);
+            --shadow-soft: 0 4px 20px rgba(26,22,18,0.07);
+            --transition:  0.26s ease;
+        }
 
-  <body>
-    <div class="container-fluid g-0">
-      <div class="row g-0">
-        <!-- SIDEBAR -->
-        <aside class="col-12 col-md-3 col-lg-2 sidebar d-flex flex-column">
-          <!-- topo -->
-          <div class="d-flex align-items-center justify-content-between px-3 py-3 sidebar-top">
-            <h2 class="logo-text mb-0">ABANFAR-BF</h2>
-            <button class="btn btn-circle"><i class="bi bi-person-fill"></i></button>
-          </div>
+        *, *::before, *::after { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
 
-          <!-- perfil -->
-          <div class="sidebar-profile text-center py-3">
-            <div class="profile-icon mb-2">
-              <i class="bi bi-person-circle"></i>
+        body {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            background: var(--section-bg);
+            color: var(--ink-soft);
+            margin: 0; padding: 0;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        h1,h2,h3,h4,h5 { font-family: 'Playfair Display', Georgia, serif; color: var(--ink); }
+
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-track { background: var(--cream); }
+        ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 3px; }
+
+        /* =============================================
+           LAYOUT
+        ============================================= */
+        .app-shell { display: flex; min-height: 100vh; }
+
+        /* =============================================
+           SIDEBAR
+        ============================================= */
+        .sidebar {
+            width: var(--sidebar-w);
+            min-height: 100vh;
+            background: var(--ink);
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 0; left: 0; bottom: 0;
+            z-index: 200;
+            transition: width var(--transition), transform var(--transition);
+            overflow: hidden;
+            border-right: 2px solid var(--gold);
+        }
+
+        .sidebar.collapsed { width: var(--sidebar-w-collapsed); }
+
+        .sidebar.collapsed .sidebar-label,
+        .sidebar.collapsed .sidebar-profile-name,
+        .sidebar.collapsed .sidebar-brand-text,
+        .sidebar.collapsed .nav-label,
+        .sidebar.collapsed .sidebar-footer-text { opacity: 0; width: 0; overflow: hidden; white-space: nowrap; }
+
+        .sidebar-top {
+            padding: 0 1rem;
+            height: var(--topbar-h);
+            display: flex; align-items: center; justify-content: space-between;
+            border-bottom: 1px solid rgba(201,168,76,0.15);
+            flex-shrink: 0;
+        }
+
+        .sidebar-brand { display: flex; align-items: center; gap: 0.7rem; text-decoration: none; overflow: hidden; }
+
+        .sidebar-logo-ring {
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            border: 1.5px solid var(--gold);
+            background: var(--gold-pale);
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0; overflow: hidden;
+        }
+
+        .sidebar-logo-ring img { width: 100%; height: 100%; object-fit: contain; border-radius: 50%; }
+        .sidebar-logo-placeholder { font-size: 1.1rem; color: var(--gold); }
+
+        .sidebar-brand-text { transition: opacity var(--transition), width var(--transition); }
+
+        .brand-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 1rem; font-weight: 700; color: var(--gold);
+            display: block; line-height: 1.1;
+        }
+
+        .brand-sub {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 0.58rem; letter-spacing: 0.06em; color: #5A5450; display: block;
+        }
+
+        .btn-collapse {
+            width: 30px; height: 30px; border-radius: 50%;
+            background: rgba(201,168,76,0.1); border: 1px solid rgba(201,168,76,0.2);
+            color: var(--gold); display: flex; align-items: center; justify-content: center;
+            cursor: pointer; flex-shrink: 0; transition: background var(--transition); font-size: 0.9rem;
+        }
+
+        .btn-collapse:hover { background: rgba(201,168,76,0.22); }
+
+        .sidebar-profile {
+            padding: 1.2rem 1rem;
+            border-bottom: 1px solid rgba(201,168,76,0.12);
+            display: flex; align-items: center; gap: 0.85rem;
+            flex-shrink: 0; overflow: hidden;
+        }
+
+        .profile-avatar {
+            width: 42px; height: 42px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--gold-pale), var(--gold));
+            border: 2px solid var(--gold);
+            display: flex; align-items: center; justify-content: center;
+            color: var(--gold-dim); font-size: 1.1rem; flex-shrink: 0;
+        }
+
+        .sidebar-profile-name { transition: opacity var(--transition), width var(--transition); overflow: hidden; }
+
+        .profile-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 0.9rem; font-weight: 700; color: var(--white);
+            display: block; white-space: nowrap;
+        }
+
+        .profile-role {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 0.6rem; letter-spacing: 0.14em; text-transform: uppercase;
+            color: var(--gold); display: block;
+        }
+
+        .sidebar-nav { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 0.8rem 0; }
+
+        .nav-section-label {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 0.6rem; letter-spacing: 0.22em; text-transform: uppercase;
+            color: #4A4440; padding: 0.5rem 1.2rem 0.3rem;
+            white-space: nowrap; overflow: hidden;
+        }
+
+        .sidebar-link {
+            display: flex; align-items: center; gap: 0.85rem;
+            padding: 0.65rem 1.2rem; color: #8A8078; text-decoration: none;
+            font-family: 'Libre Baskerville', serif; font-size: 0.78rem; letter-spacing: 0.04em;
+            position: relative; white-space: nowrap; overflow: hidden;
+            margin: 0.1rem 0.6rem; border-radius: var(--radius-sm);
+            transition: color var(--transition), background var(--transition);
+        }
+
+        .sidebar-link i { font-size: 1.05rem; flex-shrink: 0; width: 20px; text-align: center; }
+        .nav-label { transition: opacity var(--transition), width var(--transition); }
+
+        .sidebar-link:hover { color: var(--gold-light); background: rgba(201,168,76,0.07); }
+        .sidebar-link:hover i { color: var(--gold); }
+        .sidebar-link.active { color: var(--gold); background: rgba(201,168,76,0.12); border-left: 2px solid var(--gold); }
+        .sidebar-link.active i { color: var(--gold); }
+
+        .sidebar-footer {
+            padding: 0.9rem 1rem;
+            border-top: 1px solid rgba(201,168,76,0.12);
+            flex-shrink: 0;
+        }
+
+        .sidebar-footer-text {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 0.58rem; letter-spacing: 0.06em; color: #3A3430;
+            display: block; margin-bottom: 0.6rem; white-space: nowrap;
+            overflow: hidden; transition: opacity var(--transition);
+        }
+
+        .btn-logout {
+            display: flex; align-items: center; gap: 0.6rem;
+            padding: 0.5rem 0.8rem; border-radius: var(--radius-sm);
+            background: rgba(180,60,60,0.1); border: 1px solid rgba(180,60,60,0.2);
+            color: #C07070; font-family: 'Libre Baskerville', serif;
+            font-size: 0.72rem; letter-spacing: 0.06em; text-decoration: none;
+            transition: background var(--transition), color var(--transition); width: 100%;
+        }
+
+        .btn-logout:hover { background: rgba(180,60,60,0.18); color: #E09090; }
+
+        .sidebar-deco {
+            position: absolute; bottom: 100px; right: 0.5rem;
+            font-size: 5rem; color: var(--gold); opacity: 0.03;
+            pointer-events: none; font-family: serif; line-height: 1;
+        }
+
+        /* =============================================
+           MAIN AREA
+        ============================================= */
+        .main-area {
+            margin-left: var(--sidebar-w);
+            flex: 1; display: flex; flex-direction: column;
+            min-height: 100vh;
+            transition: margin-left var(--transition);
+        }
+
+        .main-area.expanded { margin-left: var(--sidebar-w-collapsed); }
+
+        /* =============================================
+           TOP BAR
+        ============================================= */
+        .topbar {
+            height: var(--topbar-h);
+            background: var(--white);
+            border-bottom: 2px solid var(--gold);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 1.8rem;
+            position: sticky; top: 0; z-index: 100;
+            box-shadow: 0 2px 16px rgba(201,168,76,0.1);
+            gap: 1rem;
+        }
+
+        .topbar-left { display: flex; align-items: center; gap: 1rem; }
+
+        .breadcrumb-custom {
+            display: flex; align-items: center; gap: 0.4rem;
+            font-family: 'Libre Baskerville', serif;
+            font-size: 0.72rem; letter-spacing: 0.06em; color: var(--gray-text);
+        }
+
+        .breadcrumb-custom .bc-sep { color: var(--gold); font-size: 0.6rem; }
+        .breadcrumb-custom .bc-active { color: var(--ink); font-weight: 700; }
+
+        .topbar-right { display: flex; align-items: center; gap: 0.8rem; }
+
+        .topbar-search {
+            display: flex; align-items: center;
+            background: var(--section-bg); border: 1.5px solid var(--gray-line);
+            border-radius: var(--radius-sm); padding: 0.35rem 0.8rem; gap: 0.5rem;
+            transition: border-color var(--transition), box-shadow var(--transition);
+        }
+
+        .topbar-search:focus-within { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,168,76,0.12); }
+
+        .topbar-search input {
+            border: none; background: transparent; outline: none;
+            font-family: 'Cormorant Garamond', serif; font-size: 0.95rem; color: var(--ink); width: 200px;
+        }
+
+        .topbar-search input::placeholder { color: #B0A498; }
+        .topbar-search i { color: var(--gold-dim); font-size: 0.9rem; }
+
+        .topbar-icon-btn {
+            width: 36px; height: 36px; border-radius: 50%;
+            background: var(--section-bg); border: 1.5px solid var(--gray-line);
+            display: flex; align-items: center; justify-content: center;
+            color: var(--gray-text); font-size: 0.95rem; cursor: pointer;
+            text-decoration: none; transition: all var(--transition); position: relative;
+        }
+
+        .topbar-icon-btn:hover { border-color: var(--gold); color: var(--gold); background: var(--gold-pale); }
+
+        .badge-dot {
+            position: absolute; top: -1px; right: -1px;
+            width: 8px; height: 8px; background: #E06060;
+            border-radius: 50%; border: 2px solid var(--white);
+        }
+
+        .topbar-user {
+            display: flex; align-items: center; gap: 0.55rem;
+            padding: 0.3rem 0.8rem 0.3rem 0.4rem;
+            background: var(--gold-pale); border: 1.5px solid rgba(201,168,76,0.3);
+            border-radius: 2rem; cursor: pointer; transition: all var(--transition);
+        }
+
+        .topbar-user:hover { border-color: var(--gold); }
+
+        .topbar-avatar {
+            width: 28px; height: 28px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--gold), var(--gold-light));
+            display: flex; align-items: center; justify-content: center;
+            color: var(--ink); font-size: 0.75rem; font-weight: 700;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .topbar-username { font-family: 'Libre Baskerville', serif; font-size: 0.72rem; color: var(--gold-dim); font-weight: 700; }
+
+        /* =============================================
+           PAGE CONTENT
+        ============================================= */
+        .page-content { padding: 2rem 2rem 3rem; flex: 1; }
+
+        .page-header { margin-bottom: 1.8rem; }
+
+        .page-eyebrow {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 0.68rem; letter-spacing: 0.26em; text-transform: uppercase;
+            color: var(--gold); display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.4rem;
+        }
+
+        .page-eyebrow::before { content: ''; width: 24px; height: 1px; background: var(--gold); }
+
+        .page-title { font-family: 'Playfair Display', serif; font-size: clamp(1.5rem,2.5vw,2rem); font-weight: 900; color: var(--ink); margin: 0 0 0.3rem; }
+
+        .page-subtitle { font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; color: var(--gray-text); margin: 0; }
+
+        .gold-rule { height: 2px; background: linear-gradient(90deg, var(--gold), transparent); border: none; margin: 1.5rem 0 2rem; opacity: 0.4; }
+
+        /* =============================================
+           SECTION CARD
+        ============================================= */
+        .section-card {
+            background: var(--white); border-radius: var(--radius-lg);
+            border: 1px solid var(--gray-line); box-shadow: var(--shadow-soft); overflow: hidden;
+        }
+
+        .section-card-header {
+            padding: 1.1rem 1.5rem; border-bottom: 1px solid var(--gray-line);
+            display: flex; align-items: center; justify-content: space-between;
+            background: var(--section-bg); gap: 0.5rem; flex-wrap: wrap;
+        }
+
+        .section-card-title {
+            font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700;
+            color: var(--ink); display: flex; align-items: center; gap: 0.5rem; margin: 0;
+        }
+
+        .section-card-title i { color: var(--gold); }
+
+        /* =============================================
+           TOOLBAR (search + filters + add button)
+        ============================================= */
+        .table-toolbar {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--gray-line);
+            display: flex; align-items: center; justify-content: space-between;
+            gap: 1rem; flex-wrap: wrap;
+            background: var(--white);
+        }
+
+        .toolbar-left { display: flex; align-items: center; gap: 0.7rem; flex-wrap: wrap; }
+
+        .filter-search {
+            display: flex; align-items: center;
+            background: var(--section-bg); border: 1.5px solid var(--gray-line);
+            border-radius: var(--radius-sm); padding: 0.4rem 0.9rem; gap: 0.5rem;
+            transition: border-color var(--transition), box-shadow var(--transition);
+        }
+
+        .filter-search:focus-within { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,168,76,0.12); }
+
+        .filter-search input {
+            border: none; background: transparent; outline: none;
+            font-family: 'Cormorant Garamond', serif; font-size: 1rem; color: var(--ink); width: 220px;
+        }
+
+        .filter-search input::placeholder { color: #B0A498; }
+        .filter-search i { color: var(--gold-dim); font-size: 0.9rem; }
+
+        .filter-select {
+            border: 1.5px solid var(--gray-line);
+            border-radius: var(--radius-sm);
+            padding: 0.42rem 0.85rem;
+            font-family: 'Cormorant Garamond', serif; font-size: 1rem; color: var(--ink-soft);
+            background: var(--section-bg); outline: none;
+            transition: border-color var(--transition);
+            cursor: pointer;
+        }
+
+        .filter-select:focus { border-color: var(--gold); }
+
+        /* =============================================
+           BUTTONS
+        ============================================= */
+        .btn-gold {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            background: var(--gold); color: var(--ink);
+            font-family: 'Libre Baskerville', serif; font-size: 0.72rem;
+            font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+            border: none; padding: 0.5rem 1.2rem; border-radius: var(--radius-sm);
+            text-decoration: none; cursor: pointer; transition: all var(--transition);
+            box-shadow: 0 3px 12px rgba(201,168,76,0.25);
+        }
+
+        .btn-gold:hover { background: var(--gold-light); color: var(--ink); transform: translateY(-2px); box-shadow: 0 6px 18px rgba(201,168,76,0.35); }
+
+        .btn-outline-gold {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            background: transparent; color: var(--gold-dim);
+            font-family: 'Libre Baskerville', serif; font-size: 0.72rem;
+            font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+            border: 1.5px solid var(--gold); padding: 0.48rem 1.1rem;
+            border-radius: var(--radius-sm); text-decoration: none; cursor: pointer;
+            transition: all var(--transition);
+        }
+
+        .btn-outline-gold:hover { background: var(--gold-pale); color: var(--gold-dim); transform: translateY(-2px); }
+
+        /* =============================================
+           DATA TABLE
+        ============================================= */
+        .data-table-wrap { overflow-x: auto; }
+
+        .data-table {
+            width: 100%; border-collapse: collapse;
+        }
+
+        .data-table thead tr {
+            background: var(--section-bg);
+            border-bottom: 2px solid var(--gray-line);
+        }
+
+        .data-table th {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 0.65rem; letter-spacing: 0.18em; text-transform: uppercase;
+            color: var(--gray-text); padding: 0.9rem 1.2rem;
+            font-weight: 700; text-align: left; white-space: nowrap;
+        }
+
+        .data-table th:first-child { padding-left: 1.5rem; }
+        .data-table th:last-child  { padding-right: 1.5rem; text-align: center; }
+
+        .data-table tbody tr {
+            border-bottom: 1px solid var(--gray-line);
+            transition: background var(--transition);
+        }
+
+        .data-table tbody tr:last-child { border-bottom: none; }
+        .data-table tbody tr:hover { background: var(--section-bg); }
+
+        .data-table td {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1rem; color: var(--ink-soft);
+            padding: 0.9rem 1.2rem; vertical-align: middle;
+        }
+
+        .data-table td:first-child { padding-left: 1.5rem; }
+        .data-table td:last-child  { padding-right: 1.5rem; text-align: center; }
+
+        /* Student name cell */
+        .student-cell { display: flex; align-items: center; gap: 0.75rem; }
+
+        .student-avatar {
+            width: 36px; height: 36px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--gold-pale), var(--gold));
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Playfair Display', serif; font-size: 0.88rem;
+            font-weight: 700; color: var(--gold-dim); flex-shrink: 0;
+            border: 1.5px solid rgba(201,168,76,0.3);
+        }
+
+        .student-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 0.95rem; font-weight: 700; color: var(--ink);
+            display: block; line-height: 1.2;
+        }
+
+        .student-user {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 0.65rem; color: var(--gray-text); letter-spacing: 0.04em;
+        }
+
+        /* Email / phone */
+        .cell-email, .cell-phone {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.95rem; color: var(--ink-soft);
+        }
+
+        .cell-email i, .cell-phone i { color: var(--gold-dim); margin-right: 0.3rem; font-size: 0.8rem; }
+
+        /* Instrument badge */
+        .instrument-badge {
+            display: inline-flex; align-items: center; gap: 0.35rem;
+            background: var(--gold-pale); color: var(--gold-dim);
+            font-family: 'Libre Baskerville', serif; font-size: 0.62rem;
+            letter-spacing: 0.1em; text-transform: uppercase;
+            padding: 0.22rem 0.65rem; border-radius: 2rem;
+            border: 1px solid rgba(201,168,76,0.3);
+            white-space: nowrap;
+        }
+
+        .instrument-none {
+            background: var(--section-bg); color: #B0A498;
+            border-color: var(--gray-line);
+        }
+
+        /* Status badge */
+        .badge-status {
+            display: inline-block; font-family: 'Libre Baskerville', serif;
+            font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase;
+            padding: 0.25rem 0.7rem; border-radius: 2rem; font-weight: 700;
+        }
+
+        .badge-active   { background: #EEF5EE; color: #3A6B3A; border: 1px solid #C5DCC5; }
+        .badge-inactive { background: #F5F0EE; color: #8A6A5A; border: 1px solid #DDD0C8; }
+        .badge-pending  { background: var(--gold-pale); color: var(--gold-dim); border: 1px solid rgba(201,168,76,0.3); }
+
+        /* Action buttons */
+        .action-btns { display: flex; align-items: center; justify-content: center; gap: 0.4rem; }
+
+        .btn-action {
+            width: 32px; height: 32px; border-radius: var(--radius-sm);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.85rem; text-decoration: none; cursor: pointer;
+            border: 1px solid transparent; transition: all var(--transition);
+        }
+
+        .btn-action-edit {
+            background: var(--gold-pale); color: var(--gold-dim);
+            border-color: rgba(201,168,76,0.3);
+        }
+
+        .btn-action-edit:hover {
+            background: var(--gold); color: var(--white);
+            border-color: var(--gold); transform: translateY(-2px);
+        }
+
+        .btn-action-view {
+            background: #EEF0F8; color: #4A4A8A;
+            border-color: #C8C8E8;
+        }
+
+        .btn-action-view:hover {
+            background: #5A5AB0; color: var(--white);
+            border-color: #5A5AB0; transform: translateY(-2px);
+        }
+
+        .btn-action-delete {
+            background: #F8EEEE; color: #8A4040;
+            border-color: #DCC8C8;
+        }
+
+        .btn-action-delete:hover {
+            background: #C04040; color: var(--white);
+            border-color: #C04040; transform: translateY(-2px);
+        }
+
+        /* =============================================
+           EMPTY STATE
+        ============================================= */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .empty-icon {
+            font-size: 4rem; color: var(--gold); opacity: 0.25;
+            display: block; margin-bottom: 1rem;
+        }
+
+        .empty-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem; font-weight: 700; color: var(--ink); margin-bottom: 0.4rem;
+        }
+
+        .empty-text {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1rem; color: var(--gray-text); margin-bottom: 1.5rem;
+        }
+
+        /* =============================================
+           PAGINATION
+        ============================================= */
+        .table-pagination {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid var(--gray-line);
+            display: flex; align-items: center; justify-content: space-between;
+            flex-wrap: wrap; gap: 0.8rem;
+            background: var(--section-bg);
+        }
+
+        .pagination-info {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 0.68rem; letter-spacing: 0.06em; color: var(--gray-text);
+        }
+
+        .pagination-btns { display: flex; gap: 0.3rem; }
+
+        .page-btn {
+            width: 34px; height: 34px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--gray-line);
+            background: var(--white); color: var(--ink-soft);
+            font-family: 'Libre Baskerville', serif; font-size: 0.8rem;
+            text-decoration: none; transition: all var(--transition); cursor: pointer;
+        }
+
+        .page-btn:hover, .page-btn.active {
+            background: var(--gold); border-color: var(--gold);
+            color: var(--ink); transform: translateY(-1px);
+            box-shadow: 0 3px 10px rgba(201,168,76,0.3);
+        }
+
+        /* =============================================
+           SUMMARY MINI CARDS (top of page)
+        ============================================= */
+        .mini-stat {
+            background: var(--white); border-radius: var(--radius-lg);
+            border: 1px solid var(--gray-line); padding: 1.1rem 1.3rem;
+            display: flex; align-items: center; gap: 1rem;
+            box-shadow: var(--shadow-soft);
+            transition: transform var(--transition), box-shadow var(--transition);
+        }
+
+        .mini-stat:hover { transform: translateY(-3px); box-shadow: var(--shadow-gold); }
+
+        .mini-stat-icon {
+            width: 42px; height: 42px; border-radius: 50%;
+            background: var(--gold-pale); display: flex; align-items: center; justify-content: center;
+            color: var(--gold-dim); font-size: 1.1rem; flex-shrink: 0;
+            transition: background var(--transition), color var(--transition);
+        }
+
+        .mini-stat:hover .mini-stat-icon { background: var(--gold); color: var(--white); }
+
+        .mini-stat-value {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem; font-weight: 900; color: var(--ink); line-height: 1;
+        }
+
+        .mini-stat-label {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 0.62rem; letter-spacing: 0.14em; text-transform: uppercase;
+            color: var(--gray-text); display: block; margin-top: 0.1rem;
+        }
+
+        /* =============================================
+           MOBILE OVERLAY
+        ============================================= */
+        .sidebar-overlay {
+            display: none; position: fixed; inset: 0;
+            background: rgba(26,22,18,0.5); z-index: 199;
+        }
+
+        .sidebar-overlay.active { display: block; }
+
+        /* =============================================
+           RESPONSIVE
+        ============================================= */
+        @media (max-width: 991px) {
+            .sidebar { transform: translateX(-100%); width: var(--sidebar-w) !important; }
+            .sidebar.mobile-open { transform: translateX(0); }
+            .main-area, .main-area.expanded { margin-left: 0 !important; }
+            .topbar-search { display: none; }
+            .filter-search input { width: 150px; }
+        }
+
+        @media (max-width: 576px) {
+            .page-content { padding: 1.2rem; }
+            .topbar { padding: 0 1rem; }
+            .table-toolbar { flex-direction: column; align-items: stretch; }
+            .toolbar-left { flex-direction: column; align-items: stretch; }
+            .filter-search input { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-shell">
+
+    <!-- =============================================
+         SIDEBAR
+    ============================================= -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-deco" aria-hidden="true">𝄞</div>
+
+        <div class="sidebar-top">
+            <a href="{% url 'home' %}" class="sidebar-brand">
+                <div class="sidebar-logo-ring">
+                    <img src="{% static 'img/logo_abanfar.png' %}" alt="Logo"
+                         onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+                    <span class="sidebar-logo-placeholder" style="display:none">♪</span>
+                </div>
+                <div class="sidebar-brand-text">
+                    <span class="brand-name">ABANFAR BF</span>
+                    <span class="brand-sub">Painel Administrativo</span>
+                </div>
+            </a>
+            <button class="btn-collapse" id="btnCollapse" title="Recolher menu">
+                <i class="bi bi-layout-sidebar-reverse" id="collapseIcon"></i>
+            </button>
+        </div>
+
+        <div class="sidebar-profile">
+            <div class="profile-avatar"><i class="bi bi-person-fill"></i></div>
+            <div class="sidebar-profile-name">
+                <span class="profile-name">{{ user.first_name|default:user.username }}</span>
+                <span class="profile-role">Gerente</span>
             </div>
-            <button class="btn btn-profile">Gerente</button>
-          </div>
+        </div>
 
-          <!-- MENU -->
-          <nav class="sidebar-menu flex-grow-1 mt-3">
-            <ul class="nav flex-column">
-              <li class="nav-item mb-3">
-                <a href="{% url 'contas:painel_gerente' %}" class="nav-link"><i class="bi bi-speedometer2 me-2"></i> Início</a>
-              </li>
+        <nav class="sidebar-nav">
+            <div class="nav-section-label">Principal</div>
 
-              <li class="nav-item mb-3">
-                <a href="{% url 'contas:lista_alunos' %}" class="nav-link active"><i class="bi bi-people-fill me-2"></i> Alunos</a>
-              </li>
+            <a href="{% url 'contas:painel_gerente' %}" class="sidebar-link">
+                <i class="bi bi-speedometer2"></i>
+                <span class="nav-label">Início</span>
+            </a>
 
-              <li class="nav-item mb-3">
-                <a href="#" class="nav-link"><i class="bi bi-person-workspace me-2"></i> Professores</a>
-              </li>
+            <div class="nav-section-label mt-2">Gestão</div>
 
-              <li class="nav-item mb-3">
-                <a href="{% url 'materias:materias_gerente' %}" class="nav-link d-flex align-items-center">
-                  <i class="bi bi-journal-text me-3"></i>
-                  <span>Matérias</span>
+            <a href="{% url 'contas:lista_alunos' %}" class="sidebar-link active">
+                <i class="bi bi-people-fill"></i>
+                <span class="nav-label">Alunos</span>
+            </a>
+
+            <a href="{% url 'professores:professores_list' %}" class="sidebar-link">
+                <i class="bi bi-person-workspace"></i>
+                <span class="nav-label">Professores</span>
+            </a>
+
+            <a href="{% url 'materias:materias_gerente' %}" class="sidebar-link">
+                <i class="bi bi-journal-text"></i>
+                <span class="nav-label">Matérias</span>
+            </a>
+
+            <a href="{% url 'instrumentos:list' %}" class="sidebar-link">
+                <i class="bi bi-music-note-list"></i>
+                <span class="nav-label">Instrumentos</span>
+            </a>
+
+            <a href="{% url 'grupos:listar' %}" class="sidebar-link">
+                <i class="bi bi-music-note-beamed"></i>
+                <span class="nav-label">Grupos Musicais</span>
+            </a>
+
+            <div class="nav-section-label mt-2">Sistema</div>
+
+            <a href="#" class="sidebar-link">
+                <i class="bi bi-gear"></i>
+                <span class="nav-label">Configurações</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <span class="sidebar-footer-text">ABANFAR BF © {% now "Y" %}</span>
+            <a href="{% url 'contas:logout' %}" class="btn-logout">
+                <i class="bi bi-box-arrow-left"></i>
+                <span class="nav-label">Sair</span>
+            </a>
+        </div>
+    </aside>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- =============================================
+         MAIN AREA
+    ============================================= -->
+    <div class="main-area" id="mainArea">
+
+        <!-- TOP BAR -->
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="topbar-icon-btn d-lg-none" id="btnMobileMenu">
+                    <i class="bi bi-list"></i>
+                </button>
+                <div class="breadcrumb-custom">
+                    <span>ABANFAR BF</span>
+                    <span class="bc-sep">♩</span>
+                    <span>Painel</span>
+                    <span class="bc-sep">♩</span>
+                    <span class="bc-active">Alunos</span>
+                </div>
+            </div>
+            <div class="topbar-right">
+                <div class="topbar-search d-none d-md-flex">
+                    <i class="bi bi-search"></i>
+                    <input type="text" placeholder="Buscar…" id="topbarSearch">
+                </div>
+                <div class="topbar-icon-btn" title="Notificações">
+                    <i class="bi bi-bell"></i>
+                    <span class="badge-dot"></span>
+                </div>
+                <div class="topbar-user">
+                    <div class="topbar-avatar">{{ user.first_name|first|default:"G" }}</div>
+                    <span class="topbar-username d-none d-sm-block">{{ user.first_name|default:user.username }}</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- PAGE CONTENT -->
+        <main class="page-content">
+
+            <!-- Header -->
+            <div class="page-header d-flex align-items-start justify-content-between flex-wrap gap-3">
+                <div>
+                    <div class="page-eyebrow"><i class="bi bi-people-fill"></i> Gestão</div>
+                    <h1 class="page-title">Alunos Cadastrados</h1>
+                    <p class="page-subtitle">Gerencie os alunos matriculados nos projetos da ABANFAR BF.</p>
+                </div>
+                <a href="{% url 'alunos:cadastrar' %}" class="btn-gold" style="margin-top:0.5rem">
+                    <i class="bi bi-person-plus-fill"></i> Cadastrar Aluno
                 </a>
-              </li>
+            </div>
 
-              <li class="nav-item mb-3">
-                <a href="#" class="nav-link"><i class="bi bi-music-note-list me-2"></i> Instrumentos</a>
-              </li>
-            </ul>
-          </nav>
-        </aside>
+            <hr class="gold-rule">
 
-        <!-- CONTEÚDO -->
-        <main class="col-12 col-md-9 col-lg-10 p-4">
-          <a href="{% url 'alunos:cadastrar' %}" class="btn btn-success mb-3 w-100">+ Cadastrar Aluno</a>
+            <!-- Mini stats -->
+            <div class="row g-3 mb-4">
+                <div class="col-6 col-lg-3">
+                    <div class="mini-stat">
+                        <div class="mini-stat-icon"><i class="bi bi-people-fill"></i></div>
+                        <div>
+                            <div class="mini-stat-value">{{ alunos|length }}</div>
+                            <span class="mini-stat-label">Total de alunos</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-3">
+                    <div class="mini-stat">
+                        <div class="mini-stat-icon"><i class="bi bi-person-check-fill"></i></div>
+                        <div>
+                            <div class="mini-stat-value">—</div>
+                            <span class="mini-stat-label">Ativos</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-3">
+                    <div class="mini-stat">
+                        <div class="mini-stat-icon"><i class="bi bi-music-note-list"></i></div>
+                        <div>
+                            <div class="mini-stat-value">—</div>
+                            <span class="mini-stat-label">Com instrumento</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-3">
+                    <div class="mini-stat">
+                        <div class="mini-stat-icon"><i class="bi bi-calendar-plus"></i></div>
+                        <div>
+                            <div class="mini-stat-value">—</div>
+                            <span class="mini-stat-label">Novos este mês</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-          <h2 class="titulo-form">Alunos Cadastrados</h2>
+            <!-- Table card -->
+            <div class="section-card">
 
-          <table class="table table-dark table-bordered mt-4">
-    <thead>
-        <tr>
-            <th>Nome</th>
-            <th>Usuário</th>
-            <th>E-mail</th>
-            <th>Telefone</th>
-            <th>Instrumento</th>
-            <th>Ações</th>
-        </tr>
-    </thead>
+                <!-- Card header -->
+                <div class="section-card-header">
+                    <h2 class="section-card-title">
+                        <i class="bi bi-table"></i> Lista de alunos
+                    </h2>
+                    <div class="d-flex gap-2 flex-wrap">
+                        <a href="#" class="btn-outline-gold">
+                            <i class="bi bi-download"></i> Exportar
+                        </a>
+                    </div>
+                </div>
 
-    <tbody>
-        {% for aluno in alunos %}
-            <tr>
-                <td>{{ aluno.nome }} {{ aluno.sobrenome }}</td>
-                <td>{{ aluno.perfil.user.username }}</td>
-                <td>{{ aluno.perfil.user.email }}</td>
-                <td>{{ aluno.telefone }}</td>
-                <td>{{ aluno.instrumento.nome|default:"Não definido" }}</td>
+                <!-- Toolbar -->
+                <div class="table-toolbar">
+                    <div class="toolbar-left">
+                        <div class="filter-search">
+                            <i class="bi bi-search"></i>
+                            <input type="text" id="tableSearch" placeholder="Buscar por nome, usuário ou e-mail…">
+                        </div>
+                        <select class="filter-select" id="filterInstrumento">
+                            <option value="">Todos os instrumentos</option>
+                            <option value="flauta">Flauta Doce</option>
+                            <option value="trompete">Trompete</option>
+                            <option value="violino">Violino</option>
+                            <option value="percussao">Percussão</option>
+                            <option value="clarinete">Clarinete</option>
+                        </select>
+                    </div>
+                    <div style="font-family:'Libre Baskerville',serif;font-size:0.68rem;color:var(--gray-text);letter-spacing:0.06em">
+                        <span id="countLabel">{{ alunos|length }} aluno(s)</span>
+                    </div>
+                </div>
 
-                <td>
-                    <a href="{% url 'alunos:editar' aluno.id %}" class="btn btn-warning btn-sm">Editar</a>
+                <!-- Table -->
+                <div class="data-table-wrap">
+                    <table class="data-table" id="alunosTable">
+                        <thead>
+                            <tr>
+                                <th>Aluno</th>
+                                <th>E-mail</th>
+                                <th>Telefone</th>
+                                <th>Instrumento</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="alunosBody">
+                            {% for aluno in alunos %}
+                            <tr class="aluno-row"
+                                data-nome="{{ aluno.nome }} {{ aluno.sobrenome }}"
+                                data-usuario="{{ aluno.perfil.user.username }}"
+                                data-email="{{ aluno.perfil.user.email }}"
+                                data-instrumento="{{ aluno.instrumento.nome|default:'' }}">
 
-                    <a href="{% url 'alunos:excluir' aluno.id %}"
-                       class="btn btn-danger btn-sm"
-                       onclick="return confirm('Tem certeza que deseja excluir este aluno?');">
-                        Excluir
-                    </a>
-                </td>
-            </tr>
-        {% empty %}
-            <tr>
-                <td colspan="6" class="text-center">Nenhum aluno cadastrado.</td>
-            </tr>
-        {% endfor %}
-    </tbody>
-</table>
+                                <!-- Nome -->
+                                <td>
+                                    <div class="student-cell">
+                                        <div class="student-avatar">
+                                            {{ aluno.nome|first|upper }}
+                                        </div>
+                                        <div>
+                                            <span class="student-name">{{ aluno.nome }} {{ aluno.sobrenome }}</span>
+                                            <span class="student-user">@{{ aluno.perfil.user.username }}</span>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <!-- Email -->
+                                <td>
+                                    <span class="cell-email">
+                                        <i class="bi bi-envelope"></i>{{ aluno.perfil.user.email|default:"—" }}
+                                    </span>
+                                </td>
+
+                                <!-- Telefone -->
+                                <td>
+                                    <span class="cell-phone">
+                                        <i class="bi bi-telephone"></i>{{ aluno.telefone|default:"—" }}
+                                    </span>
+                                </td>
+
+                                <!-- Instrumento -->
+                                <td>
+                                    {% if aluno.instrumento %}
+                                        <span class="instrument-badge">
+                                            <i class="bi bi-music-note"></i>
+                                            {{ aluno.instrumento.nome }}
+                                        </span>
+                                    {% else %}
+                                        <span class="instrument-badge instrument-none">
+                                            Não definido
+                                        </span>
+                                    {% endif %}
+                                </td>
+
+                                <!-- Status -->
+                                <td>
+                                    <span class="badge-status badge-active">Ativo</span>
+                                </td>
+
+                                <!-- Ações -->
+                                <td>
+                                    <div class="action-btns">
+                                        <a href="{% url 'alunos:editar' aluno.id %}"
+                                           class="btn-action btn-action-edit"
+                                           title="Editar aluno">
+                                            <i class="bi bi-pencil-fill"></i>
+                                        </a>
+                                        <a href="#"
+                                           class="btn-action btn-action-view"
+                                           title="Ver detalhes">
+                                            <i class="bi bi-eye-fill"></i>
+                                        </a>
+                                        <a href="{% url 'alunos:excluir' aluno.id %}"
+                                           class="btn-action btn-action-delete"
+                                           title="Excluir aluno"
+                                           onclick="return confirm('Tem certeza que deseja excluir {{ aluno.nome }}?');">
+                                            <i class="bi bi-trash-fill"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr id="emptyRow">
+                                <td colspan="6">
+                                    <div class="empty-state">
+                                        <span class="empty-icon">♪</span>
+                                        <div class="empty-title">Nenhum aluno cadastrado</div>
+                                        <p class="empty-text">Comece cadastrando o primeiro aluno da associação.</p>
+                                        <a href="{% url 'alunos:cadastrar' %}" class="btn-gold">
+                                            <i class="bi bi-person-plus-fill"></i> Cadastrar primeiro aluno
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                {% if alunos %}
+                <div class="table-pagination">
+                    <span class="pagination-info">
+                        Mostrando <strong>{{ alunos|length }}</strong> aluno(s)
+                    </span>
+                    <div class="pagination-btns">
+                        <button class="page-btn"><i class="bi bi-chevron-left"></i></button>
+                        <button class="page-btn active">1</button>
+                        <button class="page-btn"><i class="bi bi-chevron-right"></i></button>
+                    </div>
+                </div>
+                {% endif %}
+
+            </div><!-- .section-card -->
 
         </main>
-      </div>
-    </div>
-  </body>
+    </div><!-- .main-area -->
+</div><!-- .app-shell -->
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
+
+<script>
+    /* Sidebar collapse */
+    const sidebar     = document.getElementById('sidebar');
+    const mainArea    = document.getElementById('mainArea');
+    const btnCollapse = document.getElementById('btnCollapse');
+    const collapseIcon = document.getElementById('collapseIcon');
+    const btnMobile   = document.getElementById('btnMobileMenu');
+    const overlay     = document.getElementById('sidebarOverlay');
+
+    btnCollapse.addEventListener('click', () => {
+        sidebar.classList.toggle('collapsed');
+        mainArea.classList.toggle('expanded');
+        const isCollapsed = sidebar.classList.contains('collapsed');
+        collapseIcon.className = isCollapsed ? 'bi bi-layout-sidebar' : 'bi bi-layout-sidebar-reverse';
+    });
+
+    btnMobile.addEventListener('click', () => {
+        sidebar.classList.toggle('mobile-open');
+        overlay.classList.toggle('active');
+    });
+
+    overlay.addEventListener('click', () => {
+        sidebar.classList.remove('mobile-open');
+        overlay.classList.remove('active');
+    });
+
+    /* Live search filter */
+    function filterTable() {
+        const q = (document.getElementById('tableSearch').value
+                || document.getElementById('topbarSearch').value || '').toLowerCase();
+        const instrFiltro = document.getElementById('filterInstrumento').value.toLowerCase();
+        const rows = document.querySelectorAll('.aluno-row');
+        let visible = 0;
+
+        rows.forEach(row => {
+            const nome    = (row.dataset.nome    || '').toLowerCase();
+            const usuario = (row.dataset.usuario || '').toLowerCase();
+            const email   = (row.dataset.email   || '').toLowerCase();
+            const instr   = (row.dataset.instrumento || '').toLowerCase();
+
+            const matchQ     = !q || nome.includes(q) || usuario.includes(q) || email.includes(q);
+            const matchInstr = !instrFiltro || instr.includes(instrFiltro);
+
+            const show = matchQ && matchInstr;
+            row.style.display = show ? '' : 'none';
+            if (show) visible++;
+        });
+
+        const lbl = document.getElementById('countLabel');
+        if (lbl) lbl.textContent = visible + ' aluno(s)';
+    }
+
+    document.getElementById('tableSearch').addEventListener('input', filterTable);
+    document.getElementById('topbarSearch').addEventListener('input', filterTable);
+    document.getElementById('filterInstrumento').addEventListener('change', filterTable);
+</script>
+
+</body>
 </html>

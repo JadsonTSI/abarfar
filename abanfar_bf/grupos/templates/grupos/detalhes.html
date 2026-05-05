@@ -4,6 +4,7 @@
 <html lang="pt-br">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{{ grupo.nome }}</title>
 
     <!-- Bootstrap -->
@@ -19,64 +20,65 @@
   <body>
     <div class="container-fluid g-0">
       <div class="row g-0">
-        <!-- SIDEBAR (igual às outras telas) -->
         <!-- SIDEBAR -->
         <aside class="col-12 col-md-3 col-lg-2 sidebar d-flex flex-column">
-          <!-- TOPO -->
-          <div class="d-flex align-items-center justify-content-between px-3 py-3 sidebar-top">
-            <h2 class="logo-text mb-0">ABANFAR-BF</h2>
-            <a href="{% url 'contas:perfil' %}" class="btn btn-circle"><i class="bi bi-person-fill"></i></a>
-          </div>
+      <div class="d-flex align-items-center justify-content-between px-3 py-3 sidebar-top">
+        <h2 class="logo-text mb-0">ABANFAR-BF</h2>
+        <button class="btn btn-circle"><i class="bi bi-person-fill"></i></button>
+      </div>
 
-          <!-- PERFIL -->
-          <div class="sidebar-profile text-center py-3">
-            <div class="profile-icon mb-2">
-              <i class="bi bi-person-circle"></i>
-            </div>
-            <button class="btn btn-profile">ALUNO</button>
-          </div>
+      <div class="sidebar-profile text-center py-3">
+        <div class="profile-icon mb-2">
+          <i class="bi bi-person-circle"></i>
+        </div>
+        <button class="btn btn-profile">PROFESSOR</button>
+      </div>
 
-          <!-- MENU -->
-          <nav class="sidebar-menu flex-grow-1 mt-3">
-            <ul class="nav flex-column">
-              <li class="nav-item mb-3">
-                <a href="{% url 'contas:painel_aluno' %}" class="nav-link"><i class="bi bi-house-door me-3"></i> INÍCIO</a>
-              </li>
+      <nav class="sidebar-menu flex-grow-1 mt-4">
+        <ul class="nav flex-column">
+          <li class="nav-item mb-3">
+            <a href="{% url 'professores:professoreshome' %}" class="nav-link d-flex align-items-center">
+              <i class="bi bi-house-door me-3"></i> INICIO
+            </a>
+          </li>
 
-              <li class="nav-item mb-3">
-                <a href="{% url 'alunos:meu_naipe' %}" class="nav-link"><i class="bi bi-music-note me-3"></i> MEU NAIPE</a>
-              </li>
+          <li class="nav-item mb-3">
+            <a href="#" class="nav-link d-flex align-items-center">
+              <i class="bi bi-music-note me-3"></i> NIPES
+            </a>
+          </li>
 
-              <li class="nav-item mb-3">
-                <a href="{% url 'materias:materias_aluno' %}" class="nav-link d-flex align-items-center">
-                  <i class="bi bi-journal-check me-3"></i>
-                  <span>Minhas Matérias</span>
-                </a>
-              </li>
+          <li class="nav-item mb-3">
+            <a href="{% url 'materias:materias_professor' %}" class="nav-link d-flex align-items-center">
+              <i class="bi bi-journal-bookmark-fill me-3"></i> Minhas Matérias
+            </a>
+          </li>
 
-              <li class="nav-item mb-3">
-                <a href="{% url 'alunos:ensaios' %}" class="nav-link"><i class="bi bi-music-note-beamed me-3"></i> ENSAIOS</a>
-              </li>
+          <li class="nav-item mb-3">
+            <a href="{% url 'professores:ensaiospro' %}" class="nav-link d-flex align-items-center">
+              <i class="bi bi-music-note-beamed me-3"></i> ENSAIOS
+            </a>
+          </li>
 
-              <li class="nav-item mb-3">
-                <a href="{% url 'alunos:apresentacoes' %}" class="nav-link"><i class="bi bi-calendar-event me-3"></i> APRESENTAÇÕES</a>
-              </li>
+          <li class="nav-item mb-3">
+            <a href="{% url 'professores:apresentacoes_list' %}" class="nav-link d-flex align-items-center active">
+              <i class="bi bi-grid-3x3-gap-fill me-3"></i> APRESENTAÇÕES
+            </a>
+          </li>
 
-              <li class="nav-item mb-3">
-                <a href="{% url 'grupos:detalhes' grupo.id %}" class="nav-link d-flex align-items-center">
-                  <i class="bi bi-music-note-list me-3"></i>
-                  <span>GRUPOS MUSICAIS</span>
-                </a>
-              </li>
-            </ul>
-          </nav>
-        </aside>
+          <li class="nav-item mb-3">
+            <a href="#" class="nav-link d-flex align-items-center">
+              <i class="bi bi-music-note-list me-3"></i> GRUPOS MUSICAIS
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </aside>
 
         <!-- CONTEÚDO -->
         <main class="col-12 col-md-9 col-lg-10 p-4">
           <h1 class="titulo-pagina">{{ grupo.nome }}</h1>
 
-          <!-- CARD: MÚSICOS -->
           <div class="card mb-4 custom-card">
             <div class="card-header">
               <h3>Músicos do Grupo</h3>
@@ -98,7 +100,6 @@
             </div>
           </div>
 
-          <!-- CARD: PARTITURAS -->
           <div class="card custom-card">
             <div class="card-header">
               <h3 class="mt-4">Partituras</h3>
@@ -119,7 +120,9 @@
               {% endif %}
 
               {% if user.perfil.tipo == 'professor' %}
-                <a href="{% url 'grupos:enviar_partitura' grupo.id %}" class="btn btn-primary mt-3">Enviar nova partitura</a>
+                <a href="{% url 'grupos:enviar_partitura' grupo.id %}" class="btn btn-primary mt-3">
+                  Enviar nova partitura
+                </a>
               {% endif %}
             </div>
           </div>
