@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'instrumentos',
     'materias',
     'grupos',
+    'transparencia',
 ]
 
 MIDDLEWARE = [

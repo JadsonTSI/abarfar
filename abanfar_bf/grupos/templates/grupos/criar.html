@@ -1,82 +1,283 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Criar Grupo Musical</title>
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-
-    <link rel="stylesheet" href="{% static 'ensaios_pro.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar Grupo Musical — ABANFAR BF</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Cormorant+Garamond:wght@300;400;600&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root{--gold:#C9A84C;--gold-light:#E8C96A;--gold-pale:#F5E9C8;--gold-dim:#9A7A30;--cream:#FDFAF3;--white:#FFFFFF;--ink:#1A1612;--ink-soft:#3D3530;--gray-text:#7A6E65;--gray-line:#E8E0D4;--section-bg:#F9F5EC;--sidebar-w:260px;--sidebar-w-collapsed:72px;--topbar-h:64px;--radius-lg:1.1rem;--radius-sm:.55rem;--shadow-gold:0 4px 24px rgba(201,168,76,.16);--shadow-soft:0 4px 20px rgba(26,22,18,.07);--transition:.26s ease}
+        *,*::before,*::after{box-sizing:border-box}html{scroll-behavior:smooth}
+        body{font-family:'Cormorant Garamond',Georgia,serif;background:var(--section-bg);color:var(--ink-soft);margin:0;padding:0;min-height:100vh;-webkit-font-smoothing:antialiased}
+        h1,h2,h3,h4,h5{font-family:'Playfair Display',Georgia,serif;color:var(--ink)}
+        ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--cream)}::-webkit-scrollbar-thumb{background:var(--gold);border-radius:3px}
+        .app-shell{display:flex;min-height:100vh}
+        /* SIDEBAR */
+        .sidebar{width:var(--sidebar-w);min-height:100vh;background:var(--ink);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:200;transition:width var(--transition),transform var(--transition);overflow:hidden;border-right:2px solid var(--gold)}
+        .sidebar.collapsed{width:var(--sidebar-w-collapsed)}
+        .sidebar.collapsed .nav-label,.sidebar.collapsed .sidebar-profile-name,.sidebar.collapsed .sidebar-brand-text,.sidebar.collapsed .sidebar-footer-text{opacity:0;width:0;overflow:hidden;white-space:nowrap}
+        .sidebar-top{padding:0 1rem;height:var(--topbar-h);display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(201,168,76,.15);flex-shrink:0}
+        .sidebar-brand{display:flex;align-items:center;gap:.7rem;text-decoration:none;overflow:hidden}
+        .sidebar-logo-ring{width:36px;height:36px;border-radius:50%;border:1.5px solid var(--gold);background:var(--gold-pale);display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden}
+        .sidebar-logo-ring img{width:100%;height:100%;object-fit:contain;border-radius:50%}
+        .sidebar-logo-placeholder{font-size:1.1rem;color:var(--gold)}
+        .sidebar-brand-text{transition:opacity var(--transition),width var(--transition)}
+        .brand-name{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;color:var(--gold);display:block;line-height:1.1}
+        .brand-sub{font-family:'Libre Baskerville',serif;font-size:.58rem;letter-spacing:.06em;color:#5A5450;display:block}
+        .btn-collapse{width:30px;height:30px;border-radius:50%;background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.2);color:var(--gold);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:background var(--transition);font-size:.9rem}
+        .btn-collapse:hover{background:rgba(201,168,76,.22)}
+        .sidebar-profile{padding:1.2rem 1rem;border-bottom:1px solid rgba(201,168,76,.12);display:flex;align-items:center;gap:.85rem;flex-shrink:0;overflow:hidden}
+        .profile-avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--gold-pale),var(--gold));border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;color:var(--gold-dim);font-size:1.1rem;flex-shrink:0}
+        .sidebar-profile-name{transition:opacity var(--transition),width var(--transition);overflow:hidden}
+        .profile-name{font-family:'Playfair Display',serif;font-size:.9rem;font-weight:700;color:var(--white);display:block;white-space:nowrap}
+        .profile-role{font-family:'Libre Baskerville',serif;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);display:block}
+        .sidebar-nav{flex:1;overflow-y:auto;overflow-x:hidden;padding:.8rem 0}
+        .nav-section-label{font-family:'Libre Baskerville',serif;font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:#4A4440;padding:.5rem 1.2rem .3rem;white-space:nowrap;overflow:hidden}
+        .sidebar-link{display:flex;align-items:center;gap:.85rem;padding:.65rem 1.2rem;color:#8A8078;text-decoration:none;font-family:'Libre Baskerville',serif;font-size:.78rem;letter-spacing:.04em;white-space:nowrap;overflow:hidden;margin:.1rem .6rem;border-radius:var(--radius-sm);transition:color var(--transition),background var(--transition)}
+        .sidebar-link i{font-size:1.05rem;flex-shrink:0;width:20px;text-align:center}
+        .nav-label{transition:opacity var(--transition),width var(--transition)}
+        .sidebar-link:hover{color:var(--gold-light);background:rgba(201,168,76,.07)}
+        .sidebar-link.active{color:var(--gold);background:rgba(201,168,76,.12);border-left:2px solid var(--gold)}
+        .sidebar-footer{padding:.9rem 1rem;border-top:1px solid rgba(201,168,76,.12);flex-shrink:0}
+        .sidebar-footer-text{font-family:'Libre Baskerville',serif;font-size:.58rem;letter-spacing:.06em;color:#3A3430;display:block;margin-bottom:.6rem;white-space:nowrap;overflow:hidden;transition:opacity var(--transition)}
+        .btn-logout{display:flex;align-items:center;gap:.6rem;padding:.5rem .8rem;border-radius:var(--radius-sm);background:rgba(180,60,60,.1);border:1px solid rgba(180,60,60,.2);color:#C07070;font-family:'Libre Baskerville',serif;font-size:.72rem;text-decoration:none;transition:background var(--transition),color var(--transition);width:100%}
+        .btn-logout:hover{background:rgba(180,60,60,.18);color:#E09090}
+        .sidebar-deco{position:absolute;bottom:100px;right:.5rem;font-size:5rem;color:var(--gold);opacity:.03;pointer-events:none;font-family:serif;line-height:1}
+        /* MAIN */
+        .main-area{margin-left:var(--sidebar-w);flex:1;display:flex;flex-direction:column;min-height:100vh;transition:margin-left var(--transition)}
+        .main-area.expanded{margin-left:var(--sidebar-w-collapsed)}
+        /* TOPBAR */
+        .topbar{height:var(--topbar-h);background:var(--white);border-bottom:2px solid var(--gold);display:flex;align-items:center;justify-content:space-between;padding:0 1.8rem;position:sticky;top:0;z-index:100;box-shadow:0 2px 16px rgba(201,168,76,.1);gap:1rem}
+        .topbar-left{display:flex;align-items:center;gap:1rem}
+        .breadcrumb-custom{display:flex;align-items:center;gap:.4rem;font-family:'Libre Baskerville',serif;font-size:.72rem;letter-spacing:.06em;color:var(--gray-text)}
+        .breadcrumb-custom .bc-sep{color:var(--gold);font-size:.6rem}
+        .breadcrumb-custom .bc-active{color:var(--ink);font-weight:700}
+        .topbar-right{display:flex;align-items:center;gap:.8rem}
+        .topbar-icon-btn{width:36px;height:36px;border-radius:50%;background:var(--section-bg);border:1.5px solid var(--gray-line);display:flex;align-items:center;justify-content:center;color:var(--gray-text);font-size:.95rem;cursor:pointer;transition:all var(--transition);position:relative}
+        .topbar-icon-btn:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-pale)}
+        .badge-dot{position:absolute;top:-1px;right:-1px;width:8px;height:8px;background:#E06060;border-radius:50%;border:2px solid var(--white)}
+        .topbar-user{display:flex;align-items:center;gap:.55rem;padding:.3rem .8rem .3rem .4rem;background:var(--gold-pale);border:1.5px solid rgba(201,168,76,.3);border-radius:2rem;cursor:pointer;transition:all var(--transition)}
+        .topbar-user:hover{border-color:var(--gold)}
+        .topbar-avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-light));display:flex;align-items:center;justify-content:center;color:var(--ink);font-size:.75rem;font-weight:700;font-family:'Playfair Display',serif}
+        .topbar-username{font-family:'Libre Baskerville',serif;font-size:.72rem;color:var(--gold-dim);font-weight:700}
+        /* PAGE */
+        .page-content{padding:2rem 2rem 3rem;flex:1}
+        .page-eyebrow{font-family:'Libre Baskerville',serif;font-size:.68rem;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);display:flex;align-items:center;gap:.6rem;margin-bottom:.4rem}
+        .page-eyebrow::before{content:'';width:24px;height:1px;background:var(--gold)}
+        .page-title{font-family:'Playfair Display',serif;font-size:clamp(1.5rem,2.5vw,2rem);font-weight:900;color:var(--ink);margin:0 0 .3rem}
+        .page-subtitle{font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:var(--gray-text);margin:0}
+        .gold-rule{height:2px;background:linear-gradient(90deg,var(--gold),transparent);border:none;margin:1.5rem 0 2rem;opacity:.4}
+        /* FORM CARD */
+        .form-card{background:var(--white);border-radius:var(--radius-lg);border:1px solid var(--gray-line);box-shadow:var(--shadow-soft);overflow:hidden;max-width:640px}
+        .form-section{padding:1.6rem 2rem;border-bottom:1px solid var(--gray-line)}
+        .form-section:last-child{border-bottom:none}
+        .form-section-title{font-family:'Playfair Display',serif;font-size:.95rem;font-weight:700;color:var(--ink);display:flex;align-items:center;gap:.5rem;margin-bottom:1.3rem}
+        .form-section-title i{color:var(--gold)}
+        .form-section-title::after{content:'';flex:1;height:1px;background:var(--gray-line);margin-left:.6rem}
+        /* FIELDS */
+        .field-wrap{margin-bottom:1.1rem}
+        .field-wrap label{font-family:'Libre Baskerville',serif;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);display:block;margin-bottom:.4rem}
+        .field-wrap input[type="text"],
+        .field-wrap select,
+        .field-wrap textarea{width:100%;background:var(--section-bg);border:1.5px solid var(--gray-line);border-radius:var(--radius-sm);padding:.72rem 1rem;font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:var(--ink);outline:none;transition:border-color var(--transition),box-shadow var(--transition);-webkit-appearance:none}
+        .field-wrap select{background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23C9A84C' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");background-repeat:no-repeat;background-position:right .8rem center;background-size:14px;cursor:pointer}
+        .field-wrap input:focus,.field-wrap select:focus,.field-wrap textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,.13);background:var(--white)}
+        .field-wrap input::placeholder{color:#C0B4A8}
+        /* Group icon preview */
+        .group-preview-wrap{background:var(--ink);border-radius:var(--radius-lg);padding:1.5rem;margin-bottom:1.8rem;max-width:640px;display:flex;align-items:center;gap:1.2rem;position:relative;overflow:hidden;border:1px solid rgba(201,168,76,.2)}
+        .group-preview-wrap::after{content:'♫';position:absolute;right:-1rem;top:50%;transform:translateY(-50%);font-size:8rem;color:var(--gold);opacity:.05;pointer-events:none;line-height:1}
+        .group-preview-icon{width:56px;height:56px;border-radius:50%;background:rgba(201,168,76,.15);border:2px solid rgba(201,168,76,.3);display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:1.5rem;flex-shrink:0;animation:pulseGlow 4s ease-in-out infinite}
+        @keyframes pulseGlow{0%,100%{box-shadow:0 0 0 0 rgba(201,168,76,0)}50%{box-shadow:0 0 0 8px rgba(201,168,76,.12)}}
+        .preview-lbl{font-family:'Libre Baskerville',serif;font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:#6A6058}
+        .preview-group-name{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:var(--white)}
+        /* Toggle switch */
+        .toggle-wrap{display:flex;align-items:center;gap:1rem;padding:.8rem 1rem;background:var(--section-bg);border:1.5px solid var(--gray-line);border-radius:var(--radius-sm);cursor:pointer;transition:border-color var(--transition)}
+        .toggle-wrap:hover{border-color:var(--gold)}
+        .toggle-wrap input[type="checkbox"]{display:none}
+        .toggle-switch{width:44px;height:24px;background:var(--gray-line);border-radius:12px;position:relative;transition:background var(--transition);flex-shrink:0}
+        .toggle-switch::after{content:'';position:absolute;width:18px;height:18px;background:var(--white);border-radius:50%;top:3px;left:3px;transition:transform var(--transition);box-shadow:0 1px 4px rgba(0,0,0,.2)}
+        input[type="checkbox"]:checked + .toggle-switch{background:var(--gold)}
+        input[type="checkbox"]:checked + .toggle-switch::after{transform:translateX(20px)}
+        .toggle-text strong{font-family:'Playfair Display',serif;font-size:.9rem;color:var(--ink);display:block}
+        .toggle-text span{font-family:'Cormorant Garamond',serif;font-size:.9rem;color:var(--gray-text)}
+        /* form.as_p override */
+        .form-as-p p{margin-bottom:1.1rem}
+        .form-as-p label{font-family:'Libre Baskerville',serif;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);display:block;margin-bottom:.4rem}
+        .form-as-p input[type="text"],.form-as-p input[type="email"],.form-as-p select,.form-as-p textarea{width:100%;background:var(--section-bg);border:1.5px solid var(--gray-line);border-radius:var(--radius-sm);padding:.72rem 1rem;font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:var(--ink);outline:none;transition:border-color var(--transition),box-shadow var(--transition);-webkit-appearance:none}
+        .form-as-p select{background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23C9A84C' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");background-repeat:no-repeat;background-position:right .8rem center;background-size:14px;cursor:pointer}
+        .form-as-p input:focus,.form-as-p select:focus,.form-as-p textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,.13);background:var(--white)}
+        .form-as-p input[type="checkbox"]{width:auto;accent-color:var(--gold)}
+        /* FOOTER */
+        .form-footer{padding:1.4rem 2rem;background:var(--section-bg);border-top:1px solid var(--gray-line);display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+        .btn-submit{display:inline-flex;align-items:center;gap:.6rem;background:var(--gold);color:var(--ink);font-family:'Libre Baskerville',serif;font-size:.8rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;border:none;padding:.75rem 2rem;border-radius:var(--radius-sm);cursor:pointer;transition:all var(--transition);box-shadow:0 4px 16px rgba(201,168,76,.28)}
+        .btn-submit:hover{background:var(--gold-light);transform:translateY(-2px);box-shadow:0 8px 24px rgba(201,168,76,.38)}
+        .btn-cancel{display:inline-flex;align-items:center;gap:.5rem;background:transparent;color:var(--gray-text);font-family:'Libre Baskerville',serif;font-size:.78rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;border:1.5px solid var(--gray-line);padding:.7rem 1.5rem;border-radius:var(--radius-sm);text-decoration:none;transition:all var(--transition)}
+        .btn-cancel:hover{border-color:var(--gold);color:var(--gold-dim);background:var(--gold-pale)}
+        /* OVERLAY */
+        .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(26,22,18,.5);z-index:199}
+        .sidebar-overlay.active{display:block}
+        @media(max-width:991px){.sidebar{transform:translateX(-100%);width:var(--sidebar-w)!important}.sidebar.mobile-open{transform:translateX(0)}.main-area,.main-area.expanded{margin-left:0!important}}
+        @media(max-width:576px){.page-content{padding:1.2rem}.topbar{padding:0 1rem}.form-section{padding:1.2rem 1rem}.form-footer{flex-direction:column;align-items:stretch}.btn-submit,.btn-cancel{width:100%;justify-content:center}}
+    </style>
 </head>
-
 <body>
-
-<div class="container-fluid g-0">
-    <div class="row g-0">
-
-        <!-- SIDEBAR GERENTE -->
-        <aside class="col-12 col-md-3 col-lg-2 sidebar d-flex flex-column">
-          <div class="d-flex align-items-center justify-content-between px-3 py-3 sidebar-top">
-            <h2 class="logo-text mb-0">ABANFAR-BF</h2>
-            <button class="btn btn-circle"><i class="bi bi-person-fill"></i></button>
-          </div>
-
-          <div class="sidebar-profile text-center py-3">
-            <div class="profile-icon mb-2">
-              <i class="bi bi-person-circle"></i>
+<div class="app-shell">
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-deco" aria-hidden="true">𝄞</div>
+        <div class="sidebar-top">
+            <a href="{% url 'home' %}" class="sidebar-brand">
+                <div class="sidebar-logo-ring">
+                    <img src="{% static 'img/logo_abanfar.png' %}" alt="Logo" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+                    <span class="sidebar-logo-placeholder" style="display:none">♪</span>
+                </div>
+                <div class="sidebar-brand-text">
+                    <span class="brand-name">ABANFAR BF</span>
+                    <span class="brand-sub">Painel Administrativo</span>
+                </div>
+            </a>
+            <button class="btn-collapse" id="btnCollapse"><i class="bi bi-layout-sidebar-reverse" id="collapseIcon"></i></button>
+        </div>
+        <div class="sidebar-profile">
+            <div class="profile-avatar"><i class="bi bi-person-fill"></i></div>
+            <div class="sidebar-profile-name">
+                <span class="profile-name">{{ user.first_name|default:user.username }}</span>
+                <span class="profile-role">Gerente</span>
             </div>
-            <button class="btn btn-profile">Gerente</button>
-          </div>
+        </div>
+        <nav class="sidebar-nav">
+            <div class="nav-section-label">Principal</div>
+            <a href="{% url 'contas:painel_gerente' %}" class="sidebar-link"><i class="bi bi-speedometer2"></i><span class="nav-label">Início</span></a>
+            <div class="nav-section-label mt-2">Gestão</div>
+            <a href="{% url 'contas:lista_alunos' %}" class="sidebar-link"><i class="bi bi-people-fill"></i><span class="nav-label">Alunos</span></a>
+            <a href="{% url 'professores:professores_list' %}" class="sidebar-link"><i class="bi bi-person-workspace"></i><span class="nav-label">Professores</span></a>
+            <a href="{% url 'materias:materias_gerente' %}" class="sidebar-link"><i class="bi bi-journal-text"></i><span class="nav-label">Matérias</span></a>
+            <a href="{% url 'instrumentos:list' %}" class="sidebar-link"><i class="bi bi-music-note-list"></i><span class="nav-label">Instrumentos</span></a>
+            <a href="{% url 'grupos:listar' %}" class="sidebar-link active"><i class="bi bi-music-note-beamed"></i><span class="nav-label">Grupos Musicais</span></a>
+            <div class="nav-section-label mt-2">Sistema</div>
+            <a href="#" class="sidebar-link"><i class="bi bi-gear"></i><span class="nav-label">Configurações</span></a>
+        </nav>
+        <div class="sidebar-footer">
+            <span class="sidebar-footer-text">ABANFAR BF © {% now "Y" %}</span>
+            <a href="{% url 'contas:logout' %}" class="btn-logout"><i class="bi bi-box-arrow-left"></i><span class="nav-label">Sair</span></a>
+        </div>
+    </aside>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-          <nav class="sidebar-menu flex-grow-1 mt-3">
-            <ul class="nav flex-column">
-              <li class="nav-item mb-3">
-                <a href="{% url 'contas:painel_gerente' %}" class="nav-link"><i class="bi bi-speedometer2 me-2"></i> Início</a>
-              </li>
+    <!-- MAIN -->
+    <div class="main-area" id="mainArea">
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="topbar-icon-btn d-lg-none" id="btnMobileMenu"><i class="bi bi-list"></i></button>
+                <div class="breadcrumb-custom">
+                    <span>ABANFAR BF</span><span class="bc-sep">♩</span>
+                    <span><a href="{% url 'grupos:listar' %}" style="color:inherit;text-decoration:none">Grupos Musicais</a></span>
+                    <span class="bc-sep">♩</span>
+                    <span class="bc-active">Criar</span>
+                </div>
+            </div>
+            <div class="topbar-right">
+                <div class="topbar-icon-btn"><i class="bi bi-bell"></i><span class="badge-dot"></span></div>
+                <div class="topbar-user">
+                    <div class="topbar-avatar">{{ user.first_name|first|default:"G" }}</div>
+                    <span class="topbar-username d-none d-sm-block">{{ user.first_name|default:user.username }}</span>
+                </div>
+            </div>
+        </header>
 
-              <li class="nav-item mb-3">
-                <a href="{% url 'contas:lista_alunos' %}" class="nav-link"><i class="bi bi-people-fill me-2"></i> Alunos</a>
-              </li>
+        <main class="page-content">
+            <div class="page-eyebrow"><i class="bi bi-music-note-beamed"></i> Projetos</div>
+            <h1 class="page-title">Criar Grupo Musical</h1>
+            <p class="page-subtitle">Cadastre um novo conjunto ou ensemble da associação.</p>
+            <hr class="gold-rule">
 
-              <li class="nav-item mb-3">
-                <a href="{% url 'professores:professores_list' %}" class="nav-link"><i class="bi bi-person-workspace me-2"></i> Professores</a>
-              </li>
+            <!-- Group name preview -->
+            <div class="group-preview-wrap">
+                <div class="group-preview-icon"><i class="bi bi-music-note-beamed"></i></div>
+                <div>
+                    <div class="preview-lbl">Novo grupo</div>
+                    <div class="preview-group-name" id="previewGroupName">Nome do grupo…</div>
+                </div>
+            </div>
 
-              <li class="nav-item mb-3">
-                <a href="{% url 'materias:materias_gerente' %}" class="nav-link"><i class="bi bi-journal-text me-2"></i> Matérias</a>
-              </li>
-
-              <li class="nav-item mb-3">
-                <a href="{% url 'instrumentos:list' %}" class="nav-link active"><i class="bi bi-music-note-list me-2"></i> Instrumentos</a>
-              </li>
-
-              <li class="nav-item mb-3">
-                <a href="{% url 'grupos:listar' %}" class="nav-link"><i class="bi bi-music-note-list me-2"></i> Grupos Musicais</a>
-              </li>
-            </ul>
-          </nav>
-        </aside>
-
-        <main class="col-12 col-md-9 col-lg-10 p-4">
-            <h2 class="mb-4">Criar Grupo Musical</h2>
-
-            <div class="card p-4">
-                <form method="POST">
+            <div class="form-card">
+                <form method="POST" novalidate>
                     {% csrf_token %}
 
-                    {{ form.as_p }}
+                    <!-- Dados do grupo -->
+                    <div class="form-section">
+                        <div class="form-section-title"><i class="bi bi-music-note-beamed"></i> Dados do grupo</div>
 
-                    <button class="btn btn-success mt-3" type="submit">Salvar</button>
-                    <a href="{% url 'grupos:listar' %}" class="btn btn-secondary mt-3">Cancelar</a>
+                        {% comment %}
+                        Se o form tem campos além de 'nome' e 'ativo',
+                        renderize-os aqui seguindo o mesmo padrão field-wrap,
+                        ou use form.as_p dentro da div .form-as-p abaixo.
+                        {% endcomment %}
+
+                        <div class="field-wrap">
+                            <label for="id_nome">Nome do grupo</label>
+                            <input type="text" name="nome" id="id_nome"
+                                   placeholder="Ex: Banda Francisco Magalhães, Orquestra de Flautas…"
+                                   value="{{ form.nome.value|default:'' }}">
+                        </div>
+
+                        <!-- Campos extras do form via form.as_p (sem nome e ativo que já tratamos) -->
+                        {% if form.errors or form.non_field_errors %}
+                        <div class="form-as-p">
+                            {{ form.as_p }}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Status -->
+                    <div class="form-section">
+                        <div class="form-section-title"><i class="bi bi-toggle-on"></i> Status inicial</div>
+                        <label class="toggle-wrap">
+                            <input type="checkbox" name="ativo" id="id_ativo" checked>
+                            <div class="toggle-switch"></div>
+                            <div class="toggle-text">
+                                <strong id="atoLabel">Grupo ativo</strong>
+                                <span>O grupo ficará disponível e visível no sistema</span>
+                            </div>
+                        </label>
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="form-footer">
+                        <a href="{% url 'grupos:listar' %}" class="btn-cancel">
+                            <i class="bi bi-arrow-left"></i> Cancelar
+                        </a>
+                        <button type="submit" class="btn-submit">
+                            <i class="bi bi-check-circle-fill"></i> Salvar grupo
+                        </button>
+                    </div>
                 </form>
             </div>
         </main>
-
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const sidebar=document.getElementById('sidebar'),mainArea=document.getElementById('mainArea'),btnCollapse=document.getElementById('btnCollapse'),collapseIcon=document.getElementById('collapseIcon'),btnMobile=document.getElementById('btnMobileMenu'),overlay=document.getElementById('sidebarOverlay');
+    btnCollapse.addEventListener('click',()=>{sidebar.classList.toggle('collapsed');mainArea.classList.toggle('expanded');collapseIcon.className=sidebar.classList.contains('collapsed')?'bi bi-layout-sidebar':'bi bi-layout-sidebar-reverse'});
+    btnMobile.addEventListener('click',()=>{sidebar.classList.toggle('mobile-open');overlay.classList.toggle('active')});
+    overlay.addEventListener('click',()=>{sidebar.classList.remove('mobile-open');overlay.classList.remove('active')});
+
+    /* Group name live preview */
+    const nomeInput=document.getElementById('id_nome');
+    const previewName=document.getElementById('previewGroupName');
+    nomeInput?.addEventListener('input',()=>{
+        previewName.textContent=nomeInput.value.trim()||'Nome do grupo…';
+    });
+
+    /* Toggle label */
+    document.getElementById('id_ativo')?.addEventListener('change',function(){
+        document.getElementById('atoLabel').textContent=this.checked?'Grupo ativo':'Grupo inativo';
+    });
+</script>
 </body>
 </html>

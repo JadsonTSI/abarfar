@@ -1,0 +1,678 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão de Transparência — ABANFAR BF</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Cormorant+Garamond:wght@300;400;600&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root{--gold:#C9A84C;--gold-light:#E8C96A;--gold-pale:#F5E9C8;--gold-dim:#9A7A30;--cream:#FDFAF3;--white:#FFFFFF;--ink:#1A1612;--ink-soft:#3D3530;--gray-text:#7A6E65;--gray-line:#E8E0D4;--section-bg:#F9F5EC;--sidebar-w:260px;--sidebar-w-collapsed:72px;--topbar-h:64px;--radius-lg:1.1rem;--radius-sm:.55rem;--shadow-gold:0 4px 24px rgba(201,168,76,.16);--shadow-soft:0 4px 20px rgba(26,22,18,.07);--transition:.26s ease}
+        *,*::before,*::after{box-sizing:border-box}html{scroll-behavior:smooth}
+        body{font-family:'Cormorant Garamond',Georgia,serif;background:var(--section-bg);color:var(--ink-soft);margin:0;padding:0;min-height:100vh;-webkit-font-smoothing:antialiased}
+        h1,h2,h3,h4,h5{font-family:'Playfair Display',Georgia,serif;color:var(--ink)}
+        ::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-track{background:var(--cream)}::-webkit-scrollbar-thumb{background:var(--gold);border-radius:3px}
+        .app-shell{display:flex;min-height:100vh}
+        /* SIDEBAR */
+        .sidebar{width:var(--sidebar-w);min-height:100vh;background:var(--ink);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:200;transition:width var(--transition),transform var(--transition);overflow:hidden;border-right:2px solid var(--gold)}
+        .sidebar.collapsed{width:var(--sidebar-w-collapsed)}
+        .sidebar.collapsed .nav-label,.sidebar.collapsed .sidebar-profile-name,.sidebar.collapsed .sidebar-brand-text,.sidebar.collapsed .sidebar-footer-text{opacity:0;width:0;overflow:hidden;white-space:nowrap}
+        .sidebar-top{padding:0 1rem;height:var(--topbar-h);display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(201,168,76,.15);flex-shrink:0}
+        .sidebar-brand{display:flex;align-items:center;gap:.7rem;text-decoration:none;overflow:hidden}
+        .sidebar-logo-ring{width:36px;height:36px;border-radius:50%;border:1.5px solid var(--gold);background:var(--gold-pale);display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden}
+        .sidebar-logo-ring img{width:100%;height:100%;object-fit:contain;border-radius:50%}
+        .sidebar-logo-placeholder{font-size:1.1rem;color:var(--gold)}
+        .sidebar-brand-text{transition:opacity var(--transition),width var(--transition)}
+        .brand-name{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;color:var(--gold);display:block;line-height:1.1}
+        .brand-sub{font-family:'Libre Baskerville',serif;font-size:.58rem;letter-spacing:.06em;color:#5A5450;display:block}
+        .btn-collapse{width:30px;height:30px;border-radius:50%;background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.2);color:var(--gold);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:background var(--transition);font-size:.9rem}
+        .btn-collapse:hover{background:rgba(201,168,76,.22)}
+        .sidebar-profile{padding:1.2rem 1rem;border-bottom:1px solid rgba(201,168,76,.12);display:flex;align-items:center;gap:.85rem;flex-shrink:0;overflow:hidden}
+        .profile-avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--gold-pale),var(--gold));border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;color:var(--gold-dim);font-size:1.1rem;flex-shrink:0}
+        .sidebar-profile-name{transition:opacity var(--transition),width var(--transition);overflow:hidden}
+        .profile-name{font-family:'Playfair Display',serif;font-size:.9rem;font-weight:700;color:var(--white);display:block;white-space:nowrap}
+        .profile-role{font-family:'Libre Baskerville',serif;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);display:block}
+        .sidebar-nav{flex:1;overflow-y:auto;overflow-x:hidden;padding:.8rem 0}
+        .nav-section-label{font-family:'Libre Baskerville',serif;font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:#4A4440;padding:.5rem 1.2rem .3rem;white-space:nowrap;overflow:hidden}
+        .sidebar-link{display:flex;align-items:center;gap:.85rem;padding:.65rem 1.2rem;color:#8A8078;text-decoration:none;font-family:'Libre Baskerville',serif;font-size:.78rem;letter-spacing:.04em;white-space:nowrap;overflow:hidden;margin:.1rem .6rem;border-radius:var(--radius-sm);transition:color var(--transition),background var(--transition)}
+        .sidebar-link i{font-size:1.05rem;flex-shrink:0;width:20px;text-align:center}
+        .nav-label{transition:opacity var(--transition),width var(--transition)}
+        .sidebar-link:hover{color:var(--gold-light);background:rgba(201,168,76,.07)}
+        .sidebar-link.active{color:var(--gold);background:rgba(201,168,76,.12);border-left:2px solid var(--gold)}
+        .sidebar-footer{padding:.9rem 1rem;border-top:1px solid rgba(201,168,76,.12);flex-shrink:0}
+        .sidebar-footer-text{font-family:'Libre Baskerville',serif;font-size:.58rem;letter-spacing:.06em;color:#3A3430;display:block;margin-bottom:.6rem;white-space:nowrap;overflow:hidden;transition:opacity var(--transition)}
+        .btn-logout{display:flex;align-items:center;gap:.6rem;padding:.5rem .8rem;border-radius:var(--radius-sm);background:rgba(180,60,60,.1);border:1px solid rgba(180,60,60,.2);color:#C07070;font-family:'Libre Baskerville',serif;font-size:.72rem;text-decoration:none;transition:background var(--transition),color var(--transition);width:100%}
+        .btn-logout:hover{background:rgba(180,60,60,.18);color:#E09090}
+        .sidebar-deco{position:absolute;bottom:100px;right:.5rem;font-size:5rem;color:var(--gold);opacity:.03;pointer-events:none;font-family:serif;line-height:1}
+        /* MAIN */
+        .main-area{margin-left:var(--sidebar-w);flex:1;display:flex;flex-direction:column;min-height:100vh;transition:margin-left var(--transition)}
+        .main-area.expanded{margin-left:var(--sidebar-w-collapsed)}
+        /* TOPBAR */
+        .topbar{height:var(--topbar-h);background:var(--white);border-bottom:2px solid var(--gold);display:flex;align-items:center;justify-content:space-between;padding:0 1.8rem;position:sticky;top:0;z-index:100;box-shadow:0 2px 16px rgba(201,168,76,.1);gap:1rem}
+        .topbar-left{display:flex;align-items:center;gap:1rem}
+        .breadcrumb-custom{display:flex;align-items:center;gap:.4rem;font-family:'Libre Baskerville',serif;font-size:.72rem;letter-spacing:.06em;color:var(--gray-text)}
+        .breadcrumb-custom .bc-sep{color:var(--gold);font-size:.6rem}
+        .breadcrumb-custom .bc-active{color:var(--ink);font-weight:700}
+        .topbar-right{display:flex;align-items:center;gap:.8rem}
+        .topbar-search{display:flex;align-items:center;background:var(--section-bg);border:1.5px solid var(--gray-line);border-radius:var(--radius-sm);padding:.35rem .8rem;gap:.5rem;transition:border-color var(--transition),box-shadow var(--transition)}
+        .topbar-search:focus-within{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,.12)}
+        .topbar-search input{border:none;background:transparent;outline:none;font-family:'Cormorant Garamond',serif;font-size:.95rem;color:var(--ink);width:200px}
+        .topbar-search input::placeholder{color:#B0A498}
+        .topbar-search i{color:var(--gold-dim);font-size:.9rem}
+        .topbar-icon-btn{width:36px;height:36px;border-radius:50%;background:var(--section-bg);border:1.5px solid var(--gray-line);display:flex;align-items:center;justify-content:center;color:var(--gray-text);font-size:.95rem;cursor:pointer;text-decoration:none;transition:all var(--transition);position:relative}
+        .topbar-icon-btn:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-pale)}
+        .badge-dot{position:absolute;top:-1px;right:-1px;width:8px;height:8px;background:#E06060;border-radius:50%;border:2px solid var(--white)}
+        .topbar-user{display:flex;align-items:center;gap:.55rem;padding:.3rem .8rem .3rem .4rem;background:var(--gold-pale);border:1.5px solid rgba(201,168,76,.3);border-radius:2rem;cursor:pointer;transition:all var(--transition)}
+        .topbar-avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-light));display:flex;align-items:center;justify-content:center;color:var(--ink);font-size:.75rem;font-weight:700;font-family:'Playfair Display',serif}
+        .topbar-username{font-family:'Libre Baskerville',serif;font-size:.72rem;color:var(--gold-dim);font-weight:700}
+        /* PAGE */
+        .page-content{padding:2rem 2rem 3rem;flex:1}
+        .page-eyebrow{font-family:'Libre Baskerville',serif;font-size:.68rem;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);display:flex;align-items:center;gap:.6rem;margin-bottom:.4rem}
+        .page-eyebrow::before{content:'';width:24px;height:1px;background:var(--gold)}
+        .page-title{font-family:'Playfair Display',serif;font-size:clamp(1.5rem,2.5vw,2rem);font-weight:900;color:var(--ink);margin:0 0 .3rem}
+        .page-subtitle{font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:var(--gray-text);margin:0}
+        .gold-rule{height:2px;background:linear-gradient(90deg,var(--gold),transparent);border:none;margin:1.5rem 0 2rem;opacity:.4}
+        /* BUTTONS */
+        .btn-gold{display:inline-flex;align-items:center;gap:.5rem;background:var(--gold);color:var(--ink);font-family:'Libre Baskerville',serif;font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;border:none;padding:.5rem 1.2rem;border-radius:var(--radius-sm);text-decoration:none;cursor:pointer;transition:all var(--transition);box-shadow:0 3px 12px rgba(201,168,76,.25)}
+        .btn-gold:hover{background:var(--gold-light);color:var(--ink);transform:translateY(-2px)}
+        .btn-outline-gold{display:inline-flex;align-items:center;gap:.5rem;background:transparent;color:var(--gold-dim);font-family:'Libre Baskerville',serif;font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;border:1.5px solid var(--gold);padding:.48rem 1.1rem;border-radius:var(--radius-sm);text-decoration:none;cursor:pointer;transition:all var(--transition)}
+        .btn-outline-gold:hover{background:var(--gold-pale);color:var(--gold-dim);transform:translateY(-2px)}
+        /* MINI STATS */
+        .mini-stat{background:var(--white);border-radius:var(--radius-lg);border:1px solid var(--gray-line);padding:1.1rem 1.3rem;display:flex;align-items:center;gap:1rem;box-shadow:var(--shadow-soft);transition:transform var(--transition),box-shadow var(--transition)}
+        .mini-stat:hover{transform:translateY(-3px);box-shadow:var(--shadow-gold)}
+        .mini-stat-icon{width:42px;height:42px;border-radius:50%;background:var(--gold-pale);display:flex;align-items:center;justify-content:center;color:var(--gold-dim);font-size:1.1rem;flex-shrink:0;transition:background var(--transition),color var(--transition)}
+        .mini-stat:hover .mini-stat-icon{background:var(--gold);color:var(--white)}
+        .mini-stat-value{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:900;color:var(--ink);line-height:1}
+        .mini-stat-label{font-family:'Libre Baskerville',serif;font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gray-text);display:block;margin-top:.1rem}
+        /* SECTION CARD */
+        .section-card{background:var(--white);border-radius:var(--radius-lg);border:1px solid var(--gray-line);box-shadow:var(--shadow-soft);overflow:hidden;margin-bottom:1.5rem}
+        .section-card-header{padding:1.1rem 1.5rem;border-bottom:1px solid var(--gray-line);display:flex;align-items:center;justify-content:space-between;background:var(--section-bg);gap:.5rem;flex-wrap:wrap}
+        .section-card-title{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;color:var(--ink);display:flex;align-items:center;gap:.5rem;margin:0}
+        .section-card-title i{color:var(--gold)}
+        /* UPLOAD FORM */
+        .upload-card{background:var(--white);border-radius:var(--radius-lg);border:1px solid var(--gray-line);box-shadow:var(--shadow-soft);overflow:hidden;margin-bottom:1.5rem}
+        .upload-card-header{background:var(--ink);padding:1.1rem 1.5rem;border-bottom:2px solid var(--gold);display:flex;align-items:center;gap:.6rem}
+        .upload-card-header h2{font-family:'Libre Baskerville',serif;font-size:.82rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-light);margin:0}
+        .upload-card-header i{color:var(--gold)}
+        .upload-card-body{padding:1.6rem}
+        /* FIELDS */
+        .field-wrap{margin-bottom:1.1rem}
+        .field-label{font-family:'Libre Baskerville',serif;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);display:block;margin-bottom:.4rem}
+        .field-input{width:100%;background:var(--section-bg);border:1.5px solid var(--gray-line);border-radius:var(--radius-sm);padding:.72rem 1rem;font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:var(--ink);outline:none;transition:border-color var(--transition),box-shadow var(--transition);-webkit-appearance:none}
+        .field-input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,.13);background:var(--white)}
+        .field-input::placeholder{color:#C0B4A8}
+        select.field-input{background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23C9A84C' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");background-repeat:no-repeat;background-position:right .8rem center;background-size:14px;cursor:pointer}
+        textarea.field-input{resize:vertical;min-height:80px}
+        /* FILE DROP ZONE */
+        .drop-zone{border:2px dashed var(--gray-line);border-radius:var(--radius-lg);padding:2.5rem;text-align:center;cursor:pointer;transition:all var(--transition);background:var(--section-bg);position:relative}
+        .drop-zone:hover,.drop-zone.drag-over{border-color:var(--gold);background:var(--gold-pale)}
+        .drop-zone input[type="file"]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+        .drop-icon{font-size:2.8rem;color:var(--gold);opacity:.5;display:block;margin-bottom:.8rem;transition:opacity var(--transition),transform var(--transition)}
+        .drop-zone:hover .drop-icon{opacity:.8;transform:translateY(-4px)}
+        .drop-title{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;color:var(--ink);margin-bottom:.3rem}
+        .drop-hint{font-family:'Cormorant Garamond',serif;font-size:.9rem;color:var(--gray-text)}
+        .drop-hint strong{color:var(--gold-dim)}
+        .drop-formats{display:flex;gap:.4rem;justify-content:center;flex-wrap:wrap;margin-top:.8rem}
+        .fmt-badge{font-family:'Libre Baskerville',serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;padding:.18rem .55rem;border-radius:3px;font-weight:700}
+        .fmt-pdf{background:#FDECEA;color:#C0392B;border:1px solid #F5C6C2}
+        .fmt-docx{background:#EEF2FF;color:#3A5EC0;border:1px solid #C5CFF5}
+        .fmt-xlsx{background:#EEF8EE;color:#2E7A3A;border:1px solid #C2DCC5}
+        .fmt-img{background:var(--gold-pale);color:var(--gold-dim);border:1px solid rgba(201,168,76,.3)}
+        /* Selected file preview */
+        .file-selected{display:none;align-items:center;gap:.9rem;margin-top:.9rem;padding:.8rem 1rem;background:var(--gold-pale);border:1px solid rgba(201,168,76,.3);border-radius:var(--radius-sm)}
+        .file-selected.show{display:flex}
+        .fs-icon{width:36px;height:36px;border-radius:var(--radius-sm);background:var(--gold);display:flex;align-items:center;justify-content:center;color:var(--ink);font-size:1rem;flex-shrink:0}
+        .fs-name{font-family:'Playfair Display',serif;font-size:.9rem;font-weight:700;color:var(--ink)}
+        .fs-size{font-family:'Libre Baskerville',serif;font-size:.65rem;color:var(--gold-dim)}
+        /* FORM FOOTER */
+        .upload-footer{padding:1.1rem 1.6rem;background:var(--section-bg);border-top:1px solid var(--gray-line);display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+        .btn-submit{display:inline-flex;align-items:center;gap:.6rem;background:var(--gold);color:var(--ink);font-family:'Libre Baskerville',serif;font-size:.8rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;border:none;padding:.75rem 2rem;border-radius:var(--radius-sm);cursor:pointer;transition:all var(--transition);box-shadow:0 4px 16px rgba(201,168,76,.28)}
+        .btn-submit:hover{background:var(--gold-light);transform:translateY(-2px);box-shadow:0 8px 24px rgba(201,168,76,.38)}
+        .btn-reset{display:inline-flex;align-items:center;gap:.5rem;background:transparent;color:var(--gray-text);font-family:'Libre Baskerville',serif;font-size:.78rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;border:1.5px solid var(--gray-line);padding:.7rem 1.5rem;border-radius:var(--radius-sm);cursor:pointer;transition:all var(--transition)}
+        .btn-reset:hover{border-color:var(--gold);color:var(--gold-dim);background:var(--gold-pale)}
+        /* TABLE */
+        .data-table-wrap{overflow-x:auto}
+        .data-table{width:100%;border-collapse:collapse}
+        .data-table thead tr{background:var(--section-bg);border-bottom:2px solid var(--gray-line)}
+        .data-table th{font-family:'Libre Baskerville',serif;font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gray-text);padding:.9rem 1.2rem;font-weight:700;text-align:left;white-space:nowrap}
+        .data-table th:first-child{padding-left:1.5rem}
+        .data-table th:last-child{padding-right:1.5rem;text-align:center}
+        .data-table tbody tr{border-bottom:1px solid var(--gray-line);transition:background var(--transition)}
+        .data-table tbody tr:last-child{border-bottom:none}
+        .data-table tbody tr:hover{background:var(--section-bg)}
+        .data-table td{font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--ink-soft);padding:.85rem 1.2rem;vertical-align:middle}
+        .data-table td:first-child{padding-left:1.5rem}
+        .data-table td:last-child{padding-right:1.5rem;text-align:center}
+        .doc-name-cell{display:flex;align-items:center;gap:.7rem}
+        .doc-icon-sm{width:34px;height:34px;border-radius:var(--radius-sm);background:var(--gold-pale);border:1px solid rgba(201,168,76,.3);display:flex;align-items:center;justify-content:center;color:var(--gold-dim);font-size:.9rem;flex-shrink:0;transition:background var(--transition),color var(--transition)}
+        .data-table tbody tr:hover .doc-icon-sm{background:var(--gold);color:var(--white)}
+        .doc-name-text{font-family:'Playfair Display',serif;font-size:.92rem;font-weight:700;color:var(--ink);display:block;line-height:1.2}
+        .doc-cat-text{font-family:'Libre Baskerville',serif;font-size:.62rem;color:var(--gray-text);letter-spacing:.06em}
+        .badge-cat{display:inline-block;font-family:'Libre Baskerville',serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;padding:.2rem .6rem;border-radius:2rem;font-weight:700;white-space:nowrap}
+        .bc-atas{background:#EEF0F8;color:#3A3A7A;border:1px solid #C5C5E8}
+        .bc-financeiro{background:#EEF5EE;color:#3A6B3A;border:1px solid #C5DCC5}
+        .bc-institucional{background:var(--gold-pale);color:var(--gold-dim);border:1px solid rgba(201,168,76,.3)}
+        .bc-editais{background:#F8EEF0;color:#6B3A4A;border:1px solid #DCC5CC}
+        .bc-projetos{background:#F0F0F8;color:#3A3A7A;border:1px solid #C5C5E8}
+        .badge-pub{display:inline-block;font-family:'Libre Baskerville',serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;padding:.2rem .6rem;border-radius:2rem;font-weight:700}
+        .pub-sim{background:#EEF5EE;color:#3A6B3A;border:1px solid #C5DCC5}
+        .pub-nao{background:#F5F0EE;color:#8A6A5A;border:1px solid #DDD0C8}
+        .action-btns{display:flex;align-items:center;justify-content:center;gap:.4rem}
+        .btn-action{width:32px;height:32px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:.85rem;text-decoration:none;cursor:pointer;border:1px solid transparent;transition:all var(--transition)}
+        .btn-act-view{background:#EEF0F8;color:#3A3A7A;border-color:#C5C5E8}
+        .btn-act-view:hover{background:#5A5AB0;color:var(--white);transform:translateY(-2px)}
+        .btn-act-toggle{background:var(--gold-pale);color:var(--gold-dim);border-color:rgba(201,168,76,.3)}
+        .btn-act-toggle:hover{background:var(--gold);color:var(--white);transform:translateY(-2px)}
+        .btn-act-delete{background:#F8EEEE;color:#8A4040;border-color:#DCC8C8}
+        .btn-act-delete:hover{background:#C04040;color:var(--white);transform:translateY(-2px)}
+        /* TOOLBAR */
+        .table-toolbar{padding:1rem 1.5rem;border-bottom:1px solid var(--gray-line);display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;background:var(--white)}
+        .filter-search{display:flex;align-items:center;background:var(--section-bg);border:1.5px solid var(--gray-line);border-radius:var(--radius-sm);padding:.4rem .9rem;gap:.5rem;transition:border-color var(--transition),box-shadow var(--transition)}
+        .filter-search:focus-within{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,.12)}
+        .filter-search input{border:none;background:transparent;outline:none;font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--ink);width:200px}
+        .filter-search input::placeholder{color:#B0A498}
+        .filter-search i{color:var(--gold-dim);font-size:.9rem}
+        .filter-select{border:1.5px solid var(--gray-line);border-radius:var(--radius-sm);padding:.42rem .85rem;font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--ink-soft);background:var(--section-bg);outline:none;transition:border-color var(--transition);cursor:pointer}
+        .filter-select:focus{border-color:var(--gold)}
+        /* PAGINATION */
+        .table-pagination{padding:1rem 1.5rem;border-top:1px solid var(--gray-line);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.8rem;background:var(--section-bg)}
+        .pagination-info{font-family:'Libre Baskerville',serif;font-size:.68rem;letter-spacing:.06em;color:var(--gray-text)}
+        .pagination-btns{display:flex;gap:.3rem}
+        .page-btn{width:34px;height:34px;display:flex;align-items:center;justify-content:center;border-radius:var(--radius-sm);border:1px solid var(--gray-line);background:var(--white);color:var(--ink-soft);font-family:'Libre Baskerville',serif;font-size:.8rem;text-decoration:none;transition:all var(--transition);cursor:pointer}
+        .page-btn:hover,.page-btn.active{background:var(--gold);border-color:var(--gold);color:var(--ink);transform:translateY(-1px)}
+        /* EMPTY */
+        .empty-state{text-align:center;padding:4rem 2rem}
+        .empty-icon{font-size:4rem;color:var(--gold);opacity:.25;display:block;margin-bottom:1rem}
+        .empty-title{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--ink);margin-bottom:.4rem}
+        .empty-text{font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--gray-text);margin-bottom:1.5rem}
+        /* SIDEBAR OVERLAY */
+        .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(26,22,18,.5);z-index:199}
+        .sidebar-overlay.active{display:block}
+        /* SUCCESS TOAST */
+        .toast-success{position:fixed;bottom:2rem;right:2rem;z-index:9999;background:var(--ink);border:1px solid rgba(201,168,76,.3);border-left:4px solid var(--gold);border-radius:var(--radius-sm);padding:.9rem 1.3rem;display:flex;align-items:center;gap:.8rem;box-shadow:0 8px 32px rgba(26,22,18,.3);transform:translateY(100px);opacity:0;transition:all .4s ease;pointer-events:none}
+        .toast-success.show{transform:translateY(0);opacity:1;pointer-events:auto}
+        .toast-success i{color:var(--gold);font-size:1.1rem}
+        .toast-msg{font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--white)}
+        /* RESPONSIVE */
+        @media(max-width:991px){.sidebar{transform:translateX(-100%);width:var(--sidebar-w)!important}.sidebar.mobile-open{transform:translateX(0)}.main-area,.main-area.expanded{margin-left:0!important}.topbar-search{display:none}}
+        @media(max-width:576px){.page-content{padding:1.2rem}.topbar{padding:0 1rem}.upload-footer{flex-direction:column;align-items:stretch}.btn-submit,.btn-reset{width:100%;justify-content:center}}
+    </style>
+</head>
+<body>
+<div class="app-shell">
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-deco" aria-hidden="true">𝄞</div>
+        <div class="sidebar-top">
+            <a href="{% url 'home' %}" class="sidebar-brand">
+                <div class="sidebar-logo-ring">
+                    <img src="{% static 'img/logo_abanfar.png' %}" alt="Logo" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+                    <span class="sidebar-logo-placeholder" style="display:none">♪</span>
+                </div>
+                <div class="sidebar-brand-text">
+                    <span class="brand-name">ABANFAR BF</span>
+                    <span class="brand-sub">Painel Administrativo</span>
+                </div>
+            </a>
+            <button class="btn-collapse" id="btnCollapse"><i class="bi bi-layout-sidebar-reverse" id="collapseIcon"></i></button>
+        </div>
+        <div class="sidebar-profile">
+            <div class="profile-avatar"><i class="bi bi-person-fill"></i></div>
+            <div class="sidebar-profile-name">
+                <span class="profile-name">{{ user.first_name|default:user.username }}</span>
+                <span class="profile-role">Gerente</span>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <div class="nav-section-label">Principal</div>
+            <a href="{% url 'contas:painel_gerente' %}" class="sidebar-link"><i class="bi bi-speedometer2"></i><span class="nav-label">Início</span></a>
+            <div class="nav-section-label mt-2">Gestão</div>
+            <a href="{% url 'contas:lista_alunos' %}" class="sidebar-link"><i class="bi bi-people-fill"></i><span class="nav-label">Alunos</span></a>
+            <a href="{% url 'professores:professores_list' %}" class="sidebar-link"><i class="bi bi-person-workspace"></i><span class="nav-label">Professores</span></a>
+            <a href="{% url 'materias:materias_gerente' %}" class="sidebar-link"><i class="bi bi-journal-text"></i><span class="nav-label">Matérias</span></a>
+            <a href="{% url 'instrumentos:list' %}" class="sidebar-link"><i class="bi bi-music-note-list"></i><span class="nav-label">Instrumentos</span></a>
+            <a href="{% url 'grupos:listar' %}" class="sidebar-link"><i class="bi bi-music-note-beamed"></i><span class="nav-label">Grupos Musicais</span></a>
+            <div class="nav-section-label mt-2">Portal</div>
+            <a href="#" class="sidebar-link active"><i class="bi bi-shield-check"></i><span class="nav-label">Transparência</span></a>
+            <div class="nav-section-label mt-2">Sistema</div>
+            <a href="#" class="sidebar-link"><i class="bi bi-gear"></i><span class="nav-label">Configurações</span></a>
+        </nav>
+        <div class="sidebar-footer">
+            <span class="sidebar-footer-text">ABANFAR BF © {% now "Y" %}</span>
+            <a href="{% url 'contas:logout' %}" class="btn-logout"><i class="bi bi-box-arrow-left"></i><span class="nav-label">Sair</span></a>
+        </div>
+    </aside>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- MAIN -->
+    <div class="main-area" id="mainArea">
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="topbar-icon-btn d-lg-none" id="btnMobileMenu"><i class="bi bi-list"></i></button>
+                <div class="breadcrumb-custom">
+                    <span>ABANFAR BF</span><span class="bc-sep">♩</span>
+                    <span>Painel</span><span class="bc-sep">♩</span>
+                    <span class="bc-active">Transparência</span>
+                </div>
+            </div>
+            <div class="topbar-right">
+                <div class="topbar-search d-none d-md-flex">
+                    <i class="bi bi-search"></i>
+                    <input type="text" placeholder="Buscar…" id="topbarSearch">
+                </div>
+                <div class="topbar-icon-btn"><i class="bi bi-bell"></i><span class="badge-dot"></span></div>
+                <a href="{% url 'transparencia' %}" class="btn-outline-gold d-none d-md-inline-flex" target="_blank">
+                    <i class="bi bi-box-arrow-up-right"></i> Ver portal público
+                </a>
+                <div class="topbar-user">
+                    <div class="topbar-avatar">{{ user.first_name|first|default:"G" }}</div>
+                    <span class="topbar-username d-none d-sm-block">{{ user.first_name|default:user.username }}</span>
+                </div>
+            </div>
+        </header>
+
+        <main class="page-content">
+
+            <!-- Page heading -->
+            <div class="d-flex align-items-start justify-content-between flex-wrap gap-3 mb-2">
+                <div>
+                    <div class="page-eyebrow"><i class="bi bi-shield-check"></i> Portal público</div>
+                    <h1 class="page-title">Gestão de Transparência</h1>
+                    <p class="page-subtitle">Publique e gerencie os documentos que aparecem no portal público da associação.</p>
+                </div>
+                <a href="{% url 'transparencia' %}" target="_blank" class="btn-outline-gold d-md-none" style="margin-top:.5rem">
+                    <i class="bi bi-box-arrow-up-right"></i> Portal público
+                </a>
+            </div>
+            <hr class="gold-rule">
+
+            <!-- Mini stats -->
+            <div class="row g-3 mb-4">
+                <div class="col-6 col-lg-3">
+                    <div class="mini-stat">
+                        <div class="mini-stat-icon"><i class="bi bi-file-earmark-text"></i></div>
+                        <div><div class="mini-stat-value">{{ documentos|length }}</div><span class="mini-stat-label">Total publicado</span></div>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-3">
+                    <div class="mini-stat">
+                        <div class="mini-stat-icon"><i class="bi bi-journal-text"></i></div>
+                        <div><div class="mini-stat-value">{{ atas_count|default:"0" }}</div><span class="mini-stat-label">Atas</span></div>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-3">
+                    <div class="mini-stat">
+                        <div class="mini-stat-icon"><i class="bi bi-graph-up"></i></div>
+                        <div><div class="mini-stat-value">{{ financeiro_count|default:"0" }}</div><span class="mini-stat-label">Financeiro</span></div>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-3">
+                    <div class="mini-stat">
+                        <div class="mini-stat-icon"><i class="bi bi-building"></i></div>
+                        <div><div class="mini-stat-value">{{ institucional_count|default:"0" }}</div><span class="mini-stat-label">Institucional</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- UPLOAD FORM -->
+            <div class="upload-card">
+                <div class="upload-card-header">
+                    <i class="bi bi-cloud-upload"></i>
+                    <h2>Publicar novo documento</h2>
+                </div>
+                <div class="upload-card-body">
+                    <form method="POST" enctype="multipart/form-data" id="uploadForm" novalidate>
+                        {% csrf_token %}
+
+                        <div class="row g-3">
+                            <!-- Título -->
+                            <div class="col-md-8">
+                                <div class="field-wrap">
+                                    <label class="field-label" for="id_titulo"><i class="bi bi-type" style="color:var(--gold);font-size:.75rem;margin-right:.3rem"></i> Título do documento</label>
+                                    <input type="text" name="titulo" id="id_titulo" class="field-input"
+                                           placeholder="Ex: Ata de Reunião Ordinária — Março 2025">
+                                </div>
+                            </div>
+
+                            <!-- Ano -->
+                            <div class="col-md-4">
+                                <div class="field-wrap">
+                                    <label class="field-label" for="id_ano"><i class="bi bi-calendar3" style="color:var(--gold);font-size:.75rem;margin-right:.3rem"></i> Ano de referência</label>
+                                    <input type="number" name="ano" id="id_ano" class="field-input"
+                                           placeholder="Ex: 2025" min="2014" max="2099"
+                                           value="{% now 'Y' %}">
+                                </div>
+                            </div>
+
+                            <!-- Categoria -->
+                            <div class="col-md-6">
+                                <div class="field-wrap">
+                                    <label class="field-label" for="id_categoria"><i class="bi bi-tag" style="color:var(--gold);font-size:.75rem;margin-right:.3rem"></i> Categoria</label>
+                                    <select name="categoria" id="id_categoria" class="field-input">
+                                        <option value="" disabled selected>— Selecione —</option>
+                                        <option value="atas">Atas de Reunião</option>
+                                        <option value="financeiro">Relatório Financeiro</option>
+                                        <option value="institucional">Documento Institucional</option>
+                                        <option value="editais">Editais</option>
+                                        <option value="projetos">Projetos Musicais</option>
+                                        <option value="outros">Outros</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Publicar imediatamente -->
+                            <div class="col-md-6 d-flex align-items-end">
+                                <div class="field-wrap w-100">
+                                    <label class="field-label"><i class="bi bi-eye" style="color:var(--gold);font-size:.75rem;margin-right:.3rem"></i> Visibilidade</label>
+                                    <label style="display:flex;align-items:center;gap:.9rem;padding:.7rem 1rem;background:var(--section-bg);border:1.5px solid var(--gray-line);border-radius:var(--radius-sm);cursor:pointer;transition:border-color var(--transition)" id="pubToggleWrap">
+                                        <input type="checkbox" name="publicado" id="id_publicado" checked style="display:none">
+                                        <div style="width:42px;height:22px;background:var(--gold);border-radius:11px;position:relative;transition:background .25s;flex-shrink:0" id="pubSwitch">
+                                            <div style="position:absolute;width:16px;height:16px;background:var(--white);border-radius:50%;top:3px;left:23px;transition:transform .25s;box-shadow:0 1px 3px rgba(0,0,0,.2)" id="pubKnob"></div>
+                                        </div>
+                                        <div>
+                                            <div id="pubLabel" style="font-family:'Playfair Display',serif;font-size:.88rem;font-weight:700;color:var(--ink)">Publicar imediatamente</div>
+                                            <div style="font-family:'Cormorant Garamond',serif;font-size:.85rem;color:var(--gray-text)">Aparece no portal público ao salvar</div>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Descrição -->
+                            <div class="col-12">
+                                <div class="field-wrap">
+                                    <label class="field-label" for="id_descricao"><i class="bi bi-text-paragraph" style="color:var(--gold);font-size:.75rem;margin-right:.3rem"></i> Descrição breve <span style="color:var(--gray-text);font-size:.65rem;text-transform:none;letter-spacing:0">(opcional)</span></label>
+                                    <textarea name="descricao" id="id_descricao" class="field-input"
+                                              rows="2" placeholder="Resumo ou observações sobre o documento…"></textarea>
+                                </div>
+                            </div>
+
+                            <!-- FILE DROP ZONE -->
+                            <div class="col-12">
+                                <label class="field-label"><i class="bi bi-paperclip" style="color:var(--gold);font-size:.75rem;margin-right:.3rem"></i> Arquivo do documento</label>
+                                <div class="drop-zone" id="dropZone">
+                                    <input type="file" name="arquivo" id="id_arquivo"
+                                           accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png">
+                                    <span class="drop-icon">
+                                        <i class="bi bi-cloud-arrow-up"></i>
+                                    </span>
+                                    <div class="drop-title">Arraste o arquivo aqui ou clique para selecionar</div>
+                                    <p class="drop-hint">Tamanho máximo: <strong>20 MB</strong></p>
+                                    <div class="drop-formats">
+                                        <span class="fmt-badge fmt-pdf">PDF</span>
+                                        <span class="fmt-badge fmt-docx">DOCX</span>
+                                        <span class="fmt-badge fmt-xlsx">XLSX</span>
+                                        <span class="fmt-badge fmt-img">JPG / PNG</span>
+                                    </div>
+                                </div>
+                                <!-- Preview do arquivo selecionado -->
+                                <div class="file-selected" id="fileSelected">
+                                    <div class="fs-icon"><i class="bi bi-file-earmark-fill"></i></div>
+                                    <div>
+                                        <div class="fs-name" id="fsName">—</div>
+                                        <div class="fs-size" id="fsSize">—</div>
+                                    </div>
+                                    <button type="button" onclick="clearFile()" style="margin-left:auto;background:none;border:none;color:var(--gray-text);cursor:pointer;font-size:1rem;transition:color .2s" title="Remover arquivo">
+                                        <i class="bi bi-x-circle"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Footer -->
+                        <div class="upload-footer mt-3" style="margin:-1.6rem;margin-top:1.2rem">
+                            <button type="reset" class="btn-reset" onclick="resetForm()">
+                                <i class="bi bi-arrow-counterclockwise"></i> Limpar
+                            </button>
+                            <button type="submit" class="btn-submit">
+                                <i class="bi bi-cloud-upload-fill"></i> Publicar documento
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- DOCUMENTS TABLE -->
+            <div class="section-card">
+                <div class="section-card-header">
+                    <h2 class="section-card-title"><i class="bi bi-table"></i> Documentos publicados</h2>
+                    <a href="#" class="btn-outline-gold"><i class="bi bi-download"></i> Exportar lista</a>
+                </div>
+
+                <div class="table-toolbar">
+                    <div style="display:flex;align-items:center;gap:.7rem;flex-wrap:wrap">
+                        <div class="filter-search">
+                            <i class="bi bi-search"></i>
+                            <input type="text" id="tableSearch" placeholder="Buscar documento…">
+                        </div>
+                        <select class="filter-select" id="filterCat">
+                            <option value="">Todas as categorias</option>
+                            <option value="atas">Atas</option>
+                            <option value="financeiro">Financeiro</option>
+                            <option value="institucional">Institucional</option>
+                            <option value="editais">Editais</option>
+                            <option value="projetos">Projetos</option>
+                        </select>
+                        <select class="filter-select" id="filterPub">
+                            <option value="">Todos</option>
+                            <option value="sim">Publicado</option>
+                            <option value="nao">Não publicado</option>
+                        </select>
+                    </div>
+                    <div style="font-family:'Libre Baskerville',serif;font-size:.68rem;color:var(--gray-text);letter-spacing:.06em">
+                        <span id="countLabel">{{ documentos|length }} documento(s)</span>
+                    </div>
+                </div>
+
+                <div class="data-table-wrap">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Documento</th>
+                                <th>Categoria</th>
+                                <th>Ano</th>
+                                <th>Data</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            {% for doc in documentos %}
+                            <tr class="doc-row"
+                                data-titulo="{{ doc.titulo }}"
+                                data-cat="{{ doc.categoria }}"
+                                data-pub="{% if doc.publicado %}sim{% else %}nao{% endif %}">
+                                <td>
+                                    <div class="doc-name-cell">
+                                        <div class="doc-icon-sm">
+                                            {% if doc.categoria == 'atas' %}<i class="bi bi-journal-text"></i>
+                                            {% elif doc.categoria == 'financeiro' %}<i class="bi bi-graph-up"></i>
+                                            {% elif doc.categoria == 'institucional' %}<i class="bi bi-building"></i>
+                                            {% elif doc.categoria == 'editais' %}<i class="bi bi-file-earmark-ruled"></i>
+                                            {% else %}<i class="bi bi-file-earmark"></i>{% endif %}
+                                        </div>
+                                        <div>
+                                            <span class="doc-name-text">{{ doc.titulo }}</span>
+                                            <span class="doc-cat-text">{{ doc.arquivo.name|slice:"-20:" }}</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="badge-cat bc-{{ doc.categoria }}">{{ doc.get_categoria_display }}</span>
+                                </td>
+                                <td style="font-family:'Playfair Display',serif;font-size:.9rem;font-weight:700;color:var(--ink)">
+                                    {{ doc.ano }}
+                                </td>
+                                <td style="font-family:'Libre Baskerville',serif;font-size:.72rem;color:var(--gray-text)">
+                                    {{ doc.data_publicacao|date:"d/m/Y" }}
+                                </td>
+                                <td>
+                                    {% if doc.publicado %}
+                                        <span class="badge-pub pub-sim">Publicado</span>
+                                    {% else %}
+                                        <span class="badge-pub pub-nao">Rascunho</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <div class="action-btns">
+                                        <a href="{{ doc.arquivo.url }}" target="_blank" class="btn-action btn-act-view" title="Visualizar">
+                                            <i class="bi bi-eye-fill"></i>
+                                        </a>
+                                        <a href="{% url 'transparencia:toggle' doc.id %}" class="btn-action btn-act-toggle"
+                                           title="{% if doc.publicado %}Despublicar{% else %}Publicar{% endif %}">
+                                            {% if doc.publicado %}
+                                                <i class="bi bi-eye-slash-fill"></i>
+                                            {% else %}
+                                                <i class="bi bi-eye-fill"></i>
+                                            {% endif %}
+                                        </a>
+                                        <a href="{% url 'transparencia:excluir' doc.id %}" class="btn-action btn-act-delete"
+                                           title="Excluir" onclick="return confirm('Excluir {{ doc.titulo }}?');">
+                                            <i class="bi bi-trash-fill"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr><td colspan="6">
+                                <div class="empty-state">
+                                    <span class="empty-icon">♩</span>
+                                    <div class="empty-title">Nenhum documento publicado</div>
+                                    <p class="empty-text">Use o formulário acima para publicar o primeiro documento.</p>
+                                </div>
+                            </td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                {% if documentos %}
+                <div class="table-pagination">
+                    <span class="pagination-info">Mostrando <strong>{{ documentos|length }}</strong> documento(s)</span>
+                    <div class="pagination-btns">
+                        <button class="page-btn"><i class="bi bi-chevron-left"></i></button>
+                        <button class="page-btn active">1</button>
+                        <button class="page-btn"><i class="bi bi-chevron-right"></i></button>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+        </main>
+    </div>
+</div>
+
+<!-- Toast de sucesso -->
+<div class="toast-success" id="toastSuccess">
+    <i class="bi bi-check-circle-fill"></i>
+    <span class="toast-msg">Documento publicado com sucesso!</span>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    /* Sidebar */
+    const sidebar=document.getElementById('sidebar'),mainArea=document.getElementById('mainArea'),btnCollapse=document.getElementById('btnCollapse'),collapseIcon=document.getElementById('collapseIcon'),btnMobile=document.getElementById('btnMobileMenu'),overlay=document.getElementById('sidebarOverlay');
+    btnCollapse.addEventListener('click',()=>{sidebar.classList.toggle('collapsed');mainArea.classList.toggle('expanded');collapseIcon.className=sidebar.classList.contains('collapsed')?'bi bi-layout-sidebar':'bi bi-layout-sidebar-reverse'});
+    btnMobile.addEventListener('click',()=>{sidebar.classList.toggle('mobile-open');overlay.classList.toggle('active')});
+    overlay.addEventListener('click',()=>{sidebar.classList.remove('mobile-open');overlay.classList.remove('active')});
+
+    /* Publish toggle switch */
+    const pubCb=document.getElementById('id_publicado');
+    const pubSwitch=document.getElementById('pubSwitch');
+    const pubKnob=document.getElementById('pubKnob');
+    const pubLabel=document.getElementById('pubLabel');
+
+    function updatePubSwitch(){
+        if(pubCb.checked){
+            pubSwitch.style.background='var(--gold)';
+            pubKnob.style.transform='translateX(0)';
+            pubLabel.textContent='Publicar imediatamente';
+        } else {
+            pubSwitch.style.background='var(--gray-line)';
+            pubKnob.style.transform='translateX(-20px)';
+            pubLabel.textContent='Salvar como rascunho';
+        }
+    }
+
+    document.getElementById('pubToggleWrap').addEventListener('click',()=>{
+        pubCb.checked=!pubCb.checked;
+        updatePubSwitch();
+    });
+
+    updatePubSwitch();
+
+    /* File drop zone */
+    const dropZone=document.getElementById('dropZone');
+    const fileInput=document.getElementById('id_arquivo');
+    const fileSelected=document.getElementById('fileSelected');
+
+    function formatBytes(b){
+        if(b<1024)return b+' B';
+        if(b<1048576)return (b/1024).toFixed(1)+' KB';
+        return (b/1048576).toFixed(1)+' MB';
+    }
+
+    function showFilePreview(file){
+        document.getElementById('fsName').textContent=file.name;
+        document.getElementById('fsSize').textContent=formatBytes(file.size);
+        fileSelected.classList.add('show');
+    }
+
+    fileInput.addEventListener('change',()=>{
+        if(fileInput.files[0]) showFilePreview(fileInput.files[0]);
+    });
+
+    dropZone.addEventListener('dragover',e=>{e.preventDefault();dropZone.classList.add('drag-over')});
+    dropZone.addEventListener('dragleave',()=>dropZone.classList.remove('drag-over'));
+    dropZone.addEventListener('drop',e=>{
+        e.preventDefault();
+        dropZone.classList.remove('drag-over');
+        const f=e.dataTransfer.files[0];
+        if(f){
+            const dt=new DataTransfer();
+            dt.items.add(f);
+            fileInput.files=dt.files;
+            showFilePreview(f);
+        }
+    });
+
+    function clearFile(){
+        fileInput.value='';
+        fileSelected.classList.remove('show');
+    }
+
+    function resetForm(){
+        clearFile();
+        document.getElementById('uploadForm').reset();
+        pubCb.checked=true;
+        updatePubSwitch();
+    }
+
+    /* Table filter */
+    function filterTable(){
+        const q=(document.getElementById('tableSearch').value||document.getElementById('topbarSearch').value||'').toLowerCase();
+        const cat=document.getElementById('filterCat').value;
+        const pub=document.getElementById('filterPub').value;
+        let v=0;
+        document.querySelectorAll('.doc-row').forEach(r=>{
+            const show=(!q||r.dataset.titulo.toLowerCase().includes(q))&&(!cat||r.dataset.cat===cat)&&(!pub||r.dataset.pub===pub);
+            r.style.display=show?'':'none';if(show)v++;
+        });
+        document.getElementById('countLabel').textContent=v+' documento(s)';
+    }
+
+    document.getElementById('tableSearch').addEventListener('input',filterTable);
+    document.getElementById('topbarSearch').addEventListener('input',filterTable);
+    document.getElementById('filterCat').addEventListener('change',filterTable);
+    document.getElementById('filterPub').addEventListener('change',filterTable);
+
+    /* Toast on form submit (show after Django redirect with ?success=1) */
+    if(new URLSearchParams(window.location.search).get('success')==='1'){
+        const t=document.getElementById('toastSuccess');
+        t.classList.add('show');
+        setTimeout(()=>t.classList.remove('show'),4000);
+    }
+</script>
+</body>
+</html>
