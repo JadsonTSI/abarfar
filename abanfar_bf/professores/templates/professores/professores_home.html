@@ -1,141 +1,248 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="pt-br">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ABANFAR-BF - Professor</title>
-
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
-
-    <!-- SEU CSS (do jeito que você quer a estrutura) -->
-    <link rel="stylesheet" href="{% static 'professor.css' %}" />
-  </head>
-  <body>
-    <div class="container-fluid g-0">
-      <div class="row g-0">
-        <!-- SIDEBAR -->
-        <aside class="col-12 col-md-3 col-lg-2 sidebar d-flex flex-column">
-          <!-- topo com logo + ícone -->
-          <div class="d-flex align-items-center justify-content-between px-3 py-3 sidebar-top">
-            <h2 class="logo-text mb-0">ABANFAR-BF</h2>
-            <button class="btn btn-circle"><i class="bi bi-person-fill"></i></button>
-          </div>
-
-          <!-- perfil -->
-          <div class="sidebar-profile text-center py-3">
-            <div class="profile-icon mb-2">
-              <i class="bi bi-person-circle"></i>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel do Professor — ABANFAR BF</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Cormorant+Garamond:wght@300;400;600&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root{--gold:#C9A84C;--gold-light:#E8C96A;--gold-pale:#F5E9C8;--gold-dim:#9A7A30;--cream:#FDFAF3;--white:#FFFFFF;--ink:#1A1612;--ink-soft:#3D3530;--gray-text:#7A6E65;--gray-line:#E8E0D4;--section-bg:#F9F5EC;--sidebar-w:260px;--sidebar-w-collapsed:72px;--topbar-h:64px;--radius-lg:1.1rem;--radius-sm:.55rem;--shadow-gold:0 4px 24px rgba(201,168,76,.16);--shadow-soft:0 4px 20px rgba(26,22,18,.07);--transition:.26s ease}
+        *,*::before,*::after{box-sizing:border-box}html{scroll-behavior:smooth}
+        body{font-family:'Cormorant Garamond',Georgia,serif;background:var(--section-bg);color:var(--ink-soft);margin:0;padding:0;min-height:100vh;-webkit-font-smoothing:antialiased}
+        h1,h2,h3,h4,h5{font-family:'Playfair Display',Georgia,serif;color:var(--ink)}
+        ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--cream)}::-webkit-scrollbar-thumb{background:var(--gold);border-radius:3px}
+        .app-shell{display:flex;min-height:100vh}
+        .sidebar{width:var(--sidebar-w);min-height:100vh;background:var(--ink);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:200;transition:width var(--transition),transform var(--transition);overflow:hidden;border-right:2px solid var(--gold)}
+        .sidebar.collapsed{width:var(--sidebar-w-collapsed)}
+        .sidebar.collapsed .nav-label,.sidebar.collapsed .sidebar-profile-name,.sidebar.collapsed .sidebar-brand-text,.sidebar.collapsed .sidebar-footer-text{opacity:0;width:0;overflow:hidden;white-space:nowrap}
+        .sidebar-top{padding:0 1rem;height:var(--topbar-h);display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(201,168,76,.15);flex-shrink:0}
+        .sidebar-brand{display:flex;align-items:center;gap:.7rem;text-decoration:none;overflow:hidden}
+        .sidebar-logo-ring{width:36px;height:36px;border-radius:50%;border:1.5px solid var(--gold);background:var(--gold-pale);display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden}
+        .sidebar-logo-ring img{width:100%;height:100%;object-fit:contain;border-radius:50%}
+        .sidebar-logo-placeholder{font-size:1.1rem;color:var(--gold)}
+        .sidebar-brand-text{transition:opacity var(--transition),width var(--transition)}
+        .brand-name{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;color:var(--gold);display:block;line-height:1.1}
+        .brand-sub{font-family:'Libre Baskerville',serif;font-size:.58rem;letter-spacing:.06em;color:#5A5450;display:block}
+        .btn-collapse{width:30px;height:30px;border-radius:50%;background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.2);color:var(--gold);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:background var(--transition);font-size:.9rem}
+        .btn-collapse:hover{background:rgba(201,168,76,.22)}
+        .sidebar-profile{padding:1.2rem 1rem;border-bottom:1px solid rgba(201,168,76,.12);display:flex;align-items:center;gap:.85rem;flex-shrink:0;overflow:hidden}
+        .profile-avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--gold-pale),var(--gold));border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;color:var(--gold-dim);font-size:1.1rem;flex-shrink:0}
+        .sidebar-profile-name{transition:opacity var(--transition),width var(--transition);overflow:hidden}
+        .profile-name{font-family:'Playfair Display',serif;font-size:.9rem;font-weight:700;color:var(--white);display:block;white-space:nowrap}
+        .profile-role{font-family:'Libre Baskerville',serif;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);display:block}
+        .sidebar-nav{flex:1;overflow-y:auto;overflow-x:hidden;padding:.8rem 0}
+        .nav-section-label{font-family:'Libre Baskerville',serif;font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:#4A4440;padding:.5rem 1.2rem .3rem;white-space:nowrap;overflow:hidden}
+        .sidebar-link{display:flex;align-items:center;gap:.85rem;padding:.65rem 1.2rem;color:#8A8078;text-decoration:none;font-family:'Libre Baskerville',serif;font-size:.78rem;letter-spacing:.04em;white-space:nowrap;overflow:hidden;margin:.1rem .6rem;border-radius:var(--radius-sm);transition:color var(--transition),background var(--transition)}
+        .sidebar-link i{font-size:1.05rem;flex-shrink:0;width:20px;text-align:center}
+        .nav-label{transition:opacity var(--transition),width var(--transition)}
+        .sidebar-link:hover{color:var(--gold-light);background:rgba(201,168,76,.07)}
+        .sidebar-link.active{color:var(--gold);background:rgba(201,168,76,.12);border-left:2px solid var(--gold)}
+        .sidebar-footer{padding:.9rem 1rem;border-top:1px solid rgba(201,168,76,.12);flex-shrink:0}
+        .sidebar-footer-text{font-family:'Libre Baskerville',serif;font-size:.58rem;letter-spacing:.06em;color:#3A3430;display:block;margin-bottom:.6rem;white-space:nowrap;overflow:hidden;transition:opacity var(--transition)}
+        .btn-logout{display:flex;align-items:center;gap:.6rem;padding:.5rem .8rem;border-radius:var(--radius-sm);background:rgba(180,60,60,.1);border:1px solid rgba(180,60,60,.2);color:#C07070;font-family:'Libre Baskerville',serif;font-size:.72rem;text-decoration:none;transition:background var(--transition),color var(--transition);width:100%}
+        .btn-logout:hover{background:rgba(180,60,60,.18);color:#E09090}
+        .sidebar-deco{position:absolute;bottom:100px;right:.5rem;font-size:5rem;color:var(--gold);opacity:.03;pointer-events:none;font-family:serif;line-height:1}
+        .main-area{margin-left:var(--sidebar-w);flex:1;display:flex;flex-direction:column;min-height:100vh;transition:margin-left var(--transition)}
+        .main-area.expanded{margin-left:var(--sidebar-w-collapsed)}
+        .topbar{height:var(--topbar-h);background:var(--white);border-bottom:2px solid var(--gold);display:flex;align-items:center;justify-content:space-between;padding:0 1.8rem;position:sticky;top:0;z-index:100;box-shadow:0 2px 16px rgba(201,168,76,.1);gap:1rem}
+        .topbar-left{display:flex;align-items:center;gap:1rem}
+        .breadcrumb-custom{display:flex;align-items:center;gap:.4rem;font-family:'Libre Baskerville',serif;font-size:.72rem;letter-spacing:.06em;color:var(--gray-text)}
+        .breadcrumb-custom .bc-sep{color:var(--gold);font-size:.6rem}
+        .breadcrumb-custom .bc-active{color:var(--ink);font-weight:700}
+        .topbar-right{display:flex;align-items:center;gap:.8rem}
+        .topbar-icon-btn{width:36px;height:36px;border-radius:50%;background:var(--section-bg);border:1.5px solid var(--gray-line);display:flex;align-items:center;justify-content:center;color:var(--gray-text);font-size:.95rem;cursor:pointer;text-decoration:none;transition:all var(--transition)}
+        .topbar-icon-btn:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-pale)}
+        .topbar-user{display:flex;align-items:center;gap:.55rem;padding:.3rem .8rem .3rem .4rem;background:var(--gold-pale);border:1.5px solid rgba(201,168,76,.3);border-radius:2rem}
+        .topbar-avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-light));display:flex;align-items:center;justify-content:center;color:var(--ink);font-size:.75rem;font-weight:700;font-family:'Playfair Display',serif}
+        .topbar-username{font-family:'Libre Baskerville',serif;font-size:.72rem;color:var(--gold-dim);font-weight:700}
+        .page-content{padding:2rem 2rem 3rem;flex:1}
+        .page-eyebrow{font-family:'Libre Baskerville',serif;font-size:.68rem;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);display:flex;align-items:center;gap:.6rem;margin-bottom:.4rem}
+        .page-eyebrow::before{content:'';width:24px;height:1px;background:var(--gold)}
+        .page-title{font-family:'Playfair Display',serif;font-size:clamp(1.5rem,2.5vw,2rem);font-weight:900;color:var(--ink);margin:0 0 .3rem}
+        .page-subtitle{font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:var(--gray-text);margin:0}
+        .gold-rule{height:2px;background:linear-gradient(90deg,var(--gold),transparent);border:none;margin:1.5rem 0 2rem;opacity:.4}
+        .news-card{background:var(--white);border-radius:var(--radius-lg);border:1px solid var(--gray-line);box-shadow:var(--shadow-soft);overflow:hidden;display:flex;flex-direction:column;transition:transform var(--transition),box-shadow var(--transition)}
+        .news-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-gold)}
+        .news-img{width:100%;height:200px;object-fit:cover;display:block}
+        .news-img-placeholder{height:200px;background:linear-gradient(145deg,var(--ink),#2C2318);display:flex;align-items:center;justify-content:center;font-size:4rem;color:var(--gold);opacity:.3}
+        .news-body{padding:1.4rem;flex:1;display:flex;flex-direction:column}
+        .news-tag{font-family:'Libre Baskerville',serif;font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-dim);margin-bottom:.5rem}
+        .news-title{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:var(--ink);margin-bottom:.7rem;line-height:1.3}
+        .news-text{font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--gray-text);line-height:1.7;flex:1}
+        .quick-card{background:var(--white);border-radius:var(--radius-lg);border:1px solid var(--gray-line);padding:1.3rem;text-align:center;text-decoration:none;display:flex;flex-direction:column;align-items:center;gap:.7rem;height:100%;transition:transform var(--transition),box-shadow var(--transition),border-color var(--transition);box-shadow:var(--shadow-soft)}
+        .quick-card:hover{transform:translateY(-5px);box-shadow:var(--shadow-gold);border-color:var(--gold)}
+        .quick-card-icon{width:50px;height:50px;border-radius:50%;background:var(--gold-pale);display:flex;align-items:center;justify-content:center;color:var(--gold-dim);font-size:1.3rem;transition:background var(--transition),color var(--transition)}
+        .quick-card:hover .quick-card-icon{background:var(--gold);color:var(--white)}
+        .quick-card-label{font-family:'Libre Baskerville',serif;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft)}
+        .section-card{background:var(--white);border-radius:var(--radius-lg);border:1px solid var(--gray-line);box-shadow:var(--shadow-soft);overflow:hidden;margin-bottom:1.5rem}
+        .section-card-header{padding:1.1rem 1.5rem;border-bottom:1px solid var(--gray-line);display:flex;align-items:center;justify-content:space-between;background:var(--section-bg)}
+        .section-card-title{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;color:var(--ink);display:flex;align-items:center;gap:.5rem;margin:0}
+        .section-card-title i{color:var(--gold)}
+        .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(26,22,18,.5);z-index:199}
+        .sidebar-overlay.active{display:block}
+        @media(max-width:991px){.sidebar{transform:translateX(-100%);width:var(--sidebar-w)!important}.sidebar.mobile-open{transform:translateX(0)}.main-area,.main-area.expanded{margin-left:0!important}}
+        @media(max-width:576px){.page-content{padding:1.2rem}.topbar{padding:0 1rem}}
+    </style>
+</head>
+<body>
+<div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-deco" aria-hidden="true">𝄞</div>
+        <div class="sidebar-top">
+            <a href="{% url 'home' %}" class="sidebar-brand">
+                <div class="sidebar-logo-ring">
+                    <img src="{% static 'img/logo_abanfar.png' %}" alt="Logo" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+                    <span class="sidebar-logo-placeholder" style="display:none">♪</span>
+                </div>
+                <div class="sidebar-brand-text">
+                    <span class="brand-name">ABANFAR BF</span>
+                    <span class="brand-sub">Painel do Professor</span>
+                </div>
+            </a>
+            <button class="btn-collapse" id="btnCollapse"><i class="bi bi-layout-sidebar-reverse" id="collapseIcon"></i></button>
+        </div>
+        <div class="sidebar-profile">
+            <div class="profile-avatar"><i class="bi bi-person-workspace"></i></div>
+            <div class="sidebar-profile-name">
+                <span class="profile-name">{{ user.first_name|default:user.username }}</span>
+                <span class="profile-role">Professor</span>
             </div>
-            <button class="btn btn-profile">PROFESSOR</button>
-          </div>
+        </div>
+        <nav class="sidebar-nav">
+            <div class="nav-section-label">Principal</div>
+            <a href="{% url 'professores:professoreshome' %}" class="sidebar-link active"><i class="bi bi-house-door-fill"></i><span class="nav-label">Início</span></a>
+            <div class="nav-section-label mt-2">Meu Ensino</div>
+            <a href="{% url 'professores:naipes' %}" class="sidebar-link"><i class="bi bi-music-note"></i><span class="nav-label">Naipes</span></a>
+            <a href="{% url 'materias:materias_professor' %}" class="sidebar-link"><i class="bi bi-journal-bookmark-fill"></i><span class="nav-label">Minhas Matérias</span></a>
+            <a href="{% url 'professores:ensaiospro' %}" class="sidebar-link"><i class="bi bi-music-note-beamed"></i><span class="nav-label">Ensaios</span></a>
+            <a href="{% url 'professores:apresentacoes_list' %}" class="sidebar-link"><i class="bi bi-grid-3x3-gap-fill"></i><span class="nav-label">Apresentações</span></a>
+            <a href="{% url 'grupos:lista' %}" class="sidebar-link"><i class="bi bi-music-note-list"></i><span class="nav-label">Grupos Musicais</span></a>
+            <div class="nav-section-label mt-2">Conta</div>
+            <a href="{% url 'contas:perfil' %}" class="sidebar-link"><i class="bi bi-person-circle"></i><span class="nav-label">Meu Perfil</span></a>
+        </nav>
+        <div class="sidebar-footer">
+            <span class="sidebar-footer-text">ABANFAR BF © {% now "Y" %}</span>
+            <a href="{% url 'contas:logout' %}" class="btn-logout"><i class="bi bi-box-arrow-left"></i><span class="nav-label">Sair</span></a>
+        </div>
+    </aside>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-          <!-- menu -->
-          <nav class="sidebar-menu flex-grow-1 mt-4">
-            <ul class="nav flex-column">
-              <li class="nav-item mb-3">
-                <a href="#" class="nav-link d-flex align-items-center">
-                  <i class="bi bi-house-door me-3"></i>
-                  <span>INICIO</span>
-                </a>
-              </li>
-
-              <li class="nav-item mb-3">
-                <a href="{% url 'professores:naipes' %}" class="nav-link d-flex align-items-center">
-                  <i class="bi bi-music-note me-3"></i>
-                  <span>NIPES</span>
-                </a>
-              </li>
-
-              <li class="nav-item mb-3">
-                <a href="{% url 'materias:materias_professor' %}" class="nav-link d-flex align-items-center">
-                  <i class="bi bi-journal-bookmark-fill me-3"></i>
-                  <span>Minhas Matérias</span>
-                </a>
-              </li>
-
-              <li class="nav-item mb-3">
-                <a href="{% url 'professores:ensaiospro' %}" class="nav-link d-flex align-items-center">
-                  <i class="bi bi-music-note-beamed me-3"></i>
-                  <span>ENSAIOS</span>
-                </a>
-              </li>
-
-              <li class="nav-item mb-3">
-                <a href="{% url 'professores:apresentacoes_list' %}" class="nav-link d-flex align-items-center">
-                  <i class="bi bi-grid-3x3-gap-fill me-3"></i>
-                  <span>APRESENTAÇÕES</span>
-                </a>
-              </li>
-
-              <li class="nav-item mb-3">
-                <a href="{% url 'grupos:lista' %}" class="nav-link d-flex align-items-center">
-                  <i class="bi bi-music-note-list me-3"></i>
-                  <span>GRUPOS MUSICAIS</span>
-                </a>
-              </li>
-            </ul>
-          </nav>
-        </aside>
-
-        <!-- CONTEÚDO PRINCIPAL -->
-        <main class="col-12 col-md-9 col-lg-10 main-content">
-          <div class="container py-4">
-            <!-- CARD 1 -->
-            <div class="announcement-card mb-4">
-              <div class="row g-0 align-items-center">
-                <div class="col-12 col-md-4">
-                  <!-- se quiser usar imagens estáticas, depois a gente adiciona -->
-                  <img src="https://images.pexels.com/photos/210854/pexels-photo-210854.jpeg" alt="Violino" class="img-fluid rounded-start announcement-image" />
+    <div class="main-area" id="mainArea">
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="topbar-icon-btn d-lg-none" id="btnMobileMenu"><i class="bi bi-list"></i></button>
+                <div class="breadcrumb-custom">
+                    <span>ABANFAR BF</span><span class="bc-sep">♩</span>
+                    <span>Professor</span><span class="bc-sep">♩</span>
+                    <span class="bc-active">Início</span>
                 </div>
-                <div class="col-12 col-md-8">
-                  <div class="announcement-body">
-                    <div class="vertical-divider"></div>
-                    <p>Novos métodos de violino estão unindo tradição e tecnologia. Sensores inteligentes e aplicativos dão feedback em tempo real sobre postura e afinação, enquanto técnicas como o “Treino de Vibração Guiada” ajudam no controle do arco. O resultado é um aprendizado mais rápido e moderno para violinistas de todos os níveis.</p>
-                  </div>
+            </div>
+            <div class="topbar-right">
+                <div class="topbar-user">
+                    <div class="topbar-avatar">{{ user.first_name|first|default:"P" }}</div>
+                    <span class="topbar-username d-none d-sm-block">{{ user.first_name|default:user.username }}</span>
                 </div>
-              </div>
+            </div>
+        </header>
+
+        <main class="page-content">
+            <div class="page-eyebrow"><i class="bi bi-person-workspace"></i> Painel do Professor</div>
+            <h1 class="page-title">Bem-vindo, {{ user.first_name|default:"Professor" }} 🎵</h1>
+            <p class="page-subtitle">Gerencie seus ensaios, matérias e apresentações da ABANFAR BF.</p>
+            <hr class="gold-rule">
+
+            <!-- Quick access -->
+            <div class="row g-3 mb-4">
+                <div class="col-6 col-sm-4 col-lg-2">
+                    <a href="{% url 'professores:naipes' %}" class="quick-card">
+                        <div class="quick-card-icon"><i class="bi bi-music-note"></i></div>
+                        <span class="quick-card-label">Naipes</span>
+                    </a>
+                </div>
+                <div class="col-6 col-sm-4 col-lg-2">
+                    <a href="{% url 'materias:materias_professor' %}" class="quick-card">
+                        <div class="quick-card-icon"><i class="bi bi-journal-bookmark-fill"></i></div>
+                        <span class="quick-card-label">Matérias</span>
+                    </a>
+                </div>
+                <div class="col-6 col-sm-4 col-lg-2">
+                    <a href="{% url 'professores:ensaiospro' %}" class="quick-card">
+                        <div class="quick-card-icon"><i class="bi bi-music-note-beamed"></i></div>
+                        <span class="quick-card-label">Ensaios</span>
+                    </a>
+                </div>
+                <div class="col-6 col-sm-4 col-lg-2">
+                    <a href="{% url 'professores:apresentacoes_list' %}" class="quick-card">
+                        <div class="quick-card-icon"><i class="bi bi-grid-3x3-gap-fill"></i></div>
+                        <span class="quick-card-label">Apresentações</span>
+                    </a>
+                </div>
+                <div class="col-6 col-sm-4 col-lg-2">
+                    <a href="{% url 'grupos:lista' %}" class="quick-card">
+                        <div class="quick-card-icon"><i class="bi bi-music-note-list"></i></div>
+                        <span class="quick-card-label">Grupos</span>
+                    </a>
+                </div>
+                <div class="col-6 col-sm-4 col-lg-2">
+                    <a href="{% url 'contas:perfil' %}" class="quick-card">
+                        <div class="quick-card-icon"><i class="bi bi-person-circle"></i></div>
+                        <span class="quick-card-label">Meu Perfil</span>
+                    </a>
+                </div>
             </div>
 
-            <!-- CARD 2 -->
-            <div class="announcement-card mb-4">
-              <div class="row g-0 align-items-center">
-                <div class="col-12 col-md-4">
-                  <img src="https://clubepaineiras.org.br/wp-content/uploads/2022/11/aulas-de-violao-2-800x450.jpg" alt="Violão" class="img-fluid rounded-start announcement-image" />
+            <!-- News cards -->
+            <div class="section-card">
+                <div class="section-card-header">
+                    <h2 class="section-card-title"><i class="bi bi-newspaper"></i> Novidades da Música</h2>
                 </div>
-                <div class="col-12 col-md-8">
-                  <div class="announcement-body">
-                    <div class="vertical-divider"></div>
-                    <p>Estão abertas novas vagas para aulas de violão! As aulas são voltadas para iniciantes e intermediários, com foco em técnica, ritmo e repertório popular. O curso oferece horários flexíveis e acompanhamento individual, ideal para quem quer aprender a tocar de forma prática e divertida.</p>
-                  </div>
+                <div style="padding:1.5rem">
+                    <div class="row g-4">
+                        <div class="col-md-4">
+                            <div class="news-card">
+                                <img src="https://images.pexels.com/photos/210854/pexels-photo-210854.jpeg" alt="Violino" class="news-img" onerror="this.style.display='none'">
+                                <div class="news-body">
+                                    <div class="news-tag">Técnica</div>
+                                    <div class="news-title">Novos Métodos de Violino</div>
+                                    <p class="news-text">Sensores inteligentes e aplicativos dão feedback em tempo real sobre postura e afinação, tornando o aprendizado mais rápido e moderno.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="news-card">
+                                <img src="https://clubepaineiras.org.br/wp-content/uploads/2022/11/aulas-de-violao-2-800x450.jpg" alt="Violão" class="news-img" onerror="this.style.display='none'">
+                                <div class="news-body">
+                                    <div class="news-tag">Vagas</div>
+                                    <div class="news-title">Novas Vagas de Violão</div>
+                                    <p class="news-text">Aulas para iniciantes e intermediários, com foco em técnica, ritmo e repertório popular, com horários flexíveis.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="news-card">
+                                <div class="news-img-placeholder"><i class="bi bi-music-note-beamed"></i></div>
+                                <div class="news-body">
+                                    <div class="news-tag">Cultura</div>
+                                    <div class="news-title">Música e Tecnologia</div>
+                                    <p class="news-text">Plataformas digitais permitem que artistas compartilhem criações com o mundo em segundos, enquanto novos estilos surgem constantemente.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
             </div>
-
-            <!-- CARD 3 -->
-            <div class="announcement-card mb-4">
-              <div class="row g-0 align-items-center">
-                <div class="col-12 col-md-4">
-                  <img src="https://images.pexels.com/photos/27141315/pexels-photo-27141315/free-photo-of-tecnologia-pantalla-electronica-interfaz.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Aula de música" class="img-fluid rounded-start announcement-image" />
-                </div>
-                <div class="col-12 col-md-8">
-                  <div class="announcement-body">
-                    <div class="vertical-divider"></div>
-                    <p>A música tem evoluído junto com a sociedade, acompanhando mudanças culturais e tecnológicas. Hoje, plataformas digitais permitem que artistas compartilhem suas criações com o mundo em segundos, enquanto novos estilos e fusões surgem constantemente. Além de entreter, a música continua sendo uma poderosa forma de expressão, capaz de unir pessoas, influenciar emoções e transformar realidades.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
         </main>
-      </div>
     </div>
-
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  </body>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const sidebar=document.getElementById('sidebar'),mainArea=document.getElementById('mainArea'),btnCollapse=document.getElementById('btnCollapse'),collapseIcon=document.getElementById('collapseIcon'),btnMobile=document.getElementById('btnMobileMenu'),overlay=document.getElementById('sidebarOverlay');
+    btnCollapse.addEventListener('click',()=>{sidebar.classList.toggle('collapsed');mainArea.classList.toggle('expanded');collapseIcon.className=sidebar.classList.contains('collapsed')?'bi bi-layout-sidebar':'bi bi-layout-sidebar-reverse'});
+    btnMobile.addEventListener('click',()=>{sidebar.classList.toggle('mobile-open');overlay.classList.toggle('active')});
+    overlay.addEventListener('click',()=>{sidebar.classList.remove('mobile-open');overlay.classList.remove('active')});
+</script>
+</body>
 </html>

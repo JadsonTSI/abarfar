@@ -1,110 +1,533 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Painel do Aluno</title>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel do Aluno — ABANFAR BF</title>
 
-    <!-- Bootstrap -->
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Cormorant+Garamond:wght@300;400;600&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 
-    <!-- Icons -->
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
-    />
+    <style>
+        /* =============================================
+           DESIGN TOKENS — mesmo padrão do projeto
+        ============================================= */
+        :root {
+            --gold:        #C9A84C;
+            --gold-light:  #E8C96A;
+            --gold-pale:   #F5E9C8;
+            --gold-dim:    #9A7A30;
+            --cream:       #FDFAF3;
+            --white:       #FFFFFF;
+            --ink:         #1A1612;
+            --ink-soft:    #3D3530;
+            --gray-text:   #7A6E65;
+            --gray-line:   #E8E0D4;
+            --section-bg:  #F9F5EC;
+            --sidebar-w:   260px;
+            --sidebar-w-collapsed: 72px;
+            --topbar-h:    64px;
+            --radius-lg:   1.1rem;
+            --radius-sm:   0.55rem;
+            --shadow-gold: 0 4px 24px rgba(201,168,76,0.16);
+            --shadow-soft: 0 4px 20px rgba(26,22,18,0.07);
+            --transition:  0.26s ease;
+        }
 
-    <!-- CSS PADRÃO -->
-    <link rel="stylesheet" href="{% static 'professor.css' %}" />
-  </head>
+        *, *::before, *::after { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
 
-  <body>
-    <div class="container-fluid g-0">
-      <div class="row g-0">
+        body {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            background: var(--section-bg);
+            color: var(--ink-soft);
+            margin: 0; padding: 0;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
 
-        <!-- SIDEBAR DO ALUNO -->
-        <aside class="col-12 col-md-3 col-lg-2 sidebar d-flex flex-column">
-          <div class="d-flex align-items-center justify-content-between px-3 py-3 sidebar-top">
-            <h2 class="logo-text mb-0">ABANFAR-BF</h2>
-            <a href="{% url 'contas:perfil' %}" class="btn btn-circle">
-              <i class="bi bi-person-fill"></i>
+        h1,h2,h3,h4,h5 { font-family: 'Playfair Display', Georgia, serif; color: var(--ink); }
+
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-track { background: var(--cream); }
+        ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 3px; }
+
+        /* =============================================
+           LAYOUT SHELL
+        ============================================= */
+        .app-shell { display: flex; min-height: 100vh; }
+
+        /* =============================================
+           SIDEBAR
+        ============================================= */
+        .sidebar {
+            width: var(--sidebar-w);
+            min-height: 100vh;
+            background: var(--ink);
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 0; left: 0; bottom: 0;
+            z-index: 200;
+            transition: width var(--transition), transform var(--transition);
+            overflow: hidden;
+            border-right: 2px solid var(--gold);
+        }
+
+        .sidebar.collapsed { width: var(--sidebar-w-collapsed); }
+        .sidebar.collapsed .nav-label,
+        .sidebar.collapsed .sidebar-profile-name,
+        .sidebar.collapsed .sidebar-brand-text,
+        .sidebar.collapsed .sidebar-footer-text { opacity: 0; width: 0; overflow: hidden; white-space: nowrap; }
+
+        .sidebar-top {
+            padding: 0 1rem;
+            height: var(--topbar-h);
+            display: flex; align-items: center; justify-content: space-between;
+            border-bottom: 1px solid rgba(201,168,76,0.15);
+            flex-shrink: 0;
+        }
+
+        .sidebar-brand { display: flex; align-items: center; gap: 0.7rem; text-decoration: none; overflow: hidden; }
+
+        .sidebar-logo-ring {
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            border: 1.5px solid var(--gold);
+            background: var(--gold-pale);
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+        .sidebar-logo-ring img { width: 100%; height: 100%; object-fit: contain; border-radius: 50%; }
+        .sidebar-logo-placeholder { font-size: 1.1rem; color: var(--gold); }
+
+        .sidebar-brand-text { transition: opacity var(--transition), width var(--transition); }
+        .brand-name { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; color: var(--gold); display: block; line-height: 1.1; }
+        .brand-sub { font-family: 'Libre Baskerville', serif; font-size: 0.58rem; letter-spacing: 0.06em; color: #5A5450; display: block; }
+
+        .btn-collapse {
+            width: 30px; height: 30px;
+            border-radius: 50%;
+            background: rgba(201,168,76,0.1);
+            border: 1px solid rgba(201,168,76,0.2);
+            color: var(--gold);
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; flex-shrink: 0;
+            transition: background var(--transition);
+            font-size: 0.9rem;
+        }
+        .btn-collapse:hover { background: rgba(201,168,76,0.22); }
+
+        .sidebar-profile {
+            padding: 1.2rem 1rem;
+            border-bottom: 1px solid rgba(201,168,76,0.12);
+            display: flex; align-items: center; gap: 0.85rem;
+            flex-shrink: 0; overflow: hidden;
+        }
+        .profile-avatar {
+            width: 42px; height: 42px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--gold-pale), var(--gold));
+            border: 2px solid var(--gold);
+            display: flex; align-items: center; justify-content: center;
+            color: var(--gold-dim); font-size: 1.1rem; flex-shrink: 0;
+        }
+        .sidebar-profile-name { transition: opacity var(--transition), width var(--transition); overflow: hidden; }
+        .profile-name { font-family: 'Playfair Display', serif; font-size: 0.9rem; font-weight: 700; color: var(--white); display: block; white-space: nowrap; }
+        .profile-role { font-family: 'Libre Baskerville', serif; font-size: 0.6rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); display: block; }
+
+        .sidebar-nav { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 0.8rem 0; }
+
+        .nav-section-label { font-family: 'Libre Baskerville', serif; font-size: 0.6rem; letter-spacing: 0.22em; text-transform: uppercase; color: #4A4440; padding: 0.5rem 1.2rem 0.3rem; white-space: nowrap; overflow: hidden; }
+
+        .sidebar-link {
+            display: flex; align-items: center; gap: 0.85rem;
+            padding: 0.65rem 1.2rem;
+            color: #8A8078;
+            text-decoration: none;
+            font-family: 'Libre Baskerville', serif;
+            font-size: 0.78rem; letter-spacing: 0.04em;
+            white-space: nowrap; overflow: hidden;
+            margin: 0.1rem 0.6rem;
+            border-radius: var(--radius-sm);
+            transition: color var(--transition), background var(--transition);
+        }
+        .sidebar-link i { font-size: 1.05rem; flex-shrink: 0; width: 20px; text-align: center; }
+        .nav-label { transition: opacity var(--transition), width var(--transition); }
+        .sidebar-link:hover { color: var(--gold-light); background: rgba(201,168,76,0.07); }
+        .sidebar-link.active { color: var(--gold); background: rgba(201,168,76,0.12); border-left: 2px solid var(--gold); }
+
+        .sidebar-footer {
+            padding: 0.9rem 1rem;
+            border-top: 1px solid rgba(201,168,76,0.12);
+            flex-shrink: 0;
+        }
+        .sidebar-footer-text { font-family: 'Libre Baskerville', serif; font-size: 0.58rem; letter-spacing: 0.06em; color: #3A3430; display: block; margin-bottom: 0.6rem; white-space: nowrap; overflow: hidden; transition: opacity var(--transition); }
+        .btn-logout { display: flex; align-items: center; gap: 0.6rem; padding: 0.5rem 0.8rem; border-radius: var(--radius-sm); background: rgba(180,60,60,0.1); border: 1px solid rgba(180,60,60,0.2); color: #C07070; font-family: 'Libre Baskerville', serif; font-size: 0.72rem; text-decoration: none; transition: background var(--transition), color var(--transition); width: 100%; }
+        .btn-logout:hover { background: rgba(180,60,60,0.18); color: #E09090; }
+
+        .sidebar-deco { position: absolute; bottom: 100px; right: 0.5rem; font-size: 5rem; color: var(--gold); opacity: 0.03; pointer-events: none; font-family: serif; line-height: 1; }
+
+        /* =============================================
+           MAIN AREA
+        ============================================= */
+        .main-area { margin-left: var(--sidebar-w); flex: 1; display: flex; flex-direction: column; min-height: 100vh; transition: margin-left var(--transition); }
+        .main-area.expanded { margin-left: var(--sidebar-w-collapsed); }
+
+        /* =============================================
+           TOP BAR
+        ============================================= */
+        .topbar {
+            height: var(--topbar-h);
+            background: var(--white);
+            border-bottom: 2px solid var(--gold);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 1.8rem;
+            position: sticky; top: 0; z-index: 100;
+            box-shadow: 0 2px 16px rgba(201,168,76,0.1);
+            gap: 1rem;
+        }
+        .topbar-left { display: flex; align-items: center; gap: 1rem; }
+        .breadcrumb-custom { display: flex; align-items: center; gap: 0.4rem; font-family: 'Libre Baskerville', serif; font-size: 0.72rem; letter-spacing: 0.06em; color: var(--gray-text); }
+        .breadcrumb-custom .bc-sep { color: var(--gold); font-size: 0.6rem; }
+        .breadcrumb-custom .bc-active { color: var(--ink); font-weight: 700; }
+        .topbar-right { display: flex; align-items: center; gap: 0.8rem; }
+        .topbar-icon-btn { width: 36px; height: 36px; border-radius: 50%; background: var(--section-bg); border: 1.5px solid var(--gray-line); display: flex; align-items: center; justify-content: center; color: var(--gray-text); font-size: 0.95rem; cursor: pointer; text-decoration: none; transition: all var(--transition); }
+        .topbar-icon-btn:hover { border-color: var(--gold); color: var(--gold); background: var(--gold-pale); }
+        .topbar-user { display: flex; align-items: center; gap: 0.55rem; padding: 0.3rem 0.8rem 0.3rem 0.4rem; background: var(--gold-pale); border: 1.5px solid rgba(201,168,76,0.3); border-radius: 2rem; cursor: pointer; transition: all var(--transition); }
+        .topbar-avatar { width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, var(--gold), var(--gold-light)); display: flex; align-items: center; justify-content: center; color: var(--ink); font-size: 0.75rem; font-weight: 700; font-family: 'Playfair Display', serif; }
+        .topbar-username { font-family: 'Libre Baskerville', serif; font-size: 0.72rem; color: var(--gold-dim); font-weight: 700; }
+
+        /* =============================================
+           PAGE CONTENT
+        ============================================= */
+        .page-content { padding: 2rem 2rem 3rem; flex: 1; }
+
+        .page-eyebrow { font-family: 'Libre Baskerville', serif; font-size: 0.68rem; letter-spacing: 0.26em; text-transform: uppercase; color: var(--gold); display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.4rem; }
+        .page-eyebrow::before { content: ''; width: 24px; height: 1px; background: var(--gold); }
+        .page-title { font-family: 'Playfair Display', serif; font-size: clamp(1.5rem, 2.5vw, 2rem); font-weight: 900; color: var(--ink); margin: 0 0 0.3rem; }
+        .page-subtitle { font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; color: var(--gray-text); margin: 0; }
+        .gold-rule { height: 2px; background: linear-gradient(90deg, var(--gold), transparent); border: none; margin: 1.5rem 0 2rem; opacity: 0.4; }
+
+        /* =============================================
+           INFO CARDS
+        ============================================= */
+        .info-card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--gray-line);
+            padding: 1.5rem;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+            transition: transform var(--transition), box-shadow var(--transition);
+            box-shadow: var(--shadow-soft);
+            text-decoration: none;
+            display: block;
+            color: inherit;
+        }
+
+        .info-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--gold), var(--gold-light));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+
+        .info-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-gold); color: inherit; }
+        .info-card:hover::before { transform: scaleX(1); }
+
+        .info-card .card-icon {
+            width: 46px; height: 46px;
+            border-radius: 50%;
+            background: var(--gold-pale);
+            display: flex; align-items: center; justify-content: center;
+            color: var(--gold-dim);
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            transition: background var(--transition), color var(--transition);
+        }
+        .info-card:hover .card-icon { background: var(--gold); color: var(--white); }
+        .info-card .card-title { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; color: var(--ink); margin-bottom: 0.3rem; }
+        .info-card .card-desc { font-family: 'Cormorant Garamond', serif; font-size: 0.95rem; color: var(--gray-text); line-height: 1.6; }
+        .info-card .card-bg-icon { position: absolute; bottom: -0.5rem; right: 0.5rem; font-size: 4.5rem; color: var(--gold); opacity: 0.05; pointer-events: none; line-height: 1; }
+
+        /* =============================================
+           WELCOME SECTION CARD
+        ============================================= */
+        .section-card { background: var(--white); border-radius: var(--radius-lg); border: 1px solid var(--gray-line); box-shadow: var(--shadow-soft); overflow: hidden; margin-bottom: 1.5rem; }
+        .section-card-header { padding: 1.1rem 1.5rem; border-bottom: 1px solid var(--gray-line); display: flex; align-items: center; justify-content: space-between; background: var(--section-bg); gap: 0.5rem; flex-wrap: wrap; }
+        .section-card-title { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; color: var(--ink); display: flex; align-items: center; gap: 0.5rem; margin: 0; }
+        .section-card-title i { color: var(--gold); }
+        .section-card-body { padding: 1.5rem; }
+
+        .info-list { list-style: none; padding: 0; margin: 0; }
+        .info-list li { display: flex; align-items: center; gap: 0.85rem; padding: 0.75rem 0; border-bottom: 1px solid var(--gray-line); font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; color: var(--ink-soft); }
+        .info-list li:last-child { border-bottom: none; }
+        .info-list li i { color: var(--gold); font-size: 1rem; flex-shrink: 0; width: 20px; text-align: center; }
+
+        /* Sidebar overlay */
+        .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(26,22,18,0.5); z-index: 199; }
+        .sidebar-overlay.active { display: block; }
+
+        /* =============================================
+           RESPONSIVE
+        ============================================= */
+        @media (max-width: 991px) {
+            .sidebar { transform: translateX(-100%); width: var(--sidebar-w) !important; }
+            .sidebar.mobile-open { transform: translateX(0); }
+            .main-area, .main-area.expanded { margin-left: 0 !important; }
+        }
+
+        @media (max-width: 576px) {
+            .page-content { padding: 1.2rem; }
+            .topbar { padding: 0 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-shell">
+
+    <!-- =============================================
+         SIDEBAR
+    ============================================= -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-deco" aria-hidden="true">♪</div>
+
+        <div class="sidebar-top">
+            <a href="{% url 'home' %}" class="sidebar-brand">
+                <div class="sidebar-logo-ring">
+                    <img src="{% static 'img/logo_abanfar.png' %}" alt="Logo"
+                         onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+                    <span class="sidebar-logo-placeholder" style="display:none">♪</span>
+                </div>
+                <div class="sidebar-brand-text">
+                    <span class="brand-name">ABANFAR BF</span>
+                    <span class="brand-sub">Painel do Aluno</span>
+                </div>
             </a>
-          </div>
+            <button class="btn-collapse" id="btnCollapse" title="Recolher menu">
+                <i class="bi bi-layout-sidebar-reverse" id="collapseIcon"></i>
+            </button>
+        </div>
 
-          <div class="sidebar-profile text-center py-3">
-            <div class="profile-icon mb-2">
-              <i class="bi bi-person-circle"></i>
+        <div class="sidebar-profile">
+            <div class="profile-avatar">
+                <i class="bi bi-person-fill"></i>
             </div>
-            <button class="btn btn-profile">ALUNO</button>
-          </div>
+            <div class="sidebar-profile-name">
+                <span class="profile-name">{{ user.first_name|default:user.username }}</span>
+                <span class="profile-role">Aluno</span>
+            </div>
+        </div>
 
-          <nav class="sidebar-menu flex-grow-1 mt-3">
-            <ul class="nav flex-column">
-              <li class="nav-item mb-3">
-                <a href="{% url 'contas:painel_aluno' %}" class="nav-link">
-                  <i class="bi bi-house-door me-3"></i> INÍCIO
+        <nav class="sidebar-nav">
+            <div class="nav-section-label">Principal</div>
+
+            <a href="{% url 'contas:painel_aluno' %}" class="sidebar-link active">
+                <i class="bi bi-house-door-fill"></i>
+                <span class="nav-label">Início</span>
+            </a>
+
+            <div class="nav-section-label mt-2">Minha Música</div>
+
+            <a href="{% url 'alunos:meu_naipe' %}" class="sidebar-link">
+                <i class="bi bi-music-note"></i>
+                <span class="nav-label">Meu Naipe</span>
+            </a>
+
+            <a href="{% url 'materias:materias_aluno' %}" class="sidebar-link">
+                <i class="bi bi-journal-check"></i>
+                <span class="nav-label">Minhas Matérias</span>
+            </a>
+
+            <a href="{% url 'alunos:ensaios' %}" class="sidebar-link">
+                <i class="bi bi-music-note-beamed"></i>
+                <span class="nav-label">Ensaios</span>
+            </a>
+
+            <a href="{% url 'alunos:apresentacoes' %}" class="sidebar-link">
+                <i class="bi bi-calendar-event"></i>
+                <span class="nav-label">Apresentações</span>
+            </a>
+
+            {% if perfil.aluno.grupo %}
+            <a href="{% url 'grupos:detalhes' perfil.aluno.grupo.id %}" class="sidebar-link">
+                <i class="bi bi-music-note-list"></i>
+                <span class="nav-label">Grupos Musicais</span>
+            </a>
+            {% endif %}
+
+            <div class="nav-section-label mt-2">Conta</div>
+
+            <a href="{% url 'contas:perfil' %}" class="sidebar-link">
+                <i class="bi bi-person-circle"></i>
+                <span class="nav-label">Meu Perfil</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <span class="sidebar-footer-text">ABANFAR BF © {% now "Y" %}</span>
+            <a href="{% url 'contas:logout' %}" class="btn-logout">
+                <i class="bi bi-box-arrow-left"></i>
+                <span class="nav-label">Sair</span>
+            </a>
+        </div>
+    </aside>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- =============================================
+         MAIN AREA
+    ============================================= -->
+    <div class="main-area" id="mainArea">
+
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="topbar-icon-btn d-lg-none" id="btnMobileMenu">
+                    <i class="bi bi-list"></i>
+                </button>
+                <div class="breadcrumb-custom">
+                    <span>ABANFAR BF</span>
+                    <span class="bc-sep">♩</span>
+                    <span>Aluno</span>
+                    <span class="bc-sep">♩</span>
+                    <span class="bc-active">Início</span>
+                </div>
+            </div>
+
+            <div class="topbar-right">
+                <a href="{% url 'contas:perfil' %}" class="topbar-icon-btn" title="Meu Perfil">
+                    <i class="bi bi-person"></i>
                 </a>
-              </li>
+                <div class="topbar-user">
+                    <div class="topbar-avatar">
+                        {{ user.first_name|first|default:"A" }}
+                    </div>
+                    <span class="topbar-username d-none d-sm-block">
+                        {{ user.first_name|default:user.username }}
+                    </span>
+                </div>
+            </div>
+        </header>
 
-              <li class="nav-item mb-3">
-                <a href="{% url 'alunos:meu_naipe' %}" class="nav-link">
-                  <i class="bi bi-music-note me-3"></i> MEU NAIPE
-                </a>
-              </li>
+        <main class="page-content">
 
-              <li class="nav-item mb-3">
-                <a href="{% url 'materias:materias_aluno' %}" class="nav-link d-flex align-items-center">
-                  <i class="bi bi-journal-check me-3"></i>
-                  <span>Minhas Matérias</span>
-                </a>
-              </li>
+            <div class="page-header mb-4">
+                <div class="page-eyebrow">
+                    <i class="bi bi-music-note-beamed"></i> Painel do Aluno
+                </div>
+                <h1 class="page-title">Bem-vindo, {{ user.first_name|default:"Aluno" }} 🎵</h1>
+                <p class="page-subtitle">
+                    Aqui você acompanha tudo sobre sua jornada musical na ABANFAR BF.
+                </p>
+            </div>
 
-              <li class="nav-item mb-3">
-                <a href="{% url 'alunos:ensaios' %}" class="nav-link">
-                  <i class="bi bi-music-note-beamed me-3"></i> ENSAIOS
-                </a>
-              </li>
+            <hr class="gold-rule">
 
-              <li class="nav-item mb-3">
-                <a href="{% url 'alunos:apresentacoes' %}" class="nav-link">
-                  <i class="bi bi-calendar-event me-3"></i> APRESENTAÇÕES
-                </a>
-              </li>
+            <!-- QUICK ACCESS CARDS -->
+            <div class="row g-3 mb-4">
+                <div class="col-6 col-lg-3">
+                    <a href="{% url 'alunos:meu_naipe' %}" class="info-card">
+                        <div class="card-icon"><i class="bi bi-music-note"></i></div>
+                        <div class="card-title">Meu Naipe</div>
+                        <p class="card-desc">Veja seu naipe e instrumento musical.</p>
+                        <div class="card-bg-icon">♩</div>
+                    </a>
+                </div>
+                <div class="col-6 col-lg-3">
+                    <a href="{% url 'materias:materias_aluno' %}" class="info-card">
+                        <div class="card-icon"><i class="bi bi-journal-check"></i></div>
+                        <div class="card-title">Matérias</div>
+                        <p class="card-desc">Acesse suas matérias e conteúdos.</p>
+                        <div class="card-bg-icon">♫</div>
+                    </a>
+                </div>
+                <div class="col-6 col-lg-3">
+                    <a href="{% url 'alunos:ensaios' %}" class="info-card">
+                        <div class="card-icon"><i class="bi bi-music-note-beamed"></i></div>
+                        <div class="card-title">Ensaios</div>
+                        <p class="card-desc">Horários e informações dos ensaios.</p>
+                        <div class="card-bg-icon">♪</div>
+                    </a>
+                </div>
+                <div class="col-6 col-lg-3">
+                    <a href="{% url 'alunos:apresentacoes' %}" class="info-card">
+                        <div class="card-icon"><i class="bi bi-calendar-event"></i></div>
+                        <div class="card-title">Apresentações</div>
+                        <p class="card-desc">Próximas apresentações do grupo.</p>
+                        <div class="card-bg-icon">𝄞</div>
+                    </a>
+                </div>
+            </div>
 
-              <li class="nav-item mb-3">
-                <a href="{% url 'grupos:detalhes' perfil.aluno.grupo.id %}" class="nav-link d-flex align-items-center">
-                  <i class="bi bi-music-note-list me-3"></i>
-                  <span>GRUPOS MUSICAIS</span>
-                </a>
-              </li>
-            </ul>
-          </nav>
-        </aside>
-
-        <!-- CONTEÚDO PRINCIPAL -->
-        <main class="col-12 col-md-9 col-lg-10 p-4">
-
-          <h2 class="titulo-form mb-3 text-center text-md-start">
-            Bem-vindo ao seu painel, aluno!
-          </h2>
-
-          <p class="mt-3 text-center text-md-start">
-            Aqui você poderá visualizar:
-          </p>
-
-          <ul class="list-group list-group-flush mt-3 w-100 w-md-75">
-            <li class="list-group-item">Seu naipe e instrumento</li>
-            <li class="list-group-item">Horários de ensaio do seu grupo</li>
-            <li class="list-group-item">Apresentações futuras</li>
-            <li class="list-group-item">Informações do seu professor responsável</li>
-          </ul>
+            <!-- WELCOME INFO CARD -->
+            <div class="section-card">
+                <div class="section-card-header">
+                    <h2 class="section-card-title">
+                        <i class="bi bi-info-circle-fill"></i> Informações disponíveis
+                    </h2>
+                </div>
+                <div class="section-card-body">
+                    <ul class="info-list">
+                        <li><i class="bi bi-music-note"></i> Seu naipe e instrumento musical</li>
+                        <li><i class="bi bi-people-fill"></i> Horários de ensaio do seu grupo</li>
+                        <li><i class="bi bi-calendar-check"></i> Apresentações futuras programadas</li>
+                        <li><i class="bi bi-person-workspace"></i> Informações do seu professor responsável</li>
+                        <li><i class="bi bi-journal-text"></i> Materiais e matérias do seu curso</li>
+                    </ul>
+                </div>
+            </div>
 
         </main>
-      </div>
     </div>
-  </body>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
+
+<script>
+    const sidebar      = document.getElementById('sidebar');
+    const mainArea     = document.getElementById('mainArea');
+    const btnCollapse  = document.getElementById('btnCollapse');
+    const collapseIcon = document.getElementById('collapseIcon');
+    const btnMobile    = document.getElementById('btnMobileMenu');
+    const overlay      = document.getElementById('sidebarOverlay');
+
+    btnCollapse.addEventListener('click', () => {
+        sidebar.classList.toggle('collapsed');
+        mainArea.classList.toggle('expanded');
+        const isCollapsed = sidebar.classList.contains('collapsed');
+        collapseIcon.className = isCollapsed ? 'bi bi-layout-sidebar' : 'bi bi-layout-sidebar-reverse';
+    });
+
+    btnMobile.addEventListener('click', () => {
+        sidebar.classList.toggle('mobile-open');
+        overlay.classList.toggle('active');
+    });
+
+    overlay.addEventListener('click', () => {
+        sidebar.classList.remove('mobile-open');
+        overlay.classList.remove('active');
+    });
+
+    document.querySelectorAll('.sidebar-link').forEach(link => {
+        if (link.href === window.location.href) {
+            document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+            link.classList.add('active');
+        }
+    });
+</script>
+
+</body>
 </html>
