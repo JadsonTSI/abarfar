@@ -57,7 +57,7 @@ def gestao_transparencia(request):
         'editais_count':       documentos.filter(categoria='editais').count(),
         'projetos_count':      documentos.filter(categoria='projetos').count(),
     }
-    return render(request, 'transparencia/gerente.html', context)
+    return render(request, 'trasnparencia_gerente.html', context)
  
  
 @login_required

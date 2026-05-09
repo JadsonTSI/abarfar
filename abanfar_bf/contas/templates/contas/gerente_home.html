@@ -1096,11 +1096,18 @@
                 <span class="nav-label">Grupos Musicais</span>
             </a>
 
-            <div class="nav-section-label mt-2">Sistema</div>
+            <div class="nav-section-label mt-2">Transparência</div>
 
-            <a href="#" class="sidebar-link">
-                <i class="bi bi-gear"></i>
-                <span class="nav-label">Configurações</span>
+            <a href="{% url 'transparencia:gestao' %}" class="sidebar-link">
+                <i class="bi bi-bar-chart-fill"></i>
+                <span class="nav-label">Transparência</span>
+            </a>
+
+            <div class="nav-section-label mt-2">Conta</div>
+
+            <a href="{% url 'contas:perfil' %}" class="sidebar-link">
+                <i class="bi bi-person-circle"></i>
+                <span class="nav-label">Meu Perfil</span>
             </a>
         </nav>
 
@@ -1265,9 +1272,9 @@
                             </a>
                         </div>
                         <div class="col-6 col-sm-4 col-lg-2">
-                            <a href="#" class="quick-card">
-                                <div class="quick-card-icon"><i class="bi bi-file-earmark-text"></i></div>
-                                <span class="quick-card-label">Relatório</span>
+                            <a href="{% url 'transparencia:gestao' %}" class="quick-card">
+                                <div class="quick-card-icon"><i class="bi bi-bar-chart-fill"></i></div>
+                                <span class="quick-card-label">Transparência</span>
                             </a>
                         </div>
                     </div>
@@ -1527,8 +1534,8 @@
                                 <a href="{% url 'home' %}" class="btn-gold">
                                     <i class="bi bi-globe2"></i> Ver site
                                 </a>
-                                <a href="#" class="btn-outline-gold">
-                                    <i class="bi bi-file-earmark-text"></i> Relatórios
+                                <a href="{% url 'transparencia:gestao' %}" class="btn-outline-gold">
+                                    <i class="bi bi-bar-chart-fill"></i> Transparência
                                 </a>
                             </div>
                         </div>
