@@ -745,11 +745,18 @@
                 <span class="nav-label">Grupos Musicais</span>
             </a>
 
-            <div class="nav-section-label mt-2">Sistema</div>
+            <div class="nav-section-label mt-2">Transparência</div>
 
-            <a href="#" class="sidebar-link">
-                <i class="bi bi-gear"></i>
-                <span class="nav-label">Configurações</span>
+            <a href="{% url 'transparencia:gestao' %}" class="sidebar-link">
+                <i class="bi bi-shield-check"></i>
+                <span class="nav-label">Transparência</span>
+            </a>
+
+            <div class="nav-section-label mt-2">Conta</div>
+
+            <a href="{% url 'contas:perfil' %}" class="sidebar-link">
+                <i class="bi bi-person-circle"></i>
+                <span class="nav-label">Meu Perfil</span>
             </a>
         </nav>
 

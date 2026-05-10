@@ -148,15 +148,52 @@
         </div>
         <nav class="sidebar-nav">
             <div class="nav-section-label">Principal</div>
-            <a href="{% url 'contas:painel_gerente' %}" class="sidebar-link"><i class="bi bi-speedometer2"></i><span class="nav-label">Início</span></a>
+
+            <a href="{% url 'contas:painel_gerente' %}" class="sidebar-link ">
+                <i class="bi bi-speedometer2"></i>
+                <span class="nav-label">Início</span>
+            </a>
+
             <div class="nav-section-label mt-2">Gestão</div>
-            <a href="{% url 'contas:lista_alunos' %}" class="sidebar-link"><i class="bi bi-people-fill"></i><span class="nav-label">Alunos</span></a>
-            <a href="{% url 'professores:professores_list' %}" class="sidebar-link"><i class="bi bi-person-workspace"></i><span class="nav-label">Professores</span></a>
-            <a href="{% url 'materias:materias_gerente' %}" class="sidebar-link"><i class="bi bi-journal-text"></i><span class="nav-label">Matérias</span></a>
-            <a href="{% url 'instrumentos:list' %}" class="sidebar-link active"><i class="bi bi-music-note-list"></i><span class="nav-label">Instrumentos</span></a>
-            <a href="{% url 'grupos:listar' %}" class="sidebar-link"><i class="bi bi-music-note-beamed"></i><span class="nav-label">Grupos Musicais</span></a>
-            <div class="nav-section-label mt-2">Sistema</div>
-            <a href="#" class="sidebar-link"><i class="bi bi-gear"></i><span class="nav-label">Configurações</span></a>
+
+            <a href="{% url 'contas:lista_alunos' %}" class="sidebar-link">
+                <i class="bi bi-people-fill"></i>
+                <span class="nav-label">Alunos</span>
+            </a>
+
+            <a href="{% url 'professores:professores_list' %}" class="sidebar-link ">
+                <i class="bi bi-person-workspace"></i>
+                <span class="nav-label">Professores</span>
+            </a>
+
+            <a href="{% url 'materias:materias_gerente' %}" class="sidebar-link">
+                <i class="bi bi-journal-text"></i>
+                <span class="nav-label">Matérias</span>
+            </a>
+
+            <a href="{% url 'instrumentos:list' %}" class="sidebar-link active">
+                <i class="bi bi-music-note-list"></i>
+                <span class="nav-label">Instrumentos</span>
+            </a>
+
+            <a href="{% url 'grupos:listar' %}" class="sidebar-link">
+                <i class="bi bi-music-note-beamed"></i>
+                <span class="nav-label">Grupos Musicais</span>
+            </a>
+
+            <div class="nav-section-label mt-2">Transparência</div>
+
+            <a href="{% url 'transparencia:gestao' %}" class="sidebar-link">
+                <i class="bi bi-shield-check"></i>
+                <span class="nav-label">Transparência</span>
+            </a>
+
+            <div class="nav-section-label mt-2">Conta</div>
+
+            <a href="{% url 'contas:perfil' %}" class="sidebar-link">
+                <i class="bi bi-person-circle"></i>
+                <span class="nav-label">Meu Perfil</span>
+            </a>
         </nav>
         <div class="sidebar-footer">
             <span class="sidebar-footer-text">ABANFAR BF © {% now "Y" %}</span>
