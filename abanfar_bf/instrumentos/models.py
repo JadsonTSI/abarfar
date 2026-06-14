@@ -8,6 +8,17 @@ class Instrumento(models.Model):
     descricao = models.TextField(blank=True)
     pertence_associacao = models.BooleanField(default=True)
     ativo = models.BooleanField(default=True)
+    rfid = models.CharField(max_length=100, blank=True, null=True, unique=True)
+    condicao = models.CharField(
+        max_length=20,
+        choices=[
+            ('otimo', 'Ótimo'),
+            ('bom', 'Bom'),
+            ('regular', 'Regular'),
+            ('ruim', 'Ruim')
+        ],
+        default='otimo'
+    )
 
     def save(self, *args, **kwargs):
         # Se ainda não existir número de série → gerar um novo

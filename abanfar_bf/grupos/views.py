@@ -16,6 +16,7 @@ def editar_funcao(request, aluno_id):
     return render(request, "grupos/editar_funcao.html", {"aluno": aluno})
 
 
+@login_required
 def grupo_detalhes(request, id):
     grupo = get_object_or_404(GrupoMusical, id=id)
     musicos = Aluno.objects.filter(grupo=grupo)
@@ -27,6 +28,10 @@ def grupo_detalhes(request, id):
         "partituras": partituras
     }
 
+    # Aluno vê template com sidebar de aluno; professor/gerente vêem o template normal
+    tipo = getattr(getattr(request.user, 'perfil', None), 'tipo', None)
+    if tipo == 'aluno':
+        return render(request, "grupos/detalhes_aluno.html", contexto)
     return render(request, "grupos/detalhes.html", contexto)
 
 @login_required
@@ -51,6 +56,7 @@ def enviar_partitura(request, id):
 
 
 
+@login_required
 def lista_grupos(request):
     grupos = GrupoMusical.objects.all()
     return render(request, "grupos/lista.html", {"grupos": grupos})

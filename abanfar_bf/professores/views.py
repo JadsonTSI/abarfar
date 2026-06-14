@@ -179,3 +179,44 @@ def naipe_detalhe(request, nome):
         "alunos": alunos
     })
 
+
+# ── ENDPOINTS DE API PARA O APLICATIVO ─────────────────────────────────────────
+
+from django.http import JsonResponse
+
+def api_listar_ensaios(request):
+    ensaios = EnsaiosproModel.objects.all().order_by('data', 'inicio')
+    data = []
+    
+    from alunos.models import Aluno
+    alunos = Aluno.objects.all().select_related('grupo')
+    
+    # Mapear alunos por grupo musical
+    alunos_por_grupo = {}
+    for a in alunos:
+        if a.grupo:
+            g_nome = a.grupo.nome
+            if g_nome not in alunos_por_grupo:
+                alunos_por_grupo[g_nome] = []
+            alunos_por_grupo[g_nome].append({
+                "nome": f"{a.nome} {a.sobrenome}",
+                "matricula": a.matricula
+            })
+            
+    for e in ensaios:
+        # Puxar alunos do grupo com o mesmo nome do ensaio
+        g_alunos = alunos_por_grupo.get(e.nome, [])
+        data.append({
+            "id": e.id,
+            "nome": e.nome,
+            "dia_semana": e.dia_semana,
+            "data": e.data.strftime("%Y-%m-%d"),
+            "inicio": e.inicio.strftime("%H:%M"),
+            "fim": e.fim.strftime("%H:%M"),
+            "local": e.local,
+            "cancelado": e.cancelado,
+            "alunos": g_alunos
+        })
+        
+    return JsonResponse(data, safe=False)
+

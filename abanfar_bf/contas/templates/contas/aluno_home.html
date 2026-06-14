@@ -468,6 +468,16 @@
                         <div class="card-bg-icon">𝄞</div>
                     </a>
                 </div>
+                {% if request.user.perfil.aluno.grupo %}
+                <div class="col-6 col-lg-3">
+                    <a href="{% url 'grupos:detalhes' request.user.perfil.aluno.grupo.id %}" class="info-card">
+                        <div class="card-icon"><i class="bi bi-music-note-list"></i></div>
+                        <div class="card-title">Grupos Musicais</div>
+                        <p class="card-desc">Seu grupo musical.</p>
+                        <div class="card-bg-icon">𝄞</div>
+                    </a>
+                </div>
+                {% endif %}
             </div>
 
             <!-- WELCOME INFO CARD -->

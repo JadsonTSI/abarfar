@@ -6,6 +6,9 @@ from .models import Perfil
 from alunos.models import Aluno
 from professores.models import ProfessorModel
 from materias.models import Materia, MatriculaMateria
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+import json
 
 
 def login_view(request):
@@ -99,3 +102,28 @@ def alterar_foto(request):
         perfil.save()
 
     return redirect("contas:perfil")
+
+@csrf_exempt
+def login_api(request):
+    if request.method == "POST":
+        try:
+            data = request.POST
+            username = data.get("username")
+            senha = data.get("senha")
+        except:
+            return JsonResponse({"erro": "Dados invalidos"}, status=400)
+
+        user = authenticate(request, username=username, password=senha)
+
+        if user:
+            login(request, user)
+            perfil = Perfil.objects.get(user=user)
+            return JsonResponse({
+                "sucesso": True,
+                "tipo": perfil.tipo,
+                "username": user.username,
+            })
+
+        return JsonResponse({"erro": "Usuario ou senha incorretos"}, status=401)
+
+    return JsonResponse({"erro": "Metodo nao permitido"}, status=405)

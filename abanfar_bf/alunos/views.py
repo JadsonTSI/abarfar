@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 from .forms import AlunoCadastroForm, AlunoForm
 from professores.models import EnsaiosproModel, ApresentacaoModel
 from .models import Aluno, Instrumento, Naipe, GrupoMusical 
@@ -27,6 +28,7 @@ def sucesso(request):
 # ENSAIOS
 # -------------------------
 
+@login_required
 def ensaios_aluno(request):
     ensaios = EnsaiosproModel.objects.all()
     return render(request, "alunos/ensaios_aluno.html", {"ensaios": ensaios})
@@ -36,6 +38,7 @@ def ensaios_aluno(request):
 # APRESENTAÇÕES
 # -------------------------
 
+@login_required
 def apresentacoes_aluno(request):
     apresentacoes = ApresentacaoModel.objects.all()
     return render(request, "alunos/apresentacoes_aluno.html", {"apresentacoes": apresentacoes})
@@ -80,3 +83,16 @@ def excluir_aluno(request, id):
     perfil.delete()
 
     return redirect("contas:lista_alunos")
+
+
+def api_listar_alunos(request):
+    alunos = Aluno.objects.all()
+    data = [
+        {
+            "id": a.id,
+            "nome": f"{a.nome} {a.sobrenome}",
+            "matricula": a.matricula,
+        }
+        for a in alunos
+    ]
+    return JsonResponse(data, safe=False)

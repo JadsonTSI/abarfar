@@ -13,4 +13,7 @@ urlpatterns = [
     path("editar/<int:id>/", views.editar_aluno, name="editar"),
     path("excluir/<int:id>/", views.excluir_aluno, name="excluir"),
 
+    # API endpoints
+    path("api/listar/", views.api_listar_alunos, name="api_listar_alunos"),
+
 ]

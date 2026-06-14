@@ -27,4 +27,7 @@ urlpatterns = [
     path("professores/excluir/<int:id>/", views.professores_delete, name="professores_delete"),
     path("naipes/", views.naipes_view, name="naipes"),
     path("naipes/<str:nome>/", views.naipe_detalhe, name="naipe_detalhe"),
+
+    # API endpoints
+    path("api/ensaios/", views.api_listar_ensaios, name="api_listar_ensaios"),
 ]
