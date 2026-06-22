@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
+    <link rel="icon" type="image/png" href="{% static 'img/logo_abanfar.png' %}?v=2">
     <meta charset="UTF-8">
     <title>Login — ABANFAR BF</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -757,7 +758,7 @@
                         <input type="checkbox" name="lembrar">
                         Lembrar de mim
                     </label>
-                    <a href="#" class="forgot-link">Esqueceu a senha?</a>
+                    <a href="{% url 'contas:password_reset' %}" class="forgot-link">Esqueceu a senha?</a>
                 </div>
 
                 <!-- Submit -->

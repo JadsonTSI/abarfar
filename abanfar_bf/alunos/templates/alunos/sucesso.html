@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
+    <link rel="icon" type="image/png" href="{% static 'img/logo_abanfar.png' %}?v=2">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro realizado — ABANFAR BF</title>
@@ -116,10 +117,11 @@
         </div>
         <nav class="sidebar-nav">
             <div class="nav-section-label">Principal</div>
-            <a href="{% url 'contas:gerente' %}" class="sidebar-link"><i class="bi bi-house-door-fill"></i><span class="nav-label">Início</span></a>
+            <a href="{% url 'contas:painel_gerente' %}" class="sidebar-link"><i class="bi bi-house-door-fill"></i><span class="nav-label">Início</span></a>
             <a href="{% url 'contas:lista_alunos' %}" class="sidebar-link active"><i class="bi bi-people-fill"></i><span class="nav-label">Alunos</span></a>
             <a href="{% url 'professores:professores_list' %}" class="sidebar-link"><i class="bi bi-person-workspace"></i><span class="nav-label">Professores</span></a>
             <a href="{% url 'instrumentos:list' %}" class="sidebar-link"><i class="bi bi-music-note-beamed"></i><span class="nav-label">Instrumentos</span></a>
+            <a href="{% url 'instrumentos:iot_web_control' %}" class="sidebar-link"><i class="bi bi-cpu-fill"></i><span class="nav-label">Controle IoT</span></a>
             <a href="{% url 'materias:materias_gerente' %}" class="sidebar-link"><i class="bi bi-journal-bookmark-fill"></i><span class="nav-label">Matérias</span></a>
             <a href="{% url 'grupos:listar' %}" class="sidebar-link"><i class="bi bi-music-note-list"></i><span class="nav-label">Grupos</span></a>
             <a href="{% url 'transparencia:portal' %}" class="sidebar-link"><i class="bi bi-file-earmark-text-fill"></i><span class="nav-label">Transparência</span></a>

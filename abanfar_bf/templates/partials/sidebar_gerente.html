@@ -1,0 +1,99 @@
+{% load static %}
+<aside class="sidebar" id="sidebar">
+    <!-- Decorative note -->
+    <div class="sidebar-deco" aria-hidden="true">𝄞</div>
+
+    <!-- Top: brand + collapse -->
+    <div class="sidebar-top">
+        <a href="{% url 'home' %}" class="sidebar-brand">
+            <div class="sidebar-logo-ring">
+                <img src="{% static 'img/logo_abanfar.png' %}" alt="Logo"
+                     onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+                <span class="sidebar-logo-placeholder" style="display:none">♪</span>
+            </div>
+            <div class="sidebar-brand-text">
+                <span class="brand-name">ABANFAR BF</span>
+                <span class="brand-sub">Painel Administrativo</span>
+            </div>
+        </a>
+        <button class="btn-collapse" id="btnCollapse" title="Recolher menu">
+            <i class="bi bi-layout-sidebar-reverse" id="collapseIcon"></i>
+        </button>
+    </div>
+
+    <!-- Profile -->
+    <div class="sidebar-profile">
+        <div class="profile-avatar">
+            <i class="bi bi-person-fill"></i>
+        </div>
+        <div class="sidebar-profile-name">
+            <span class="profile-name">{{ user.first_name|default:user.username }}</span>
+            <span class="profile-role">Gerente</span>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="sidebar-nav">
+        <div class="nav-section-label">Principal</div>
+
+        <a href="{% url 'contas:painel_gerente' %}" class="sidebar-link active">
+            <i class="bi bi-speedometer2"></i>
+            <span class="nav-label">Início</span>
+        </a>
+
+        <div class="nav-section-label mt-2">Gestão</div>
+
+        <a href="{% url 'contas:lista_alunos' %}" class="sidebar-link">
+            <i class="bi bi-people-fill"></i>
+            <span class="nav-label">Alunos</span>
+        </a>
+
+        <a href="{% url 'professores:professores_list' %}" class="sidebar-link">
+            <i class="bi bi-person-workspace"></i>
+            <span class="nav-label">Professores</span>
+        </a>
+
+        <a href="{% url 'materias:materias_gerente' %}" class="sidebar-link">
+            <i class="bi bi-journal-text"></i>
+            <span class="nav-label">Matérias</span>
+        </a>
+
+        <a href="{% url 'instrumentos:list' %}" class="sidebar-link">
+            <i class="bi bi-music-note-list"></i>
+            <span class="nav-label">Instrumentos</span>
+        </a>
+
+        <a href="{% url 'instrumentos:iot_web_control' %}" class="sidebar-link">
+            <i class="bi bi-cpu-fill"></i>
+            <span class="nav-label">Controle IoT</span>
+        </a>
+
+        <a href="{% url 'grupos:listar' %}" class="sidebar-link">
+            <i class="bi bi-music-note-beamed"></i>
+            <span class="nav-label">Grupos Musicais</span>
+        </a>
+
+        <div class="nav-section-label mt-2">Transparência</div>
+
+        <a href="{% url 'transparencia:gestao' %}" class="sidebar-link">
+            <i class="bi bi-shield-check"></i>
+            <span class="nav-label">Transparência</span>
+        </a>
+
+        <div class="nav-section-label mt-2">Conta</div>
+
+        <a href="{% url 'contas:perfil' %}" class="sidebar-link">
+            <i class="bi bi-person-circle"></i>
+            <span class="nav-label">Meu Perfil</span>
+        </a>
+    </nav>
+
+    <!-- Footer -->
+    <div class="sidebar-footer">
+        <span class="sidebar-footer-text">ABANFAR BF © {% now "Y" %}</span>
+        <a href="{% url 'contas:logout' %}" class="btn-logout">
+            <i class="bi bi-box-arrow-left"></i>
+            <span class="nav-label">Sair</span>
+        </a>
+    </div>
+</aside>

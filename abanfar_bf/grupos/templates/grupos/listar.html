@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
+    <link rel="icon" type="image/png" href="{% static 'img/logo_abanfar.png' %}?v=2">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Grupos Musicais — ABANFAR BF</title>
@@ -226,6 +227,11 @@
                 <span class="nav-label">Instrumentos</span>
             </a>
 
+            <a href="{% url 'instrumentos:iot_web_control' %}" class="sidebar-link">
+                <i class="bi bi-cpu-fill"></i>
+                <span class="nav-label">Controle IoT</span>
+            </a>
+
             <a href="{% url 'grupos:listar' %}" class="sidebar-link active">
                 <i class="bi bi-music-note-beamed"></i>
                 <span class="nav-label">Grupos Musicais</span>
@@ -301,19 +307,19 @@
                 <div class="col-6 col-lg-3">
                     <div class="mini-stat">
                         <div class="mini-stat-icon"><i class="bi bi-check-circle-fill"></i></div>
-                        <div><div class="mini-stat-value">{{ grupos|length }}</div><span class="mini-stat-label">Ativos</span></div>
+                        <div><div class="mini-stat-value">{{ ativos_count }}</div><span class="mini-stat-label">Ativos</span></div>
                     </div>
                 </div>
                 <div class="col-6 col-lg-3">
                     <div class="mini-stat">
                         <div class="mini-stat-icon"><i class="bi bi-people-fill"></i></div>
-                        <div><div class="mini-stat-value">—</div><span class="mini-stat-label">Membros totais</span></div>
+                        <div><div class="mini-stat-value">{{ membros_totais_count }}</div><span class="mini-stat-label">Membros totais</span></div>
                     </div>
                 </div>
                 <div class="col-6 col-lg-3">
                     <div class="mini-stat">
                         <div class="mini-stat-icon"><i class="bi bi-calendar-event"></i></div>
-                        <div><div class="mini-stat-value">—</div><span class="mini-stat-label">Próximos ensaios</span></div>
+                        <div><div class="mini-stat-value">{{ proximos_ensaios_count }}</div><span class="mini-stat-label">Próximos ensaios</span></div>
                     </div>
                 </div>
             </div>
@@ -328,7 +334,12 @@
                             <button class="view-btn active" id="btnCardView" title="Visualização em cards"><i class="bi bi-grid-fill"></i></button>
                             <button class="view-btn" id="btnTableView" title="Visualização em tabela"><i class="bi bi-list-ul"></i></button>
                         </div>
-                        <a href="#" class="btn-outline-gold"><i class="bi bi-download"></i> Exportar</a>
+                        <a href="{% url 'grupos:exportar_grupos_excel' %}" class="btn-outline-gold">
+                            <i class="bi bi-file-earmark-excel"></i> Exportar Excel
+                        </a>
+                        <a href="{% url 'grupos:exportar_grupos_pdf' %}" class="btn-outline-gold">
+                            <i class="bi bi-file-earmark-pdf"></i> Exportar PDF
+                        </a>
                     </div>
                 </div>
 

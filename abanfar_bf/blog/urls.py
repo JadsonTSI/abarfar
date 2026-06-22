@@ -1,10 +1,11 @@
-from django.contrib import admin
 from django.urls import path
-from blog.views import home
 from . import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', home, name='home'),
-    path('transparencia/', views.portal_transparencia,  name='transparencia'),
+    path('', views.home, name='home'),
+    path('blog/post/<slug:slug>/', views.post_detail, name='post_detail'),
+    path('sobre/', views.sobre, name='sobre'),
+    path('projetos/', views.projetos, name='projetos'),
+    path('galeria/', views.galeria, name='galeria'),
+    path('contato/', views.contato, name='contato'),
 ]

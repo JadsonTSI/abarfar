@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
+from contas.decorators import gerente_required, iot_api_required
 from .forms import AlunoCadastroForm, AlunoForm
 from professores.models import EnsaiosproModel, ApresentacaoModel
 from .models import Aluno, Instrumento, Naipe, GrupoMusical 
@@ -65,6 +66,7 @@ def meu_naipe(request):
     })
 
 
+@gerente_required
 def editar_aluno(request, id):
     aluno = get_object_or_404(Aluno, id=id)
     form = AlunoForm(request.POST or None, instance=aluno)
@@ -75,6 +77,7 @@ def editar_aluno(request, id):
 
     return render(request, "alunos/editar_aluno.html", {"form": form, "aluno": aluno})
 
+@gerente_required
 def excluir_aluno(request, id):
     aluno = get_object_or_404(Aluno, id=id)
     perfil = aluno.perfil
@@ -85,6 +88,7 @@ def excluir_aluno(request, id):
     return redirect("contas:lista_alunos")
 
 
+@iot_api_required
 def api_listar_alunos(request):
     alunos = Aluno.objects.all()
     data = [

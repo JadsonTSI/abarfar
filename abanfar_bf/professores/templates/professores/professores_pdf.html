@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+    @page {
+        size: a4 landscape;
+        margin: 1.5cm 1.5cm 2.2cm 1.5cm;
+        @frame footer_frame {
+            -pdf-frame-content: footer_content;
+            bottom: 0.8cm;
+            height: 1cm;
+            left: 1.5cm;
+            width: 26cm;
+        }
+    }
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        color: #333333;
+        font-size: 9pt;
+        line-height: 1.4;
+    }
+    .header-table {
+        width: 100%;
+        margin-bottom: 12px;
+        padding-bottom: 8px;
+        border-bottom: 2px solid #8B6E2F;
+    }
+    .title {
+        font-size: 15pt;
+        font-weight: bold;
+        color: #8B6E2F;
+    }
+    .subtitle {
+        font-size: 8pt;
+        color: #888888;
+        margin-top: 2px;
+    }
+    .meta {
+        font-size: 8pt;
+        color: #666666;
+        text-align: right;
+        vertical-align: top;
+    }
+    .summary-table {
+        width: 100%;
+        margin-bottom: 14px;
+        border-collapse: collapse;
+    }
+    .summary-table td {
+        padding: 8px 6px;
+        border: 1px solid #DDDDDD;
+        background-color: #F8F5EE;
+        text-align: center;
+    }
+    .summary-label {
+        font-size: 7pt;
+        color: #888888;
+        font-weight: bold;
+    }
+    .summary-val {
+        font-size: 15pt;
+        font-weight: bold;
+        color: #8B6E2F;
+    }
+    .summary-val-green {
+        font-size: 15pt;
+        font-weight: bold;
+        color: #2E7D32;
+    }
+    .summary-val-red {
+        font-size: 15pt;
+        font-weight: bold;
+        color: #C62828;
+    }
+    .section-title {
+        font-size: 9.5pt;
+        font-weight: bold;
+        color: #8B6E2F;
+        margin-bottom: 5px;
+        border-bottom: 1px solid #E0D5C0;
+        padding-bottom: 2px;
+    }
+    .data-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    .data-table th {
+        background-color: #8B6E2F;
+        color: #FFFFFF;
+        font-weight: bold;
+        text-align: left;
+        padding: 5px 6px;
+        font-size: 8pt;
+    }
+    .data-table td {
+        padding: 5px 6px;
+        border-bottom: 1px solid #EEEEEE;
+        font-size: 8pt;
+        word-break: break-word;
+    }
+    .row-even td {
+        background-color: #FDFAF4;
+    }
+    .row-odd td {
+        background-color: #FFFFFF;
+    }
+    .status-ativo {
+        color: #1B5E20;
+        font-weight: bold;
+        font-size: 8pt;
+    }
+    .status-inativo {
+        color: #B71C1C;
+        font-weight: bold;
+        font-size: 8pt;
+    }
+    .center {
+        text-align: center;
+    }
+    .footer-text {
+        font-size: 7pt;
+        color: #888888;
+        border-top: 1px solid #CCCCCC;
+        padding-top: 3px;
+    }
+</style>
+</head>
+<body>
+
+    <!-- Footer (deve vir ANTES do conteúdo no xhtml2pdf) -->
+    <div id="footer_content">
+        <table style="width: 100%;" class="footer-text">
+            <tr>
+                <td>ABANFAR &mdash; Associação Banda Filarmônica</td>
+                <td style="text-align: right;">
+                    Página <pdf:pagenumber /> de <pdf:pagecount />
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- Cabeçalho -->
+    <table class="header-table">
+        <tr>
+            <td style="width: 75%;">
+                <div class="title">{{ titulo }}</div>
+                <div class="subtitle">ABANFAR &mdash; Sistema de Gestão</div>
+            </td>
+            <td class="meta">
+                Gerado em:<br>{{ data_geracao }}
+            </td>
+        </tr>
+    </table>
+
+    <!-- Cards Resumo -->
+    <table class="summary-table">
+        <tr>
+            <td style="width: 33%;">
+                <div class="summary-label">TOTAL DE PROFESSORES</div>
+                <div class="summary-val">{{ total_professores }}</div>
+            </td>
+            <td style="width: 33%;">
+                <div class="summary-label">ATIVOS</div>
+                <div class="summary-val-green">{{ ativos }}</div>
+            </td>
+            <td style="width: 34%;">
+                <div class="summary-label">INATIVOS</div>
+                <div class="summary-val-red">{{ inativos }}</div>
+            </td>
+        </tr>
+    </table>
+
+    <!-- Tabela principal -->
+    <div class="section-title">Lista Completa de Professores</div>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th style="width: 18%;">Nome</th>
+                <th style="width: 28%;">E-mail</th>
+                <th style="width: 14%;">Telefone</th>
+                <th style="width: 28%;">Instrumento Principal</th>
+                <th style="width: 12%; text-align: center;">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in professores %}
+            <tr class="{% cycle 'row-odd' 'row-even' %}">
+                <td><strong>{{ p.nome }}</strong></td>
+                <td>{{ p.email|default:"—" }}</td>
+                <td>{{ p.telefone|default:"—" }}</td>
+                <td>{{ p.instrumento|default:"—" }}</td>
+                <td class="center">
+                    {% if p.ativo %}
+                    <span class="status-ativo">&#10003; Ativo</span>
+                    {% else %}
+                    <span class="status-inativo">&#10007; Inativo</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" class="center" style="color: #888; font-style: italic; padding: 12px;">
+                    Nenhum professor cadastrado.
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</body>
+</html>

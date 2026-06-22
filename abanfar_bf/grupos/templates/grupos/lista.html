@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
+    <link rel="icon" type="image/png" href="{% static 'img/logo_abanfar.png' %}?v=2">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Grupos Musicais — ABANFAR BF</title>
@@ -128,9 +129,10 @@
             </div>
         </div>
 
-        <nav class="sidebar-nav">
-<div class="nav-section-label">Principal</div>
+                <nav class="sidebar-nav">
+            <div class="nav-section-label">Principal</div>
             <a href="{% url 'professores:professoreshome' %}" class="sidebar-link"><i class="bi bi-house-door-fill"></i><span class="nav-label">Início</span></a>
+            <div class="nav-section-label mt-2">Meu Ensino</div>
             <a href="{% url 'professores:naipes' %}" class="sidebar-link"><i class="bi bi-music-note"></i><span class="nav-label">Naipes</span></a>
             <a href="{% url 'materias:materias_professor' %}" class="sidebar-link"><i class="bi bi-journal-bookmark-fill"></i><span class="nav-label">Minhas Matérias</span></a>
             <a href="{% url 'professores:ensaiospro' %}" class="sidebar-link"><i class="bi bi-music-note-beamed"></i><span class="nav-label">Ensaios</span></a>
@@ -138,7 +140,6 @@
             <a href="{% url 'grupos:lista' %}" class="sidebar-link active"><i class="bi bi-music-note-list"></i><span class="nav-label">Grupos Musicais</span></a>
             <div class="nav-section-label mt-2">Conta</div>
             <a href="{% url 'contas:perfil' %}" class="sidebar-link"><i class="bi bi-person-circle"></i><span class="nav-label">Meu Perfil</span></a>
-
         </nav>
 
         <div class="sidebar-footer">

@@ -1,0 +1,416 @@
+{% extends "blog/base.html" %}
+{% load static %}
+
+{% block title %}Sobre Nós — ABANFAR BF{% endblock %}
+
+{% block extra_css %}
+<style>
+    .page-header {
+        background: linear-gradient(135deg, #1A1612 0%, #2C2318 60%, #1A1612 100%);
+        padding: 6rem 0;
+        color: var(--white);
+        position: relative;
+        overflow: hidden;
+        border-bottom: 2px solid var(--gold);
+    }
+    .page-header::after {
+        content: '♪';
+        position: absolute;
+        right: 10%;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 15rem;
+        color: var(--gold);
+        opacity: 0.05;
+        font-family: serif;
+    }
+    .page-header h1 {
+        font-family: 'Playfair Display', serif;
+        font-size: 3.5rem;
+        font-weight: 900;
+        color: var(--white);
+        margin-bottom: 1rem;
+    }
+    .page-header p {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 1.3rem;
+        color: var(--gold-pale);
+        max-width: 600px;
+        margin: 0;
+    }
+    .section-padding {
+        padding: 5rem 0;
+    }
+    .mvv-card {
+        background: var(--white);
+        border: 1px solid var(--gray-line);
+        border-radius: var(--radius-lg);
+        padding: 2.5rem 2rem;
+        height: 100%;
+        transition: transform var(--transition), box-shadow var(--transition);
+        box-shadow: var(--shadow-soft);
+    }
+    .mvv-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-gold);
+    }
+    .mvv-icon {
+        font-size: 2.5rem;
+        color: var(--gold);
+        margin-bottom: 1.5rem;
+    }
+    .mvv-card h3 {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: var(--ink);
+    }
+    .mvv-card p {
+        font-family: 'Cormorant Garamond', Georgia, serif;
+        font-size: 1.08rem;
+        color: var(--ink-soft);
+        line-height: 1.7;
+        margin: 0;
+    }
+    .timeline {
+        position: relative;
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 2rem 0;
+    }
+    .timeline::after {
+        content: '';
+        position: absolute;
+        width: 2px;
+        background: var(--gray-line);
+        top: 0;
+        bottom: 0;
+        left: 50%;
+        margin-left: -1px;
+    }
+    .timeline-item {
+        padding: 1rem 3rem;
+        position: relative;
+        background: transparent;
+        width: 50%;
+    }
+    .timeline-item::after {
+        content: '';
+        position: absolute;
+        width: 16px;
+        height: 16px;
+        right: -8px;
+        background-color: var(--white);
+        border: 3px solid var(--gold);
+        top: 1.5rem;
+        border-radius: 50%;
+        z-index: 1;
+        transition: background-color 0.3s;
+    }
+    .timeline-item:hover::after {
+        background-color: var(--gold);
+    }
+    .left {
+        left: 0;
+        text-align: right;
+    }
+    .right {
+        left: 50%;
+    }
+    .right::after {
+        left: -8px;
+    }
+    .timeline-content {
+        padding: 1.8rem;
+        background: var(--white);
+        position: relative;
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--gray-line);
+        box-shadow: var(--shadow-soft);
+    }
+    .timeline-year {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.6rem;
+        font-weight: 900;
+        color: var(--gold-dim);
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+    .timeline-title {
+        font-family: 'Libre Baskerville', serif;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--ink);
+        margin-bottom: 0.75rem;
+    }
+    .timeline-desc {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 1.05rem;
+        color: var(--gray-text);
+        line-height: 1.6;
+        margin: 0;
+    }
+    .team-card {
+        background: var(--white);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--gray-line);
+        overflow: hidden;
+        box-shadow: var(--shadow-soft);
+        text-align: center;
+        transition: transform var(--transition);
+        height: 100%;
+    }
+    .team-card:hover {
+        transform: translateY(-4px);
+    }
+    .team-img-wrapper {
+        position: relative;
+        background: var(--gold-pale);
+        padding-top: 100%; /* 1:1 Aspect Ratio */
+        overflow: hidden;
+    }
+    .team-avatar-placeholder {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 4.5rem;
+        color: var(--gold-dim);
+        font-family: serif;
+        opacity: 0.6;
+    }
+    .team-info {
+        padding: 1.5rem;
+    }
+    .team-name {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--ink);
+        margin-bottom: 0.3rem;
+    }
+    .team-role {
+        font-family: 'Libre Baskerville', serif;
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        color: var(--gold-dim);
+        letter-spacing: 0.1em;
+        margin-bottom: 0.8rem;
+        display: block;
+    }
+    .team-bio {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 0.95rem;
+        color: var(--gray-text);
+        line-height: 1.5;
+        margin: 0;
+    }
+
+    @media (max-width: 767.98px) {
+        .timeline::after {
+            left: 31px;
+        }
+        .timeline-item {
+            width: 100%;
+            padding-left: 70px;
+            padding-right: 25px;
+            text-align: left;
+        }
+        .timeline-item::after {
+            left: 22px;
+            top: 2.2rem;
+        }
+        .left {
+            left: 0;
+        }
+        .right::after {
+            left: 22px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- HEADER -->
+<header class="page-header text-center text-md-start">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <span class="hero-eyebrow text-uppercase" style="letter-spacing:.2em; color:var(--gold)">Nossa História</span>
+                <h1>Quem Somos</h1>
+                <p>Fundada em 2014, a ABANFAR BF promove a inclusão social e cidadania através da arte e educação musical gratuita em Baía Formosa/RN.</p>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- QUEM SOMOS DETALHADO -->
+<section class="section-padding">
+    <div class="container">
+        <div class="row g-5 align-items-center">
+            <div class="col-lg-6">
+                <div class="section-label">Fundação e Trajetória</div>
+                <h2 class="mb-4" style="font-family:'Playfair Display', serif; font-size:2.5rem; font-weight:700;">A música como agente de transformação social</h2>
+                <div class="post-detail-body" style="font-family:'Cormorant Garamond', serif; font-size:1.15rem; line-height:1.85">
+                    <p>A Associação de Bandas, Fanfarras e Regentes de Baía Formosa/RN (ABANFAR BF) é uma entidade sem fins lucrativos criada para preencher uma lacuna de acesso cultural na nossa comunidade. Desde o primeiro dia, acreditamos que todo jovem possui um talento que merece ser incentivado e lapidado.</p>
+                    <p>O trabalho de iniciação musical oferecido de forma 100% gratuita funciona como uma ferramenta pedagógica de inclusão e formação cidadã. Nossos alunos encontram nos ensaios diários um ambiente de colaboração, disciplina, desenvolvimento emocional e amor à arte, mantendo-os longe das vulnerabilidades sociais e impulsionando novas perspectivas de vida.</p>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="p-4" style="background:var(--section-bg); border-radius:var(--radius-lg); border:1px solid var(--gray-line); box-shadow:var(--shadow-soft)">
+                    <h3 class="mb-3" style="font-family:'Playfair Display', serif; font-weight:700; color:var(--gold-dim)">Nosso Impacto em Números</h3>
+                    <div class="row g-4 text-center mt-2">
+                        <div class="col-6">
+                            <div class="stat-item">
+                                <span class="stat-number" style="font-size:3rem">12+</span>
+                                <span class="stat-label">Anos de Atuação</span>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="stat-item">
+                                <span class="stat-number" style="font-size:3rem">500+</span>
+                                <span class="stat-label">Alunos Atendidos</span>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="stat-item">
+                                <span class="stat-number" style="font-size:3rem">150+</span>
+                                <span class="stat-label">Instrumentos Ativos</span>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="stat-item">
+                                <span class="stat-number" style="font-size:3rem">5+</span>
+                                <span class="stat-label">Grupos Musicais</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- MISSÃO, VISÃO, VALORES -->
+<section class="section-padding" style="background-color: var(--section-bg)">
+    <div class="container">
+        <div class="text-center mb-5">
+            <span class="section-label d-inline-flex justify-content-center">Diretrizes Institucionais</span>
+            <h2 style="font-family:'Playfair Display', serif; font-weight:700;">Pilares que nos guiam</h2>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="mvv-card text-center">
+                    <div class="mvv-icon"><i class="bi bi-bullseye"></i></div>
+                    <h3>Missão</h3>
+                    <p>Oferecer educação musical de excelência e gratuita como vetor de inclusão social, cidadania, disciplina e desenvolvimento humano e cultural para crianças e jovens.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="mvv-card text-center">
+                    <div class="mvv-icon"><i class="bi bi-eye"></i></div>
+                    <h3>Visão</h3>
+                    <p>Ser reconhecida regionalmente como uma associação de referência em transformação social pela música, expandindo projetos e revelando novos talentos artísticos.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="mvv-card text-center">
+                    <div class="mvv-icon"><i class="bi bi-shield-check"></i></div>
+                    <h3>Valores</h3>
+                    <p>Ética, transparência, inclusão democrática, respeito mútuo, disciplina e a paixão pela música como linguagem universal que une pessoas e realidades.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- LINHA DO TEMPO (TRAJETÓRIA) -->
+<section class="section-padding">
+    <div class="container">
+        <div class="text-center mb-5">
+            <span class="section-label d-inline-flex justify-content-center">Nossa Trajetória</span>
+            <h2 style="font-family:'Playfair Display', serif; font-weight:700;">Momentos Marcantes</h2>
+        </div>
+        <div class="timeline">
+            <div class="timeline-item left">
+                <div class="timeline-content">
+                    <span class="timeline-year">2014</span>
+                    <h4 class="timeline-title">Fundação da ABANFAR BF</h4>
+                    <p class="timeline-desc">Início das atividades em Baía Formosa/RN por iniciativa de regentes e voluntários com foco no resgate de tradições de bandas.</p>
+                </div>
+            </div>
+            <div class="timeline-item right">
+                <div class="timeline-content">
+                    <span class="timeline-year">2017</span>
+                    <h4 class="timeline-title">Primeiras Apresentações Cívicas</h4>
+                    <p class="timeline-desc">A consolidação dos ensaios culminou em desfiles marcantes e no reconhecimento público da relevância social do projeto na cidade.</p>
+                </div>
+            </div>
+            <div class="timeline-item left">
+                <div class="timeline-content">
+                    <span class="timeline-year">2021</span>
+                    <h4 class="timeline-title">Orquestra de Flautas e Iniciação Infantil</h4>
+                    <p class="timeline-desc">Expansão pedagógica com a introdução do projeto de flauta doce, permitindo a musicalização de crianças em idades mais precoces.</p>
+                </div>
+            </div>
+            <div class="timeline-item right">
+                <div class="timeline-content">
+                    <span class="timeline-year">2026</span>
+                    <h4 class="timeline-title">Modernização e Novo Portal</h4>
+                    <p class="timeline-desc">Lançamento do portal de transparência, digitalização da gestão de instrumentos e expansão das vagas para novas turmas.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CORPO DOCENTE / EQUIPE -->
+<section class="section-padding" style="background-color: var(--section-bg)">
+    <div class="container">
+        <div class="text-center mb-5">
+            <span class="section-label d-inline-flex justify-content-center">Equipe e Liderança</span>
+            <h2 style="font-family:'Playfair Display', serif; font-weight:700;">Quem faz acontecer</h2>
+        </div>
+        <div class="row g-4 justify-content-center">
+            <div class="col-sm-6 col-lg-3">
+                <div class="team-card">
+                    <div class="team-img-wrapper">
+                        <span class="team-avatar-placeholder">♩</span>
+                    </div>
+                    <div class="team-info">
+                        <h4 class="team-name">Regente Francisco</h4>
+                        <span class="team-role">Maestro Principal</span>
+                        <p class="team-bio">Coordenador musical geral e regente das corporações de metais e percussão.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-3">
+                <div class="team-card">
+                    <div class="team-img-wrapper">
+                        <span class="team-avatar-placeholder">♫</span>
+                    </div>
+                    <div class="team-info">
+                        <h4 class="team-name">Profa. Maria Clara</h4>
+                        <span class="team-role">Musicalização Infantil</span>
+                        <p class="team-bio">Responsável pelo ensino de flauta doce e teoria básica para crianças.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-3">
+                <div class="team-card">
+                    <div class="team-img-wrapper">
+                        <span class="team-avatar-placeholder">♬</span>
+                    </div>
+                    <div class="team-info">
+                        <h4 class="team-name">Maestro Antônio</h4>
+                        <span class="team-role">Diretor Artístico</span>
+                        <p class="team-bio">Organizador dos concertos especiais, festivais e arranjador musical.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

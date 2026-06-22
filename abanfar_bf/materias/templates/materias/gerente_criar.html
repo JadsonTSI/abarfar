@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
+    <link rel="icon" type="image/png" href="{% static 'img/logo_abanfar.png' %}?v=2">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Criar Matéria — ABANFAR BF</title>
@@ -162,6 +163,11 @@
             <a href="{% url 'instrumentos:list' %}" class="sidebar-link">
                 <i class="bi bi-music-note-list"></i>
                 <span class="nav-label">Instrumentos</span>
+            </a>
+
+            <a href="{% url 'instrumentos:iot_web_control' %}" class="sidebar-link">
+                <i class="bi bi-cpu-fill"></i>
+                <span class="nav-label">Controle IoT</span>
             </a>
 
             <a href="{% url 'grupos:listar' %}" class="sidebar-link">

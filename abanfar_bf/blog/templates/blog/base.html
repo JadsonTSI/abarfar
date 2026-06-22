@@ -1,0 +1,190 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}ABANFAR BF — Música que Transforma Vidas{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="ABANFAR BF — Associação de Bandas, Fanfarras e Regentes de Baía Formosa/RN. Educação musical, inclusão social e cidadania desde 2014.">
+    <link rel="icon" type="image/png" href="{% static 'img/logo_abanfar.png' %}?v=2">
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Cormorant+Garamond:wght@300;400;600&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <!-- CSS próprio -->
+    <link rel="stylesheet" href="{% static 'css/blog.css' %}?v=3">
+
+    <style>
+        /* Correção crítica para evitar quebra do navbar em telas médias/pequenas */
+        .brand-text .brand-sub {
+            white-space: normal !important;
+            max-width: 210px;
+            display: block;
+        }
+        /* Ajuste fino nos espaçamentos dos links do menu */
+        .main-navbar .navbar-nav .nav-link {
+            padding: 0.5rem 0.75rem !important;
+        }
+        @media (max-width: 1200px) {
+            .brand-text .brand-sub {
+                display: none !important; /* Esconde o subtítulo longo em resoluções menores para dar mais espaço */
+            }
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+    <div class="container d-flex justify-content-between align-items-center">
+        <div>📍 Baía Formosa, RN</div>
+        <div class="d-flex gap-3">
+            <a href="mailto:contato@abanfarbf.org"><i class="bi bi-envelope-fill me-1"></i>contato@abanfarbf.org</a>
+        </div>
+    </div>
+</div>
+
+<!-- NAVBAR -->
+<nav class="main-navbar navbar navbar-expand-xl" id="mainNav">
+    <div class="container navbar-inner">
+        <a class="navbar-brand" href="{% url 'home' %}">
+            <div class="brand-logo-ring">
+                <img src="{% static 'img/logo_abanfar.png' %}" alt="Logo ABANFAR BF"
+                     onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+                <span class="brand-logo-placeholder" style="display:none">♪</span>
+            </div>
+            <div class="brand-text">
+                <span class="brand-name">ABANFAR BF</span>
+                <span class="brand-sub">Assoc. de Bandas, Fanfarras e Regentes — Baía Formosa/RN</span>
+            </div>
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavContent">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="mainNavContent">
+            <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a class="nav-link {% if request.path == '/' %}active{% endif %}" href="{% url 'home' %}">Início</a></li>
+                <li class="nav-item"><a class="nav-link {% if '/sobre/' in request.path %}active{% endif %}" href="{% url 'sobre' %}">Sobre</a></li>
+                <li class="nav-item"><a class="nav-link {% if '/projetos/' in request.path %}active{% endif %}" href="{% url 'projetos' %}">Projetos</a></li>
+                <li class="nav-item"><a class="nav-link {% if '/galeria/' in request.path %}active{% endif %}" href="{% url 'galeria' %}">Galeria</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'transparencia:portal' %}">Transparência</a></li>
+                <li class="nav-item"><a class="nav-link {% if '/contato/' in request.path %}active{% endif %}" href="{% url 'contato' %}">Contato</a></li>
+            </ul>
+            <div class="d-flex align-items-center gap-2 ms-lg-3 mt-3 mt-lg-0">
+                {% if user.is_authenticated %}
+                    <span style="font-size:.82rem;color:var(--gray-text);font-family:'Libre Baskerville',serif" class="d-none d-xxl-inline">
+                        Olá, {{ user.first_name|default:user.username }}!
+                    </span>
+                    <a href="{% url 'contas:painel_gerente' %}" class="btn-entrar">Painel</a>
+                    <a href="{% url 'contas:logout' %}" class="btn-entrar btn-outline-secondary" style="background:transparent;border:1px solid var(--gold);color:var(--gold-dim)!important">Sair</a>
+                {% else %}
+                    <a href="{% url 'contas:login' %}" class="btn-entrar">Entrar</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</nav>
+
+{% block content %}{% endblock %}
+
+<!-- FOOTER -->
+<footer class="site-footer">
+    <div class="container">
+        <div class="row g-5">
+            <div class="col-lg-4">
+                <div class="footer-brand-name">ABANFAR BF</div>
+                <p class="footer-brand-tagline">
+                    Música, educação e cidadania para transformar vidas em Baía Formosa/RN.
+                </p>
+                <div class="footer-divider-gold"></div>
+                <p style="font-size:.85rem;color:#6A6058;font-family:'Cormorant Garamond',serif;line-height:1.7">
+                    Associação apartidária, filantrópica e sem fins lucrativos, dedicada à
+                    inclusão social por meio da arte musical desde 2014.
+                </p>
+                <div class="footer-music-row">
+                    <span class="footer-note">♩</span>
+                    <span class="footer-note">♪</span>
+                    <span class="footer-note">♫</span>
+                    <span class="footer-note">♬</span>
+                    <span class="footer-note">𝄞</span>
+                </div>
+                <div class="d-flex gap-2 mt-4">
+                    <a href="#" class="footer-social-icon"><i class="bi bi-facebook"></i></a>
+                    <a href="#" class="footer-social-icon"><i class="bi bi-instagram"></i></a>
+                    <a href="#" class="footer-social-icon"><i class="bi bi-youtube"></i></a>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-2">
+                <div class="footer-col-title">Navegação</div>
+                <a href="{% url 'home' %}" class="footer-link">Início</a>
+                <a href="{% url 'sobre' %}" class="footer-link">Sobre nós</a>
+                <a href="{% url 'projetos' %}" class="footer-link">Projetos</a>
+                <a href="{% url 'galeria' %}" class="footer-link">Galeria</a>
+                <a href="{% url 'contato' %}" class="footer-link">Contato</a>
+            </div>
+
+            <div class="col-sm-6 col-lg-3">
+                <div class="footer-col-title">Programas</div>
+                <a href="{% url 'projetos' %}" class="footer-link">Musicalização Infantil</a>
+                <a href="{% url 'projetos' %}" class="footer-link">Banda Magalhães</a>
+                <a href="{% url 'projetos' %}" class="footer-link">Orquestra de Flautas</a>
+                <a href="{% url 'projetos' %}" class="footer-link">Ensino de Teoria Musical</a>
+            </div>
+
+            <div class="col-lg-3">
+                <div class="footer-col-title">Contato</div>
+                <p style="font-size:.9rem;color:#7A7068;font-family:'Cormorant Garamond',serif;line-height:1.9;margin:0">
+                    <i class="bi bi-geo-alt" style="color:var(--gold)"></i>
+                    Baía Formosa — RN, Brasil
+                </p>
+                <p style="font-size:.9rem;color:#7A7068;font-family:'Cormorant Garamond',serif;line-height:1.9;margin:0">
+                    <i class="bi bi-envelope" style="color:var(--gold)"></i>
+                    contato@abanfarbf.org
+                </p>
+                <p style="font-size:.9rem;color:#7A7068;font-family:'Cormorant Garamond',serif;line-height:1.9;margin:0">
+                    <i class="bi bi-clock" style="color:var(--gold)"></i>
+                    Seg – Sex, 8h às 17h
+                </p>
+                <div class="mt-4 p-3" style="background:rgba(201,168,76,.08);border-radius:var(--radius-sm);border:1px solid rgba(201,168,76,.15)">
+                    <p style="font-family:'Libre Baskerville',serif;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:.5rem">
+                        <i class="bi bi-envelope-paper me-1"></i>Newsletter
+                    </p>
+                    <input type="email" placeholder="Seu e-mail" style="width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(201,168,76,.25);border-radius:var(--radius-sm);padding:.45rem .8rem;font-family:'Cormorant Garamond',serif;font-size:.95rem;color:#C8BFB4;outline:none;margin-bottom:.5rem">
+                    <button style="width:100%;background:var(--gold);color:var(--ink);font-family:'Libre Baskerville',serif;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;padding:.45rem;border:none;border-radius:var(--radius-sm);cursor:pointer;font-weight:700;transition:background var(--transition)" onmouseover="this.style.background='#E8C96A'" onmouseout="this.style.background='var(--gold)'">Assinar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
+            <p>&copy; {% now "Y" %} ABANFAR BF — Todos os direitos reservados.</p>
+            <p>Desenvolvido com <a href="#">Django</a> &amp; <a href="#">Bootstrap</a> &nbsp;♩&nbsp; Música para transformar vidas</p>
+        </div>
+    </div>
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
+
+<script>
+    /* ----- Navbar scroll class ----- */
+    const nav = document.getElementById('mainNav');
+    if (nav) {
+        window.addEventListener('scroll', () => {
+            nav.classList.toggle('scrolled', window.scrollY > 60);
+        }, { passive: true });
+    }
+</script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,304 @@
+{% extends "blog/base.html" %}
+{% load static %}
+
+{% block title %}Galeria de Fotos — ABANFAR BF{% endblock %}
+
+{% block extra_css %}
+<style>
+    .page-header {
+        background: linear-gradient(135deg, #1A1612 0%, #2C2318 60%, #1A1612 100%);
+        padding: 6rem 0;
+        color: var(--white);
+        position: relative;
+        overflow: hidden;
+        border-bottom: 2px solid var(--gold);
+    }
+    .page-header::after {
+        content: '♪';
+        position: absolute;
+        right: 10%;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 15rem;
+        color: var(--gold);
+        opacity: 0.05;
+        font-family: serif;
+    }
+    .page-header h1 {
+        font-family: 'Playfair Display', serif;
+        font-size: 3.5rem;
+        font-weight: 900;
+        color: var(--white);
+        margin-bottom: 1rem;
+    }
+    .page-header p {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 1.3rem;
+        color: var(--gold-pale);
+        max-width: 600px;
+        margin: 0;
+    }
+    .section-padding {
+        padding: 5rem 0;
+    }
+    
+    /* FILTERS */
+    .filter-group {
+        display: flex;
+        justify-content: center;
+        gap: 0.8rem;
+        flex-wrap: wrap;
+        margin-bottom: 3.5rem;
+    }
+    .filter-btn {
+        background: var(--white);
+        border: 1px solid var(--gray-line);
+        color: var(--ink-soft);
+        font-family: 'Libre Baskerville', serif;
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        padding: 0.55rem 1.4rem;
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+        transition: all var(--transition);
+    }
+    .filter-btn:hover, .filter-btn.active {
+        background: var(--gold);
+        color: var(--ink);
+        border-color: var(--gold);
+        box-shadow: 0 4px 12px rgba(201, 168, 76, 0.25);
+    }
+    
+    /* GALLERY GRID */
+    .gallery-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 2rem;
+    }
+    .gallery-card {
+        background: var(--white);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        border: 1px solid var(--gray-line);
+        box-shadow: var(--shadow-soft);
+        transition: transform var(--transition), box-shadow var(--transition);
+    }
+    .gallery-card:hover {
+        transform: translateY(-6px);
+        box-shadow: var(--shadow-gold);
+    }
+    .gallery-img-wrapper {
+        position: relative;
+        overflow: hidden;
+        padding-top: 68%; /* 3:2 Ratio */
+        background: #eee;
+    }
+    .gallery-img-wrapper img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+    .gallery-card:hover .gallery-img-wrapper img {
+        transform: scale(1.06);
+    }
+    .gallery-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to top, rgba(26, 22, 18, 0.85) 0%, rgba(26, 22, 18, 0.1) 70%);
+        opacity: 0;
+        transition: opacity var(--transition);
+        display: flex;
+        align-items: flex-end;
+        padding: 1.5rem;
+    }
+    .gallery-card:hover .gallery-overlay {
+        opacity: 1;
+    }
+    .gallery-caption {
+        color: var(--white);
+        width: 100%;
+    }
+    .gallery-caption h4 {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--white);
+        margin-bottom: 0.25rem;
+    }
+    .gallery-caption span {
+        font-family: 'Libre Baskerville', serif;
+        font-size: 0.62rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--gold-light);
+        font-weight: 700;
+    }
+    
+    /* Fade/scale transition for filtering */
+    .gallery-item {
+        transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+    .gallery-item.hidden {
+        opacity: 0;
+        transform: scale(0.9);
+        display: none !important;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- HEADER -->
+<header class="page-header text-center text-md-start">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <span class="hero-eyebrow text-uppercase" style="letter-spacing:.2em; color:var(--gold)">Nossos Registros</span>
+                <h1>Galeria de Fotos</h1>
+                <p>Navegue pelos registros fotográficos dos ensaios, apresentações cívicas, recitais e atividades da ABANFAR BF.</p>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- CORPO DA GALERIA -->
+<section class="section-padding">
+    <div class="container">
+        
+        <!-- BOTÕES DE FILTRO -->
+        <div class="filter-group">
+            <button class="filter-btn active" data-filter="all">Todos</button>
+            <button class="filter-btn" data-filter="apresentacoes">Apresentações</button>
+            <button class="filter-btn" data-filter="ensaios">Ensaios & Aulas</button>
+            <button class="filter-btn" data-filter="eventos">Eventos Sociais</button>
+        </div>
+        
+        <!-- GRID DE FOTOS -->
+        <div class="gallery-grid">
+            
+            <!-- FOTO 1 -->
+            <div class="gallery-card gallery-item" data-category="ensaios">
+                <div class="gallery-img-wrapper">
+                    <img src="{% static 'img/galeria1.jpg' %}" alt="Ensaios dos alunos da ABANFAR BF"
+                         onerror="this.src='https://placehold.co/600x400/1a1612/c9a84c?text=Ensaios'">
+                    <div class="gallery-overlay">
+                        <div class="gallery-caption">
+                            <h4>Ensaio Geral</h4>
+                            <span>Ensaios & Aulas</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- FOTO 2 -->
+            <div class="gallery-card gallery-item" data-category="apresentacoes">
+                <div class="gallery-img-wrapper">
+                    <img src="{% static 'img/galeria2.jpg' %}" alt="Desfile cívico da Banda Francisco Magalhães"
+                         onerror="this.src='https://placehold.co/600x400/1a1612/c9a84c?text=Apresentações'">
+                    <div class="gallery-overlay">
+                        <div class="gallery-caption">
+                            <h4>Desfile de Emancipação</h4>
+                            <span>Apresentações</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- FOTO 3 -->
+            <div class="gallery-card gallery-item" data-category="ensaios">
+                <div class="gallery-img-wrapper">
+                    <img src="{% static 'img/galeria3.jpg' %}" alt="Prática de instrumentos e sopros"
+                         onerror="this.src='https://placehold.co/600x400/1a1612/c9a84c?text=Ensaios'">
+                    <div class="gallery-overlay">
+                        <div class="gallery-caption">
+                            <h4>Aula Prática de Metais</h4>
+                            <span>Ensaios & Aulas</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- FOTO 4 -->
+            <div class="gallery-card gallery-item" data-category="eventos">
+                <div class="gallery-img-wrapper">
+                    <img src="{% static 'img/galeria4.jpeg' %}" alt="Encontro de corporações musicais"
+                         onerror="this.src='https://placehold.co/600x400/1a1612/c9a84c?text=Eventos'">
+                    <div class="gallery-overlay">
+                        <div class="gallery-caption">
+                            <h4>Encontro de Bandas</h4>
+                            <span>Eventos Sociais</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FOTO 5 (Do post 1) -->
+            <div class="gallery-card gallery-item" data-category="apresentacoes">
+                <div class="gallery-img-wrapper">
+                    <img src="{% static 'img/post1.jpeg' %}" alt="Grupo filarmônico principal"
+                         onerror="this.src='https://placehold.co/600x400/1a1612/c9a84c?text=Apresentações'">
+                    <div class="gallery-overlay">
+                        <div class="gallery-caption">
+                            <h4>Concerto de Aniversário</h4>
+                            <span>Apresentações</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FOTO 6 (Do post 3) -->
+            <div class="gallery-card gallery-item" data-category="ensaios">
+                <div class="gallery-img-wrapper">
+                    <img src="{% static 'img/post3.jpeg' %}" alt="Alunos na Orquestra de Flautas"
+                         onerror="this.src='https://placehold.co/600x400/1a1612/c9a84c?text=Ensaios'">
+                    <div class="gallery-overlay">
+                        <div class="gallery-caption">
+                            <h4>Orquestra de Flauta Doce</h4>
+                            <span>Ensaios & Aulas</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const buttons = document.querySelectorAll(".filter-btn");
+        const items = document.querySelectorAll(".gallery-item");
+
+        buttons.forEach(button => {
+            button.addEventListener("click", function () {
+                // Remover active de todos
+                buttons.forEach(btn => btn.classList.remove("active"));
+                // Adicionar no clicado
+                this.classList.add("active");
+
+                const filterValue = this.getAttribute("data-filter");
+
+                items.forEach(item => {
+                    if (filterValue === "all") {
+                        item.classList.remove("hidden");
+                    } else {
+                        const category = item.getAttribute("data-category");
+                        if (category === filterValue) {
+                            item.classList.remove("hidden");
+                        } else {
+                            item.classList.add("hidden");
+                        }
+                    }
+                });
+            });
+        });
+    });
+</script>
+{% endblock %}

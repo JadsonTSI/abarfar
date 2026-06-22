@@ -1,0 +1,275 @@
+{% extends "blog/base.html" %}
+{% load static %}
+
+{% block title %}Contato — ABANFAR BF{% endblock %}
+
+{% block extra_css %}
+<style>
+    .page-header {
+        background: linear-gradient(135deg, #1A1612 0%, #2C2318 60%, #1A1612 100%);
+        padding: 6rem 0;
+        color: var(--white);
+        position: relative;
+        overflow: hidden;
+        border-bottom: 2px solid var(--gold);
+    }
+    .page-header::after {
+        content: '♪';
+        position: absolute;
+        right: 10%;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 15rem;
+        color: var(--gold);
+        opacity: 0.05;
+        font-family: serif;
+    }
+    .page-header h1 {
+        font-family: 'Playfair Display', serif;
+        font-size: 3.5rem;
+        font-weight: 900;
+        color: var(--white);
+        margin-bottom: 1rem;
+    }
+    .page-header p {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 1.3rem;
+        color: var(--gold-pale);
+        max-width: 600px;
+        margin: 0;
+    }
+    .section-padding {
+        padding: 5rem 0;
+    }
+    
+    .contact-card {
+        background: var(--white);
+        border: 1px solid var(--gray-line);
+        border-radius: var(--radius-lg);
+        padding: 2.5rem;
+        box-shadow: var(--shadow-soft);
+        height: 100%;
+    }
+    .contact-info-box {
+        display: flex;
+        align-items: flex-start;
+        gap: 1.2rem;
+        margin-bottom: 2rem;
+    }
+    .contact-info-box:last-child {
+        margin-bottom: 0;
+    }
+    .contact-info-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: var(--gold-pale);
+        border: 1px solid rgba(201, 168, 76, 0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.3rem;
+        color: var(--gold-dim);
+        flex-shrink: 0;
+    }
+    .contact-info-text h4 {
+        font-family: 'Libre Baskerville', serif;
+        font-size: 0.82rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--ink);
+        margin-bottom: 0.35rem;
+        font-weight: 700;
+    }
+    .contact-info-text p {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 1.15rem;
+        color: var(--gray-text);
+        line-height: 1.5;
+        margin: 0;
+    }
+    
+    /* FORM INPUTS */
+    .form-gold-group {
+        margin-bottom: 1.5rem;
+    }
+    .form-gold-group label {
+        font-family: 'Libre Baskerville', serif;
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--ink-soft);
+        margin-bottom: 0.5rem;
+        display: block;
+        font-weight: 700;
+    }
+    .form-gold-control {
+        width: 100%;
+        background: var(--cream);
+        border: 1px solid var(--gray-line);
+        border-radius: var(--radius-sm);
+        padding: 0.75rem 1rem;
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 1.1rem;
+        color: var(--ink);
+        transition: all var(--transition);
+    }
+    .form-gold-control:focus {
+        outline: none;
+        background: var(--white);
+        border-color: var(--gold);
+        box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.15);
+    }
+    textarea.form-gold-control {
+        min-height: 150px;
+        resize: vertical;
+    }
+    
+    .map-container {
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        border: 1px solid var(--gray-line);
+        box-shadow: var(--shadow-soft);
+        height: 350px;
+        background: #eee;
+    }
+    .map-container iframe {
+        width: 100%;
+        height: 100%;
+        border: 0;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- HEADER -->
+<header class="page-header text-center text-md-start">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <span class="hero-eyebrow text-uppercase" style="letter-spacing:.2em; color:var(--gold)">Fale Conosco</span>
+                <h1>Contato</h1>
+                <p>Tem alguma dúvida, deseja apoiar a associação ou matricular um aluno? Envie uma mensagem ou visite a nossa sede.</p>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- CORPO DE CONTATO -->
+<section class="section-padding">
+    <div class="container">
+        
+        <!-- MENSAGENS DE SUCESSO -->
+        {% if messages %}
+            <div class="row mb-4">
+                <div class="col-12">
+                    {% for message in messages %}
+                        <div class="alert alert-success alert-dismissible fade show" role="alert" style="font-family:'Cormorant Garamond', serif; font-size:1.15rem; border-color: var(--gold-light); background-color: var(--gold-pale); color: var(--gold-dim)">
+                            <i class="bi bi-check-circle-fill me-2" style="color:var(--gold-dim)"></i>
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+        
+        <div class="row g-5">
+            <!-- COLUNA ESQUERDA: INFORMAÇÕES DE CONTATO -->
+            <div class="col-lg-5">
+                <div class="contact-card">
+                    <h3 class="mb-4" style="font-family:'Playfair Display', serif; font-weight:700; color:var(--ink)">Informações de Contato</h3>
+                    
+                    <div class="contact-info-box">
+                        <div class="contact-info-icon"><i class="bi bi-geo-alt-fill"></i></div>
+                        <div class="contact-info-text">
+                            <h4>Nossa Sede</h4>
+                            <p>Baía Formosa — RN, Brasil<br>Centro Comunitário de Cultura</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-info-box">
+                        <div class="contact-info-icon"><i class="bi bi-envelope-fill"></i></div>
+                        <div class="contact-info-text">
+                            <h4>E-mail</h4>
+                            <p><a href="mailto:contato@abanfarbf.org" style="color:inherit; text-decoration:none">contato@abanfarbf.org</a></p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-info-box">
+                        <div class="contact-info-icon"><i class="bi bi-clock-fill"></i></div>
+                        <div class="contact-info-text">
+                            <h4>Funcionamento</h4>
+                            <p>Segunda a Sexta-feira<br>Das 8h às 17h</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-info-box">
+                        <div class="contact-info-icon"><i class="bi bi-share-fill"></i></div>
+                        <div class="contact-info-text">
+                            <h4>Redes Sociais</h4>
+                            <p>
+                                <a href="#" style="color:var(--gold-dim); margin-right: 1rem; text-decoration:none"><i class="bi bi-instagram me-1"></i>Instagram</a>
+                                <a href="#" style="color:var(--gold-dim); margin-right: 1rem; text-decoration:none"><i class="bi bi-facebook me-1"></i>Facebook</a>
+                                <a href="#" style="color:var(--gold-dim); text-decoration:none"><i class="bi bi-youtube me-1"></i>YouTube</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- COLUNA DIREITA: FORMULÁRIO -->
+            <div class="col-lg-7">
+                <div class="contact-card">
+                    <h3 class="mb-4" style="font-family:'Playfair Display', serif; font-weight:700; color:var(--ink)">Envie uma Mensagem</h3>
+                    
+                    <form method="post" action="{% url 'contato' %}">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-gold-group">
+                                    <label for="id_nome">Nome Completo</label>
+                                    <input type="text" id="id_nome" name="nome" class="form-gold-control" placeholder="Seu nome" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-gold-group">
+                                    <label for="id_email">E-mail</label>
+                                    <input type="email" id="id_email" name="email" class="form-gold-control" placeholder="Seu e-mail" required>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-gold-group">
+                            <label for="id_assunto">Assunto</label>
+                            <input type="text" id="id_assunto" name="assunto" class="form-gold-control" placeholder="Ex: Matrícula de Aluno, Apoio, Dúvida" required>
+                        </div>
+                        
+                        <div class="form-gold-group">
+                            <label for="id_mensagem">Mensagem</label>
+                            <textarea id="id_mensagem" name="mensagem" class="form-gold-control" placeholder="Sua mensagem..." required></textarea>
+                        </div>
+                        
+                        <div class="text-end">
+                            <button type="submit" class="btn-entrar" style="border:none; padding:.75rem 2rem">
+                                <i class="bi bi-send me-2"></i>Enviar Mensagem
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <!-- MAPA MOCK/EMBED -->
+        <div class="row mt-5">
+            <div class="col-12">
+                <div class="map-container">
+                    <!-- Embed de mapa placeholder do Google para Baía Formosa -->
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15848.403565575518!2d-35.01842065!3d-6.381593!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x7ad15ffcb9893d5%3A0xe54d3ca24d31405e!2zQmHDrWEgRm9ybW9zYSwgUk4sIDU5MTk0LTAwMA!5e0!3m2!1spt-BR!2sbr!4v1700000000000!5m2!1spt-BR!2sbr" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</section>
+{% endblock %}

@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
+    <link rel="icon" type="image/png" href="{% static 'img/logo_abanfar.png' %}?v=2">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Matérias — ABANFAR BF</title>
@@ -211,6 +212,11 @@
                 <span class="nav-label">Instrumentos</span>
             </a>
 
+            <a href="{% url 'instrumentos:iot_web_control' %}" class="sidebar-link">
+                <i class="bi bi-cpu-fill"></i>
+                <span class="nav-label">Controle IoT</span>
+            </a>
+
             <a href="{% url 'grupos:listar' %}" class="sidebar-link">
                 <i class="bi bi-music-note-beamed"></i>
                 <span class="nav-label">Grupos Musicais</span>
@@ -308,7 +314,7 @@
                     <div class="mini-stat">
                         <div class="mini-stat-icon"><i class="bi bi-person-workspace"></i></div>
                         <div>
-                            <div class="mini-stat-value">—</div>
+                            <div class="mini-stat-value">{{ professores_ativos_count }}</div>
                             <span class="mini-stat-label">Professores ativos</span>
                         </div>
                     </div>
@@ -317,7 +323,7 @@
                     <div class="mini-stat">
                         <div class="mini-stat-icon"><i class="bi bi-people-fill"></i></div>
                         <div>
-                            <div class="mini-stat-value">—</div>
+                            <div class="mini-stat-value">{{ alunos_matriculados_count }}</div>
                             <span class="mini-stat-label">Alunos matriculados</span>
                         </div>
                     </div>
@@ -326,7 +332,7 @@
                     <div class="mini-stat">
                         <div class="mini-stat-icon"><i class="bi bi-music-note"></i></div>
                         <div>
-                            <div class="mini-stat-value">—</div>
+                            <div class="mini-stat-value">{{ instrumentos_cobertos_count }}</div>
                             <span class="mini-stat-label">Instrumentos cobertos</span>
                         </div>
                     </div>
@@ -395,7 +401,7 @@
                                 <a href="{% url 'materias:matricular_alunos' m.id %}" class="btn-matricular">
                                     <i class="bi bi-person-plus-fill"></i> Matricular alunos
                                 </a>
-                                <a href="#" class="btn-editar">
+                                <a href="{% url 'materias:editar_materia' m.id %}" class="btn-editar">
                                     <i class="bi bi-pencil-fill"></i> Editar
                                 </a>
                             </div>

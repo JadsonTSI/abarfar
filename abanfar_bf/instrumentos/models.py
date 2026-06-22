@@ -49,3 +49,12 @@ class InstrumentoEmprestimo(models.Model):
 
     def __str__(self):
         return f"{self.instrumento.identificador} -> {self.aluno.matricula} ({'devolvido' if self.devolvido else 'emprestado'})"
+
+
+class IoTScan(models.Model):
+    rfid = models.CharField(max_length=100)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.rfid} - {self.timestamp}"
+

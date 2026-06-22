@@ -1,0 +1,290 @@
+{% extends "blog/base.html" %}
+{% load static %}
+
+{% block title %}Nossos Projetos — ABANFAR BF{% endblock %}
+
+{% block extra_css %}
+<style>
+    .page-header {
+        background: linear-gradient(135deg, #1A1612 0%, #2C2318 60%, #1A1612 100%);
+        padding: 6rem 0;
+        color: var(--white);
+        position: relative;
+        overflow: hidden;
+        border-bottom: 2px solid var(--gold);
+    }
+    .page-header::after {
+        content: '♪';
+        position: absolute;
+        right: 10%;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 15rem;
+        color: var(--gold);
+        opacity: 0.05;
+        font-family: serif;
+    }
+    .page-header h1 {
+        font-family: 'Playfair Display', serif;
+        font-size: 3.5rem;
+        font-weight: 900;
+        color: var(--white);
+        margin-bottom: 1rem;
+    }
+    .page-header p {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 1.3rem;
+        color: var(--gold-pale);
+        max-width: 600px;
+        margin: 0;
+    }
+    .section-padding {
+        padding: 5rem 0;
+    }
+    .project-card {
+        background: var(--white);
+        border: 1px solid var(--gray-line);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        box-shadow: var(--shadow-soft);
+        transition: transform var(--transition), box-shadow var(--transition);
+        margin-bottom: 2rem;
+    }
+    .project-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-gold);
+    }
+    .project-header-bar {
+        background: var(--ink);
+        padding: 1.5rem 2rem;
+        border-bottom: 3px solid var(--gold);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .project-title-group {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+    .project-card-icon {
+        font-size: 2rem;
+        color: var(--gold);
+    }
+    .project-card-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.6rem;
+        font-weight: 700;
+        color: var(--white);
+        margin: 0;
+    }
+    .project-badge {
+        background: rgba(201, 168, 76, 0.15);
+        color: var(--gold-light);
+        font-family: 'Libre Baskerville', serif;
+        font-size: 0.65rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        padding: 0.35rem 0.85rem;
+        border-radius: 2rem;
+        border: 1px solid rgba(201, 168, 76, 0.4);
+        font-weight: 700;
+    }
+    .project-body {
+        padding: 2.5rem 2rem;
+    }
+    .project-intro {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 1.25rem;
+        line-height: 1.8;
+        color: var(--ink);
+        margin-bottom: 1.5rem;
+    }
+    .project-meta-list {
+        background: var(--section-bg);
+        border-radius: var(--radius-sm);
+        border: 1px solid var(--gray-line);
+        padding: 1.2rem 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+    .project-meta-item {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 1.05rem;
+        color: var(--ink-soft);
+        margin-bottom: 0.6rem;
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+    }
+    .project-meta-item:last-child {
+        margin-bottom: 0;
+    }
+    .project-meta-item i {
+        color: var(--gold-dim);
+        font-size: 1.1rem;
+        width: 20px;
+    }
+    .project-details {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 1.1rem;
+        line-height: 1.75;
+        color: var(--gray-text);
+    }
+    .project-details p {
+        margin-bottom: 1rem;
+    }
+    .project-details p:last-child {
+        margin-bottom: 0;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- HEADER -->
+<header class="page-header text-center text-md-start">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <span class="hero-eyebrow text-uppercase" style="letter-spacing:.2em; color:var(--gold)">Nossos Programas</span>
+                <h1>Projetos Educacionais</h1>
+                <p>Descubra os grupos musicais e frentes de ensino mantidas pela ABANFAR BF, oferecendo formação artística gratuita em Baía Formosa/RN.</p>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- LISTA DE PROJETOS -->
+<section class="section-padding">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-10 mx-auto">
+                
+                <!-- PROJETO 1: MUSICALIZAÇÃO INFANTIL -->
+                <div class="project-card">
+                    <div class="project-header-bar">
+                        <div class="project-title-group">
+                            <div class="project-card-icon"><i class="bi bi-balloon"></i></div>
+                            <h2 class="project-card-title">Musicalização Infantil</h2>
+                        </div>
+                        <span class="project-badge">Iniciação</span>
+                    </div>
+                    <div class="project-body">
+                        <p class="project-intro">A introdução do universo sonoro para as crianças de forma lúdica e interativa, estimulando a percepção musical desde a infância.</p>
+                        <div class="project-meta-list">
+                            <div class="project-meta-item">
+                                <i class="bi bi-people-fill"></i>
+                                <span><strong>Público-alvo:</strong> Crianças de 6 a 9 anos.</span>
+                            </div>
+                            <div class="project-meta-item">
+                                <i class="bi bi-calendar-event"></i>
+                                <span><strong>Aulas:</strong> Terças e Quintas-feiras, no contra-turno escolar.</span>
+                            </div>
+                            <div class="project-meta-item">
+                                <i class="bi bi-check-circle"></i>
+                                <span><strong>Pré-requisito:</strong> Nenhum conhecimento prévio exigido.</span>
+                            </div>
+                        </div>
+                        <div class="project-details">
+                            <p>O programa trabalha a percepção rítmica, canto coral infantil e expressão corporal. As crianças aprendem os fundamentos da música através de jogos sonoros, pequenas percussões e dinâmicas cooperativas, preparando-as cognitivamente e socialmente para a prática instrumental subsequente.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PROJETO 2: ORQUESTRA DE FLAUTAS DOCE -->
+                <div class="project-card">
+                    <div class="project-header-bar">
+                        <div class="project-title-group">
+                            <div class="project-card-icon"><i class="bi bi-music-note-beamed"></i></div>
+                            <h2 class="project-card-title">Orquestra de Flautas Doce</h2>
+                        </div>
+                        <span class="project-badge">Formação Inicial</span>
+                    </div>
+                    <div class="project-body">
+                        <p class="project-intro">O primeiro contato prático com um instrumento de sopro, ensinando a leitura de partituras e a sensibilidade de tocar em grupo.</p>
+                        <div class="project-meta-list">
+                            <div class="project-meta-item">
+                                <i class="bi bi-people-fill"></i>
+                                <span><strong>Público-alvo:</strong> Crianças e adolescentes de 10 a 14 anos.</span>
+                            </div>
+                            <div class="project-meta-item">
+                                <i class="bi bi-calendar-event"></i>
+                                <span><strong>Aulas:</strong> Quartas e Sextas-feiras.</span>
+                            </div>
+                            <div class="project-meta-item">
+                                <i class="bi bi-check-circle"></i>
+                                <span><strong>Pré-requisito:</strong> Ter concluído a etapa de iniciação ou passar por avaliação básica.</span>
+                            </div>
+                        </div>
+                        <div class="project-details">
+                            <p>A flauta doce é utilizada por sua grande acessibilidade técnica e portabilidade, servindo como uma excelente base para a teoria dos sopros. A orquestra de flautas ensina coordenação motora fina, controle de respiração, dinâmica e execução de arranjos a três ou quatro vozes com repertório clássico e popular.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PROJETO 3: BANDA MUSICAL FRANCISCO MAGALHÃES -->
+                <div class="project-card">
+                    <div class="project-header-bar">
+                        <div class="project-title-group">
+                            <div class="project-card-icon"><i class="bi bi-megaphone"></i></div>
+                            <h2 class="project-card-title">Banda Musical Francisco Magalhães</h2>
+                        </div>
+                        <span class="project-badge">Intermediário</span>
+                    </div>
+                    <div class="project-body">
+                        <p class="project-intro">Uma das principais corporações instrumentais da ABANFAR BF, reunindo instrumentistas de sopro (metais/madeiras) e percussão.</p>
+                        <div class="project-meta-list">
+                            <div class="project-meta-item">
+                                <i class="bi bi-people-fill"></i>
+                                <span><strong>Público-alvo:</strong> Jovens a partir de 12 anos.</span>
+                            </div>
+                            <div class="project-meta-item">
+                                <i class="bi bi-calendar-event"></i>
+                                <span><strong>Ensaios:</strong> Segundas, Terças e Quintas-feiras à noite.</span>
+                            </div>
+                            <div class="project-meta-item">
+                                <i class="bi bi-check-circle"></i>
+                                <span><strong>Pré-requisito:</strong> Domínio básico de um instrumento de banda (trompete, trombone, saxofone, clarinete, percussão).</span>
+                            </div>
+                        </div>
+                        <div class="project-details">
+                            <p>Com um histórico riquíssimo de apresentações cívicas e concertos comunitários, a Banda Francisco Magalhães trabalha intensamente a cooperação mútua, a disciplina coletiva e a sonoridade de conjunto. O repertório engloba hinos tradicionais, arranjos de música popular brasileira, trilhas de cinema e clássicos do pop internacional.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PROJETO 4: ORQUESTRA FILARMÔNICA -->
+                <div class="project-card">
+                    <div class="project-header-bar">
+                        <div class="project-title-group">
+                            <div class="project-card-icon"><i class="bi bi-stars"></i></div>
+                            <h2 class="project-card-title">Orquestra Filarmônica</h2>
+                        </div>
+                        <span class="project-badge">Avançado</span>
+                    </div>
+                    <div class="project-body">
+                        <p class="project-intro">O grupo de maior nível técnico da associação, voltado para concertos especiais e o aperfeiçoamento virtuosístico dos alunos de destaque.</p>
+                        <div class="project-meta-list">
+                            <div class="project-meta-item">
+                                <i class="bi bi-people-fill"></i>
+                                <span><strong>Público-alvo:</strong> Alunos avançados e músicos convidados.</span>
+                            </div>
+                            <div class="project-meta-item">
+                                <i class="bi bi-calendar-event"></i>
+                                <span><strong>Ensaios:</strong> Sextas-feiras e Sábados.</span>
+                            </div>
+                            <div class="project-meta-item">
+                                <i class="bi bi-check-circle"></i>
+                                <span><strong>Pré-requisito:</strong> Leitura fluida de partituras e excelente domínio técnico instrumental (aprovado por banca interna).</span>
+                            </div>
+                        </div>
+                        <div class="project-details">
+                            <p>A Orquestra Filarmônica foca em arranjos orquestrais complexos, peças sinfônicas tradicionais e projetos de concerto temáticos. É a ponte entre a educação de base da associação e a profissionalização musical, incentivando o estudo aprofundado e a liderança artística dos jovens na comunidade.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

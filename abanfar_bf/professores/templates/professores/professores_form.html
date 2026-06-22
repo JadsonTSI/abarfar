@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
+    <link rel="icon" type="image/png" href="{% static 'img/logo_abanfar.png' %}?v=2">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastrar Professor — ABANFAR BF</title>
@@ -175,6 +176,7 @@
             <a href="{% url 'professores:professores_list' %}" class="sidebar-link active"><i class="bi bi-person-workspace"></i><span class="nav-label">Professores</span></a>
             <a href="{% url 'materias:materias_gerente' %}" class="sidebar-link"><i class="bi bi-journal-text"></i><span class="nav-label">Matérias</span></a>
             <a href="{% url 'instrumentos:list' %}" class="sidebar-link"><i class="bi bi-music-note-list"></i><span class="nav-label">Instrumentos</span></a>
+            <a href="{% url 'instrumentos:iot_web_control' %}" class="sidebar-link"><i class="bi bi-cpu-fill"></i><span class="nav-label">Controle IoT</span></a>
             <a href="{% url 'grupos:listar' %}" class="sidebar-link"><i class="bi bi-music-note-beamed"></i><span class="nav-label">Grupos Musicais</span></a>
             <div class="nav-section-label mt-2">Sistema</div>
             <a href="#" class="sidebar-link"><i class="bi bi-gear"></i><span class="nav-label">Configurações</span></a>
@@ -246,6 +248,22 @@
                                 </div>
                             </div>
                         </div>
+                        {% if form.usuario %}
+                        <div class="row g-3 mt-1">
+                            <div class="col-md-6">
+                                <div class="field-wrap">
+                                    {{ form.usuario.label_tag }}
+                                    {{ form.usuario }}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="field-wrap">
+                                    {{ form.senha.label_tag }}
+                                    {{ form.senha }}
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
                     </div>
 
                     <!-- SEÇÃO 2: Contato -->

@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from contas.decorators import gerente_required
 from .models import Documento
  
 # ── PÁGINA PÚBLICA DO BLOG ──────────────────────────────────
@@ -22,7 +23,7 @@ def portal_transparencia(request):
  
  
 # ── PAINEL DO GERENTE ───────────────────────────────────────
-@login_required
+@gerente_required
 def gestao_transparencia(request):
     """Painel privado onde o gerente gerencia os documentos."""
     if request.method == 'POST':
@@ -60,7 +61,7 @@ def gestao_transparencia(request):
     return render(request, 'trasnparencia_gerente.html', context)
  
  
-@login_required
+@gerente_required
 def toggle_publicacao(request, doc_id):
     """Alterna entre publicado/rascunho."""
     doc = get_object_or_404(Documento, id=doc_id)
@@ -70,7 +71,7 @@ def toggle_publicacao(request, doc_id):
     return redirect('transparencia:gestao')
  
  
-@login_required
+@gerente_required
 def excluir_documento(request, doc_id):
     """Exclui um documento."""
     doc = get_object_or_404(Documento, id=doc_id)

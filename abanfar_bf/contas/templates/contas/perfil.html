@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
+    <link rel="icon" type="image/png" href="{% static 'img/logo_abanfar.png' %}?v=2">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Perfil — ABANFAR BF</title>
@@ -285,7 +286,7 @@
                 <a href="{% url 'professores:naipes' %}" class="sidebar-link"><i class="bi bi-music-note"></i><span class="nav-label">Naipes</span></a>
                 <a href="{% url 'materias:materias_professor' %}" class="sidebar-link"><i class="bi bi-journal-bookmark-fill"></i><span class="nav-label">Minhas Matérias</span></a>
                 <a href="{% url 'professores:ensaiospro' %}" class="sidebar-link"><i class="bi bi-music-note-beamed"></i><span class="nav-label">Ensaios</span></a>
-                <a href="{% url 'professores:apresentacoes_list' %}" class="sidebar-link"><i class="bi bi-calendar-event"></i><span class="nav-label">Apresentações</span></a>
+                <a href="{% url 'professores:apresentacoes_list' %}" class="sidebar-link"><i class="bi bi-grid-3x3-gap-fill"></i><span class="nav-label">Apresentações</span></a>
                 <a href="{% url 'grupos:lista' %}" class="sidebar-link"><i class="bi bi-music-note-list"></i><span class="nav-label">Grupos Musicais</span></a>
                 
                 <div class="nav-section-label mt-2">Conta</div>
@@ -299,6 +300,7 @@
                 <a href="{% url 'professores:professores_list' %}" class="sidebar-link"><i class="bi bi-person-workspace"></i><span class="nav-label">Professores</span></a>
                 <a href="{% url 'materias:materias_gerente' %}" class="sidebar-link"><i class="bi bi-journal-text"></i><span class="nav-label">Matérias</span></a>
                 <a href="{% url 'instrumentos:list' %}" class="sidebar-link"><i class="bi bi-music-note-list"></i><span class="nav-label">Instrumentos</span></a>
+            <a href="{% url 'instrumentos:iot_web_control' %}" class="sidebar-link"><i class="bi bi-cpu-fill"></i><span class="nav-label">Controle IoT</span></a>
                 <a href="{% url 'grupos:listar' %}" class="sidebar-link"><i class="bi bi-music-note-beamed"></i><span class="nav-label">Grupos Musicais</span></a>
 
                 <div class="nav-section-label mt-2">Transparência</div>
@@ -307,6 +309,7 @@
                 <div class="nav-section-label mt-2">Conta</div>
                 <a href="{% url 'contas:perfil' %}" class="sidebar-link active"><i class="bi bi-person-circle"></i><span class="nav-label">Meu Perfil</span></a>
             {% endif %}
+        </nav>
 
         <div class="sidebar-footer">
             <span class="sidebar-footer-text">ABANFAR BF © {% now "Y" %}</span>

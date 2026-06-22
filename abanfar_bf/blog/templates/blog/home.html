@@ -1,120 +1,10 @@
+{% extends "blog/base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <title>ABANFAR BF — Música que Transforma Vidas</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="ABANFAR BF — Associação de Bandas, Fanfarras e Regentes de Baía Formosa/RN. Educação musical, inclusão social e cidadania desde 2014.">
 
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Cormorant+Garamond:wght@300;400;600&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-    <!-- CSS próprio -->
-    <link rel="stylesheet" href="{% static 'css/blog.css' %}">
+{% block title %}ABANFAR BF — Música que Transforma Vidas{% endblock %}
 
-    <style>
-        /* ============================================================
-           TOKENS & BASE  (duplicados aqui p/ funcionar sem collectstatic)
-        ============================================================ */
-        :root{--gold:#C9A84C;--gold-light:#E8C96A;--gold-pale:#F5E9C8;--gold-dim:#9A7A30;--cream:#FDFAF3;--white:#FFFFFF;--ink:#1A1612;--ink-soft:#3D3530;--gray-text:#7A6E65;--gray-line:#E8E0D4;--section-bg:#F9F5EC;--shadow-gold:0 4px 28px rgba(201,168,76,.18);--shadow-soft:0 8px 32px rgba(26,22,18,.08);--radius-lg:1.25rem;--radius-sm:.6rem;--transition:.28s ease}
-        *,*::before,*::after{box-sizing:border-box}
-        html{scroll-behavior:smooth}
-        body{font-family:'Cormorant Garamond',Georgia,serif;background:var(--cream);color:var(--ink-soft);line-height:1.75;font-size:1.08rem;-webkit-font-smoothing:antialiased}
-        h1,h2,h3,h4,h5,h6{font-family:'Playfair Display',Georgia,serif;color:var(--ink);letter-spacing:-.01em}
-        a{transition:color var(--transition)}
-        img{max-width:100%;display:block}
-        ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--cream)}::-webkit-scrollbar-thumb{background:var(--gold);border-radius:3px}
-
-        /* TOP BAR */
-        .top-bar{background:var(--ink);color:var(--gold-pale);font-size:.78rem;font-family:'Libre Baskerville',serif;letter-spacing:.08em;padding:.45rem 0;border-bottom:1px solid var(--gold-dim)}
-        .top-bar a{color:var(--gold-light);text-decoration:none}.top-bar a:hover{color:var(--white)}
-
-        /* NAVBAR */
-        .main-navbar{background:var(--white);border-bottom:2px solid var(--gold);padding:0;position:sticky;top:0;z-index:1000;box-shadow:0 2px 20px rgba(201,168,76,.12);transition:box-shadow var(--transition)}
-        .main-navbar.scrolled{box-shadow:0 4px 32px rgba(201,168,76,.22)}
-        .navbar-inner{padding:.7rem 0}
-        .navbar-brand{display:flex;align-items:center;gap:.75rem;text-decoration:none}
-        .brand-logo-ring{width:52px;height:52px;border-radius:50%;border:2px solid var(--gold);padding:3px;display:flex;align-items:center;justify-content:center;background:var(--gold-pale);flex-shrink:0;overflow:hidden;transition:transform var(--transition),box-shadow var(--transition)}
-        .navbar-brand:hover .brand-logo-ring{transform:scale(1.06);box-shadow:var(--shadow-gold)}
-        .brand-logo-ring img{width:100%;height:100%;object-fit:contain;border-radius:50%}
-        .brand-logo-placeholder{font-size:1.5rem;color:var(--gold)}
-        .brand-text .brand-name{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:var(--ink);line-height:1.1;display:block}
-        .brand-text .brand-sub{font-size:.68rem;color:var(--gray-text);letter-spacing:.05em;font-family:'Libre Baskerville',serif;display:block;max-width:210px}
-        .main-navbar .navbar-nav .nav-link{font-family:'Libre Baskerville',serif;font-size:.82rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft)!important;padding:.5rem 1rem!important;position:relative;transition:color var(--transition)}
-        .main-navbar .navbar-nav .nav-link::after{content:'';position:absolute;bottom:0;left:1rem;right:1rem;height:2px;background:var(--gold);transform:scaleX(0);transform-origin:center;transition:transform .25s ease}
-        .main-navbar .navbar-nav .nav-link:hover,.main-navbar .navbar-nav .nav-link.active{color:var(--gold)!important}
-        .main-navbar .navbar-nav .nav-link:hover::after,.main-navbar .navbar-nav .nav-link.active::after{transform:scaleX(1)}
-        .btn-entrar{background:var(--gold);color:var(--ink)!important;font-family:'Libre Baskerville',serif;font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;border:none;padding:.45rem 1.4rem;border-radius:var(--radius-sm);font-weight:700;text-decoration:none;display:inline-block;transition:background var(--transition),transform var(--transition),box-shadow var(--transition)}
-        .btn-entrar:hover{background:var(--gold-dim);color:var(--white)!important;transform:translateY(-2px);box-shadow:0 4px 14px rgba(201,168,76,.3)}
-        .navbar-toggler{border-color:var(--gold)!important}
-        .navbar-toggler-icon{background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%23C9A84C' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e")!important}
-
-        /* HERO */
-        .hero-section{background:linear-gradient(135deg,#1A1612 0%,#2C2318 60%,#1A1612 100%);min-height:88vh;display:flex;align-items:center;position:relative;overflow:hidden;padding:4rem 0}
-        .music-float{position:absolute;color:var(--gold);opacity:.08;pointer-events:none;animation:floatNote 8s ease-in-out infinite;user-select:none}
-        .music-float:nth-child(1){top:12%;left:8%;animation-delay:0s;font-size:5rem}
-        .music-float:nth-child(2){top:60%;left:3%;animation-delay:1.5s;font-size:3rem}
-        .music-float:nth-child(3){top:25%;right:5%;animation-delay:3s;font-size:6rem}
-        .music-float:nth-child(4){bottom:15%;right:12%;animation-delay:.8s;font-size:4.5rem}
-        .music-float:nth-child(5){top:70%;right:28%;animation-delay:2s;font-size:2.5rem;opacity:.05}
-        @keyframes floatNote{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-20px) rotate(5deg)}}
-        .hero-clef{position:absolute;right:6%;top:50%;transform:translateY(-50%);font-size:20rem;color:var(--gold);opacity:.06;pointer-events:none;line-height:1;font-family:serif}
-        .hero-content{position:relative;z-index:2}
-        .hero-eyebrow{display:inline-flex;align-items:center;gap:.6rem;font-family:'Libre Baskerville',serif;font-size:.72rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:1.5rem}
-        .hero-eyebrow::before,.hero-eyebrow::after{content:'';display:inline-block;width:28px;height:1px;background:var(--gold)}
-        .hero-title{font-family:'Playfair Display',serif;font-size:clamp(2.8rem,6vw,5.5rem);font-weight:900;color:var(--white);line-height:1.05;margin-bottom:1.5rem}
-        .hero-title .gold-word{color:var(--gold-light);font-style:italic}
-        .hero-description{font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:#C8BFB4;max-width:520px;margin-bottom:2.5rem;line-height:1.8}
-        .hero-cta{display:inline-flex;align-items:center;gap:.6rem;background:var(--gold);color:var(--ink);font-family:'Libre Baskerville',serif;font-size:.85rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:.9rem 2.2rem;border-radius:var(--radius-sm);text-decoration:none;transition:all .3s;box-shadow:0 6px 24px rgba(201,168,76,.35)}
-        .hero-cta:hover{background:var(--gold-light);color:var(--ink);transform:translateY(-3px);box-shadow:0 10px 32px rgba(201,168,76,.45)}
-        .hero-cta-outline{display:inline-flex;align-items:center;gap:.6rem;background:transparent;color:var(--gold-light);font-family:'Libre Baskerville',serif;font-size:.85rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:.9rem 2.2rem;border-radius:var(--radius-sm);text-decoration:none;border:1px solid rgba(201,168,76,.4);transition:all .3s}
-        .hero-cta-outline:hover{border-color:var(--gold);color:var(--gold);background:rgba(201,168,76,.06)}
-        .hero-stats{margin-top:4rem;padding-top:2.5rem;border-top:1px solid rgba(201,168,76,.2);display:flex;gap:3rem;flex-wrap:wrap}
-        .stat-item .stat-number{font-family:'Playfair Display',serif;font-size:2.6rem;font-weight:900;color:var(--gold);line-height:1;display:block}
-        .stat-item .stat-label{font-family:'Libre Baskerville',serif;font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:#8C7E72;display:block;margin-top:.3rem}
-        .hero-musical-emblem{width:380px;height:380px;border-radius:50%;border:1px solid rgba(201,168,76,.25);display:flex;align-items:center;justify-content:center;position:relative}
-        .hero-musical-emblem::before{content:'';position:absolute;inset:12px;border-radius:50%;border:1px solid rgba(201,168,76,.15)}
-        .hero-musical-emblem::after{content:'';position:absolute;inset:28px;border-radius:50%;border:1px solid rgba(201,168,76,.1)}
-        .emblem-clef{font-size:11rem;color:var(--gold);opacity:.7;position:relative;z-index:1;font-family:serif;line-height:1;animation:pulseGlow 4s ease-in-out infinite}
-        @keyframes pulseGlow{0%,100%{text-shadow:0 0 40px rgba(201,168,76,.3)}50%{text-shadow:0 0 80px rgba(201,168,76,.6),0 0 120px rgba(201,168,76,.2)}}
-        .orbit-ring{position:absolute;inset:-20px;border-radius:50%;animation:orbit 18s linear infinite}
-        @keyframes orbit{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-        .orbit-dot{position:absolute;top:0;left:50%;transform:translateX(-50%);width:10px;height:10px;background:var(--gold);border-radius:50%;box-shadow:0 0 8px rgba(201,168,76,.8)}
-
-        /* MARQUEE STRIP */
-        .featured-strip{background:var(--ink);padding:1.2rem 0;overflow:hidden}
-        .strip-marquee{display:flex;gap:3.5rem;white-space:nowrap;animation:marquee 22s linear infinite;width:max-content}
-        .strip-marquee:hover{animation-play-state:paused}
-        .strip-item{display:inline-flex;align-items:center;gap:.7rem;font-family:'Libre Baskerville',serif;font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-pale)}
-        .strip-item i{color:var(--gold);font-size:1rem}
-        @keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-
-        /* SECTION UTILS */
-        .section-label{font-family:'Libre Baskerville',serif;font-size:.72rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);display:flex;align-items:center;gap:.7rem;margin-bottom:.5rem}
-        .section-label::before{content:'';width:32px;height:1px;background:var(--gold);flex-shrink:0}
-        .section-title{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:700;color:var(--ink);margin-bottom:.4rem}
-        .section-divider{text-align:center;margin:.5rem 0 2.5rem;position:relative}
-        .section-divider::before{content:'';position:absolute;top:50%;left:0;right:0;height:1px;background:var(--gray-line)}
-        .section-divider span{background:var(--cream);padding:0 1.2rem;position:relative;color:var(--gold);font-size:1.4rem}
-        .section-divider-light span{background:var(--section-bg)}
-
-        /* PROGRAMS */
-        .programs-section{padding:5.5rem 0;background:var(--cream)}
-        .program-card{background:var(--white);border-radius:var(--radius-lg);border:1px solid var(--gray-line);padding:2rem;height:100%;position:relative;overflow:hidden;transition:transform var(--transition),box-shadow var(--transition)}
-        .program-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--gold-light));transform:scaleX(0);transform-origin:left;transition:transform .4s ease}
-        .program-card:hover::before{transform:scaleX(1)}
-        .program-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-gold)}
-        .program-number{font-family:'Playfair Display',serif;font-size:4rem;font-weight:900;color:var(--gold-pale);line-height:1;position:absolute;top:1rem;right:1.5rem}
-        .program-icon{width:52px;height:52px;background:var(--gold-pale);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold-dim);font-size:1.4rem;margin-bottom:1.2rem;transition:background var(--transition),color var(--transition)}
-        .program-card:hover .program-icon{background:var(--gold);color:var(--white)}
-        .program-title{font-family:'Playfair Display',serif;font-size:1.15rem;font-weight:700;color:var(--ink);margin-bottom:.7rem}
-        .program-desc{font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--gray-text);line-height:1.7}
-
+{% block extra_css %}
+<style>
         /* BLOG */
         .blog-section{padding:5.5rem 0;background:var(--cream)}
         .post-featured{border-radius:var(--radius-lg);overflow:hidden;background:var(--white);box-shadow:var(--shadow-soft);display:grid;grid-template-columns:1fr 1fr;min-height:440px;transition:transform var(--transition),box-shadow var(--transition);text-decoration:none;margin-bottom:2rem;border:1px solid var(--gray-line)}
@@ -283,77 +173,9 @@
             .btn-support-outline{margin-left:0;margin-top:.75rem}
         }
     </style>
-</head>
-<body>
+{% endblock %}
 
-<!-- =============================================
-     TOP BAR
-============================================= -->
-<div class="top-bar d-none d-md-block">
-    <div class="container d-flex justify-content-between align-items-center">
-        <div class="d-flex align-items-center gap-3">
-            <span><i class="bi bi-geo-alt-fill me-1" style="color:var(--gold)"></i>Baía Formosa — RN, Brasil</span>
-            <span class="d-none d-lg-inline">|</span>
-            <span class="d-none d-lg-inline"><i class="bi bi-envelope-fill me-1" style="color:var(--gold)"></i>contato@abanfarbf.org</span>
-        </div>
-        <div class="d-flex align-items-center gap-3">
-            <a href="#"><i class="bi bi-facebook"></i></a>
-            <a href="#"><i class="bi bi-instagram"></i></a>
-            <a href="#"><i class="bi bi-youtube"></i></a>
-            <span>|</span>
-            <span>Fundada em 2014 &bull; Baía Formosa/RN</span>
-        </div>
-    </div>
-</div>
-
-<!-- =============================================
-     NAVBAR
-============================================= -->
-<nav class="main-navbar navbar navbar-expand-lg" id="mainNav">
-    <div class="container navbar-inner">
-        <a class="navbar-brand" href="#">
-            <div class="brand-logo-ring">
-                <img src="{% static 'img/logo_abanfar.png' %}" alt="Logo ABANFAR BF"
-                     onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
-                <span class="brand-logo-placeholder" style="display:none">♪</span>
-            </div>
-            <div class="brand-text">
-                <span class="brand-name">ABANFAR BF</span>
-                <span class="brand-sub">Assoc. de Bandas, Fanfarras e Regentes — Baía Formosa/RN</span>
-            </div>
-        </a>
-
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavContent">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="mainNavContent">
-            <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
-                <li class="nav-item"><a class="nav-link active" href="#">Início</a></li>
-                <li class="nav-item"><a class="nav-link" href="#sobre">Sobre</a></li>
-                <li class="nav-item"><a class="nav-link" href="#projetos">Projetos</a></li>
-                <li class="nav-item"><a class="nav-link" href="#blog">Blog</a></li>
-                <li class="nav-item"><a class="nav-link" href="#galeria">Galeria</a></li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'transparencia:portal' %}">Transparência</a></li>
-                <li class="nav-item"><a class="nav-link" href="#contato">Contato</a></li>
-            </ul>
-            <div class="d-flex align-items-center gap-2 ms-lg-3 mt-3 mt-lg-0">
-                {% if user.is_authenticated %}
-                    <span style="font-size:.82rem;color:var(--gray-text);font-family:'Libre Baskerville',serif">
-                        Olá, {{ user.first_name|default:user.username }}!
-                    </span>
-                    <a href="{% url 'contas:logout' %}" class="btn-entrar">Sair</a>
-                {% else %}
-                    <a href="{% url 'contas:login' %}" class="btn-entrar">Entrar</a>
-                {% endif %}
-            </div>
-        </div>
-    </div>
-</nav>
-
-<!-- =============================================
-     HERO
-============================================= -->
+{% block content %}
 <section class="hero-section">
     <div class="music-float">♩</div>
     <div class="music-float">♫</div>
@@ -380,10 +202,10 @@
                     desde 2014.
                 </p>
                 <div class="d-flex flex-wrap gap-2">
-                    <a href="#projetos" class="hero-cta">
+                    <a href="{% url 'projetos' %}" class="hero-cta">
                         <i class="bi bi-music-note-list"></i> Conheça os projetos
                     </a>
-                    <a href="#sobre" class="hero-cta-outline">
+                    <a href="{% url 'sobre' %}" class="hero-cta-outline">
                         <i class="bi bi-play-circle"></i> Nossa história
                     </a>
                 </div>
@@ -515,114 +337,67 @@
             <div class="col-lg-8">
 
                 <!-- Featured Post -->
-                <a href="#" class="post-featured reveal">
+                {% if featured_post %}
+                <a href="{% url 'post_detail' featured_post.slug %}" class="post-featured reveal">
                     <div class="feat-img">
-                        <img src="{% static 'img/post1.jpeg' %}" alt="Nossa história"
-                             onerror="this.style.display='none'">
+                        {% if featured_post.imagem_estatica %}
+                            <img src="{% static featured_post.imagem_estatica %}" alt="{{ featured_post.titulo }}"
+                                 onerror="this.style.display='none'">
+                        {% endif %}
                         <span class="feat-img-placeholder">𝄞</span>
                         <div class="feat-img-overlay"></div>
                     </div>
                     <div class="feat-body">
-                        <span class="post-tag tag-historia">Nossa História</span>
-                        <h2 class="post-title">Fundação e trajetória da ABANFAR BF</h2>
+                        <span class="post-tag tag-historia">{{ featured_post.tag }}</span>
+                        <h2 class="post-title">{{ featured_post.titulo }}</h2>
                         <p class="post-excerpt">
-                            Fundada em 2014, a ABANFAR BF é uma associação sem fins lucrativos
-                            que oferece iniciação musical, educação e inclusão social por meio de bandas,
-                            fanfarras, orquestras e projetos comunitários que transformam realidades.
+                            {{ featured_post.resumo }}
                         </p>
                         <div class="post-meta">
-                            <span><i class="bi bi-calendar3"></i> 31 maio 2025</span>
-                            <span><i class="bi bi-person"></i> Equipe ABANFAR BF</span>
+                            <span><i class="bi bi-calendar3"></i> {{ featured_post.data_publicacao|date:"d \m\a\i\o Y" }}</span>
+                            <span><i class="bi bi-person"></i> {{ featured_post.autor }}</span>
                         </div>
                         <span class="post-read-more">Ler mais <i class="bi bi-arrow-right"></i></span>
                     </div>
                 </a>
+                {% endif %}
 
                 <!-- 2×2 grid posts -->
                 <div class="row g-4">
+                    {% for post in grid_posts %}
                     <div class="col-md-6 reveal">
                         <div class="blog-card">
                             <div class="card-img-wrap">
-                                <img src="{% static 'img/post2.jpg' %}" alt="Banda Francisco Magalhães"
-                                     onerror="this.style.display='none'">
-                                <span class="img-placeholder-icon"><i class="bi bi-megaphone-fill"></i></span>
+                                {% if post.imagem_estatica %}
+                                    <img src="{% static post.imagem_estatica %}" alt="{{ post.titulo }}"
+                                         onerror="this.style.display='none'">
+                                {% endif %}
+                                <span class="img-placeholder-icon">
+                                    {% if post.tag == 'Projetos' %}
+                                        <i class="bi bi-megaphone-fill"></i>
+                                    {% elif post.tag == 'Orquestra' %}
+                                        <i class="bi bi-music-note-beamed"></i>
+                                    {% elif post.tag == 'Notícias' %}
+                                        <i class="bi bi-stars"></i>
+                                    {% else %}
+                                        <i class="bi bi-award-fill"></i>
+                                    {% endif %}
+                                </span>
                             </div>
                             <div class="card-content">
-                                <span class="post-tag tag-projeto">Projetos</span>
-                                <h3 class="card-title-text">Banda Musical Francisco Magalhães</h3>
+                                <span class="post-tag tag-projeto">{{ post.tag }}</span>
+                                <h3 class="card-title-text">{{ post.titulo }}</h3>
                                 <p class="card-excerpt">
-                                    A banda trabalha cidadania, sensibilidade e habilidades artísticas,
-                                    reunindo jovens em um ambiente de disciplina e amor à música.
+                                    {{ post.resumo }}
                                 </p>
-                                <a href="#" class="post-read-more mt-auto">Ver detalhes <i class="bi bi-arrow-right"></i></a>
+                                <a href="{% url 'post_detail' post.slug %}" class="post-read-more mt-auto">Ler mais <i class="bi bi-arrow-right"></i></a>
                             </div>
                             <div class="card-footer-custom">
-                                <div class="post-meta"><span><i class="bi bi-calendar3"></i> 12 abr 2025</span></div>
+                                <div class="post-meta"><span><i class="bi bi-calendar3"></i> {{ post.data_publicacao|date:"d \a\b\r Y" }}</span></div>
                             </div>
                         </div>
                     </div>
-
-                    <div class="col-md-6 reveal">
-                        <div class="blog-card">
-                            <div class="card-img-wrap">
-                                <img src="{% static 'img/post3.jpeg' %}" alt="Orquestra de Flautas"
-                                     onerror="this.style.display='none'">
-                                <span class="img-placeholder-icon"><i class="bi bi-music-note-beamed"></i></span>
-                            </div>
-                            <div class="card-content">
-                                <span class="post-tag tag-orquestra">Orquestra</span>
-                                <h3 class="card-title-text">Orquestra de Flautas Doce</h3>
-                                <p class="card-excerpt">
-                                    Projeto voltado para musicalização de crianças e adolescentes,
-                                    utilizando a flauta doce como instrumento inicial.
-                                </p>
-                                <a href="#" class="post-read-more mt-auto">Conhecer o projeto <i class="bi bi-arrow-right"></i></a>
-                            </div>
-                            <div class="card-footer-custom">
-                                <div class="post-meta"><span><i class="bi bi-calendar3"></i> 20 mar 2025</span></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-6 reveal">
-                        <div class="blog-card">
-                            <div class="card-img-wrap">
-                                <span class="img-placeholder-icon"><i class="bi bi-stars"></i></span>
-                            </div>
-                            <div class="card-content">
-                                <span class="post-tag tag-noticias">Notícias</span>
-                                <h3 class="card-title-text">Apresentação na Praça Central</h3>
-                                <p class="card-excerpt">
-                                    Nossa banda realizou apresentação especial para a comunidade,
-                                    celebrando o aniversário de Baía Formosa com muita música e emoção.
-                                </p>
-                                <a href="#" class="post-read-more mt-auto">Ler mais <i class="bi bi-arrow-right"></i></a>
-                            </div>
-                            <div class="card-footer-custom">
-                                <div class="post-meta"><span><i class="bi bi-calendar3"></i> 05 fev 2025</span></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-6 reveal">
-                        <div class="blog-card">
-                            <div class="card-img-wrap">
-                                <span class="img-placeholder-icon"><i class="bi bi-award-fill"></i></span>
-                            </div>
-                            <div class="card-content">
-                                <span class="post-tag tag-projeto">Projetos</span>
-                                <h3 class="card-title-text">Filarmônica encerra semestre com concerto</h3>
-                                <p class="card-excerpt">
-                                    A Orquestra Filarmônica encerrou o primeiro semestre
-                                    com concerto especial aberto à comunidade.
-                                </p>
-                                <a href="#" class="post-read-more mt-auto">Ler mais <i class="bi bi-arrow-right"></i></a>
-                            </div>
-                            <div class="card-footer-custom">
-                                <div class="post-meta"><span><i class="bi bi-calendar3"></i> 18 jan 2025</span></div>
-                            </div>
-                        </div>
-                    </div>
+                    {% endfor %}
                 </div>
 
                 <!-- Pagination -->
@@ -918,10 +693,10 @@
                     <li><i class="bi bi-check-circle-fill"></i> Ajude a expandir o alcance dos projetos</li>
                 </ul>
                 <div class="d-flex flex-wrap gap-2">
-                    <a href="#contato" class="btn-support-primary">
+                    <a href="{% url 'contato' %}" class="btn-support-primary">
                         <i class="bi bi-heart-fill"></i> Quero apoiar
                     </a>
-                    <a href="#sobre" class="btn-support-outline">
+                    <a href="{% url 'sobre' %}" class="btn-support-outline">
                         <i class="bi bi-info-circle"></i> Saiba mais
                     </a>
                 </div>
@@ -935,98 +710,10 @@
     </div>
 </section>
 
-<!-- =============================================
-     FOOTER
-============================================= -->
-<footer class="site-footer">
-    <div class="container">
-        <div class="row g-5">
-            <div class="col-lg-4">
-                <div class="footer-brand-name">ABANFAR BF</div>
-                <p class="footer-brand-tagline">
-                    Música, educação e cidadania para transformar vidas em Baía Formosa/RN.
-                </p>
-                <div class="footer-divider-gold"></div>
-                <p style="font-size:.85rem;color:#6A6058;font-family:'Cormorant Garamond',serif;line-height:1.7">
-                    Associação apartidária, filantrópica e sem fins lucrativos, dedicada à
-                    inclusão social por meio da arte musical desde 2014.
-                </p>
-                <div class="footer-music-row">
-                    <span class="footer-note">♩</span>
-                    <span class="footer-note">♪</span>
-                    <span class="footer-note">♫</span>
-                    <span class="footer-note">♬</span>
-                    <span class="footer-note">𝄞</span>
-                </div>
-                <div class="d-flex gap-2 mt-4">
-                    <a href="#" class="footer-social-icon"><i class="bi bi-facebook"></i></a>
-                    <a href="#" class="footer-social-icon"><i class="bi bi-instagram"></i></a>
-                    <a href="#" class="footer-social-icon"><i class="bi bi-youtube"></i></a>
-                </div>
-            </div>
+{% endblock %}
 
-            <div class="col-sm-6 col-lg-2">
-                <div class="footer-col-title">Navegação</div>
-                <a href="#" class="footer-link">Início</a>
-                <a href="#sobre" class="footer-link">Sobre nós</a>
-                <a href="#projetos" class="footer-link">Projetos</a>
-                <a href="#galeria" class="footer-link">Galeria</a>
-                <a href="#blog" class="footer-link">Blog</a>
-                <a href="#contato" class="footer-link">Contato</a>
-            </div>
-
-            <div class="col-sm-6 col-lg-3">
-                <div class="footer-col-title">Programas</div>
-                <a href="#" class="footer-link">Programa de Educação Musical</a>
-                <a href="#" class="footer-link">Orquestra de Flautas Doce</a>
-                <a href="#" class="footer-link">Banda Francisco Magalhães</a>
-                <a href="#" class="footer-link">Orquestra Filarmônica</a>
-            </div>
-
-            <div class="col-lg-3">
-                <div class="footer-col-title">Contato</div>
-                <p style="font-size:.9rem;color:#7A7068;font-family:'Cormorant Garamond',serif;line-height:1.9;margin:0">
-                    <i class="bi bi-geo-alt" style="color:var(--gold)"></i>
-                    Baía Formosa — RN, Brasil
-                </p>
-                <p style="font-size:.9rem;color:#7A7068;font-family:'Cormorant Garamond',serif;line-height:1.9;margin:0">
-                    <i class="bi bi-envelope" style="color:var(--gold)"></i>
-                    contato@abanfarbf.org
-                </p>
-                <p style="font-size:.9rem;color:#7A7068;font-family:'Cormorant Garamond',serif;line-height:1.9;margin:0">
-                    <i class="bi bi-clock" style="color:var(--gold)"></i>
-                    Seg – Sex, 8h às 17h
-                </p>
-                <div class="mt-4 p-3" style="background:rgba(201,168,76,.08);border-radius:var(--radius-sm);border:1px solid rgba(201,168,76,.15)">
-                    <p style="font-family:'Libre Baskerville',serif;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:.5rem">
-                        <i class="bi bi-envelope-paper me-1"></i>Newsletter
-                    </p>
-                    <input type="email" placeholder="Seu e-mail" style="width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(201,168,76,.25);border-radius:var(--radius-sm);padding:.45rem .8rem;font-family:'Cormorant Garamond',serif;font-size:.95rem;color:#C8BFB4;outline:none;margin-bottom:.5rem">
-                    <button style="width:100%;background:var(--gold);color:var(--ink);font-family:'Libre Baskerville',serif;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;padding:.45rem;border:none;border-radius:var(--radius-sm);cursor:pointer;font-weight:700;transition:background var(--transition)" onmouseover="this.style.background='#E8C96A'" onmouseout="this.style.background='var(--gold)'">Assinar</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="footer-bottom">
-        <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
-            <p>&copy; {% now "Y" %} ABANFAR BF — Todos os direitos reservados.</p>
-            <p>Desenvolvido com <a href="#">Django</a> &amp; <a href="#">Bootstrap</a> &nbsp;♩&nbsp; Música para transformar vidas</p>
-        </div>
-    </div>
-</footer>
-
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-    crossorigin="anonymous"></script>
-
+{% block extra_js %}
 <script>
-    /* ----- Navbar scroll class ----- */
-    const nav = document.getElementById('mainNav');
-    window.addEventListener('scroll', () => {
-        nav.classList.toggle('scrolled', window.scrollY > 60);
-    }, { passive: true });
-
     /* ----- Scroll Reveal ----- */
     const revealEls = document.querySelectorAll('.reveal');
     const observer = new IntersectionObserver((entries) => {
@@ -1043,24 +730,5 @@
     }, { threshold: 0.12 });
 
     revealEls.forEach(el => observer.observe(el));
-
-    /* ----- Active nav link on scroll ----- */
-    const sections = document.querySelectorAll('section[id], aside[id]');
-    const navLinks = document.querySelectorAll('.main-navbar .nav-link');
-
-    const sectionObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                navLinks.forEach(link => {
-                    link.classList.toggle('active',
-                        link.getAttribute('href') === '#' + entry.target.id);
-                });
-            }
-        });
-    }, { threshold: 0.3 });
-
-    sections.forEach(s => sectionObserver.observe(s));
 </script>
-
-</body>
-</html>
+{% endblock %}

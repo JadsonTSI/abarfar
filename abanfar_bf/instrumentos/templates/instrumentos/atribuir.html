@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
+    <link rel="icon" type="image/png" href="{% static 'img/logo_abanfar.png' %}?v=2">
     <meta charset="UTF-8">
     <title>Atribuir Instrumento</title>
 
@@ -35,7 +36,7 @@
                     </div>
 
                     <button type="submit" class="btn btn-success">Atribuir</button>
-                    <a href="{% url 'instrumentos:uso' %}" class="btn btn-secondary">Voltar</a>
+                    <a href="{% url 'instrumentos:uso' instrumento.id %}" class="btn btn-secondary">Voltar</a>
                 </form>
 
             </div>

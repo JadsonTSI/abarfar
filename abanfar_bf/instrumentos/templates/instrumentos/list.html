@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
+    <link rel="icon" type="image/png" href="{% static 'img/logo_abanfar.png' %}?v=2">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Instrumentos — ABANFAR BF</title>
@@ -202,6 +203,11 @@
                 <span class="nav-label">Instrumentos</span>
             </a>
 
+            <a href="{% url 'instrumentos:iot_web_control' %}" class="sidebar-link">
+                <i class="bi bi-cpu-fill"></i>
+                <span class="nav-label">Controle IoT</span>
+            </a>
+
             <a href="{% url 'grupos:listar' %}" class="sidebar-link">
                 <i class="bi bi-music-note-beamed"></i>
                 <span class="nav-label">Grupos Musicais</span>
@@ -275,19 +281,19 @@
                 <div class="col-6 col-lg-3">
                     <div class="mini-stat">
                         <div class="mini-stat-icon"><i class="bi bi-check-circle-fill"></i></div>
-                        <div><div class="mini-stat-value">—</div><span class="mini-stat-label">Ativos</span></div>
+                        <div><div class="mini-stat-value">{{ ativos_count }}</div><span class="mini-stat-label">Ativos</span></div>
                     </div>
                 </div>
                 <div class="col-6 col-lg-3">
                     <div class="mini-stat">
                         <div class="mini-stat-icon"><i class="bi bi-building"></i></div>
-                        <div><div class="mini-stat-value">—</div><span class="mini-stat-label">Da associação</span></div>
+                        <div><div class="mini-stat-value">{{ da_associacao_count }}</div><span class="mini-stat-label">Da associação</span></div>
                     </div>
                 </div>
                 <div class="col-6 col-lg-3">
                     <div class="mini-stat">
                         <div class="mini-stat-icon"><i class="bi bi-person-fill"></i></div>
-                        <div><div class="mini-stat-value">—</div><span class="mini-stat-label">Dos alunos</span></div>
+                        <div><div class="mini-stat-value">{{ dos_alunos_count }}</div><span class="mini-stat-label">Dos alunos</span></div>
                     </div>
                 </div>
             </div>
@@ -295,7 +301,14 @@
             <div class="section-card">
                 <div class="section-card-header">
                     <h2 class="section-card-title"><i class="bi bi-table"></i> Lista de instrumentos</h2>
-                    <a href="#" class="btn-outline-gold"><i class="bi bi-download"></i> Exportar</a>
+                    <div class="d-flex gap-2 flex-wrap">
+                        <a href="{% url 'instrumentos:exportar_instrumentos_excel' %}" class="btn-outline-gold">
+                            <i class="bi bi-file-earmark-excel"></i> Exportar Excel
+                        </a>
+                        <a href="{% url 'instrumentos:exportar_instrumentos_pdf' %}" class="btn-outline-gold">
+                            <i class="bi bi-file-earmark-pdf"></i> Exportar PDF
+                        </a>
+                    </div>
                 </div>
                 <div class="table-toolbar">
                     <div class="toolbar-left">
