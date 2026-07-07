@@ -96,7 +96,36 @@
         .sidebar-overlay.active{display:block}
         @media(max-width:991px){.sidebar{transform:translateX(-100%);width:var(--sidebar-w)!important}.sidebar.mobile-open{transform:translateX(0)}.main-area,.main-area.expanded{margin-left:0!important}}
         @media(max-width:576px){.page-content{padding:1.2rem}.topbar{padding:0 1rem}}
-    </style>
+    
+        /* Ajustes para a Sidebar Colapsada (Responsivo/Minimizado) */
+        .sidebar.collapsed .sidebar-top {
+            justify-content: center !important;
+            padding: 0 !important;
+        }
+        .sidebar.collapsed .sidebar-brand {
+            display: none !important;
+        }
+        .sidebar.collapsed .sidebar-profile {
+            justify-content: center !important;
+            padding: 1.2rem 0 !important;
+        }
+        .sidebar.collapsed .sidebar-profile-name {
+            display: none !important;
+        }
+        .sidebar.collapsed .sidebar-link {
+            justify-content: center !important;
+            padding: 0.65rem 0 !important;
+            margin: 0.1rem 0.3rem !important;
+        }
+        .sidebar.collapsed .nav-section-label {
+            display: none !important;
+        }
+        .sidebar.collapsed .btn-logout {
+            justify-content: center !important;
+            padding: 0.5rem 0 !important;
+        }
+
+</style>
 </head>
 <body>
 <div class="app-shell">
@@ -116,7 +145,13 @@
             <button class="btn-collapse" id="btnCollapse"><i class="bi bi-layout-sidebar-reverse" id="collapseIcon"></i></button>
         </div>
         <div class="sidebar-profile">
-            <div class="profile-avatar"><i class="bi bi-person-workspace"></i></div>
+            <div class="profile-avatar" style="overflow: hidden;">
+                {% if request.user.perfil.foto %}
+                    <img src="{{ request.user.perfil.foto.url }}" alt="Foto de perfil" style="width:100%; height:100%; object-fit:cover;">
+                {% else %}
+                    <i class="bi bi-person-workspace"></i>
+                {% endif %}
+            </div>
             <div class="sidebar-profile-name">
                 <span class="profile-name">{{ user.first_name|default:user.username }}</span>
                 <span class="profile-role">Professor</span>
@@ -153,7 +188,13 @@
             </div>
             <div class="topbar-right">
                 <div class="topbar-user">
-                    <div class="topbar-avatar">{{ user.first_name|first|default:"P" }}</div>
+                    <div class="topbar-avatar" style="overflow: hidden; display: flex; align-items: center; justify-content: center;">
+                        {% if request.user.perfil.foto %}
+                            <img src="{{ request.user.perfil.foto.url }}" alt="Foto" style="width: 100%; height: 100%; object-fit: cover;">
+                        {% else %}
+                            {{ user.first_name|first|default:"P" }}
+                        {% endif %}
+                    </div>
                     <span class="topbar-username d-none d-sm-block">{{ user.first_name|default:user.username }}</span>
                 </div>
             </div>
@@ -179,6 +220,7 @@
                     <th>Data</th>
                     <th>Horário</th>
                     <th>Local</th>
+                    <th>Status</th>
                     <th style="text-align:center">Ações</th>
                 </tr>
             </thead>
@@ -188,18 +230,30 @@
                     <td style="font-family:'Playfair Display',serif;font-weight:700;color:var(--ink)">{{ a.titulo }}</td>
                     <td>{{ a.descricao|truncatechars:40 }}</td>
                     <td>{{ a.grupo }}</td>
-                    <td style="font-family:'Libre Baskerville',serif;font-size:.8rem">{{ a.data }}</td>
-                    <td>{{ a.horario }}</td>
+                    <td style="font-family:'Libre Baskerville',serif;font-size:.8rem">{{ a.data|date:'d/m/Y' }}</td>
+                    <td>{{ a.horario }}{% if a.horario_fim %} às {{ a.horario_fim }}{% endif %}</td>
                     <td>{{ a.local }}</td>
+                    <td>
+                        {% if a.cancelado %}
+                            <span class="badge-cancelled">Cancelado</span>
+                        {% else %}
+                            <span class="badge-active">Ativo</span>
+                        {% endif %}
+                    </td>
                     <td style="text-align:center">
                         <div style="display:flex;align-items:center;justify-content:center;gap:.3rem">
                             <a href="{% url 'professores:apresentacoes_edit' a.id %}" class="btn-action btn-act-edit" title="Editar"><i class="bi bi-pencil-fill"></i></a>
                             <a href="{% url 'professores:apresentacoes_delete' a.id %}" class="btn-action btn-act-delete" title="Excluir"><i class="bi bi-trash-fill"></i></a>
+                            {% if not a.cancelado %}
+                                <a href="{% url 'professores:cancelar_apresentacao' a.id %}" class="btn-action btn-act-warn" title="Cancelar"><i class="bi bi-x-circle"></i></a>
+                            {% else %}
+                                <a href="{% url 'professores:restaurar_apresentacao' a.id %}" class="btn-action btn-act-ok" title="Restaurar"><i class="bi bi-arrow-counterclockwise"></i></a>
+                            {% endif %}
                         </div>
                     </td>
                 </tr>
                 {% empty %}
-                <tr><td colspan="7">
+                <tr><td colspan="8">
                     <div class="empty-state">
                         <span class="empty-icon">𝄞</span>
                         <div class="empty-title">Nenhuma apresentação cadastrada</div>

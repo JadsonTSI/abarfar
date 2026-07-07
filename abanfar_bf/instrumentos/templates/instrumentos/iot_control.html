@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Cormorant+Garamond:wght@300;400;600&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <style>
         :root {
@@ -252,7 +254,75 @@
             .page-content { padding: 1.2rem; }
             .topbar { padding: 0 1rem; }
         }
-    </style>
+    
+        /* Ajustes para a Sidebar Colapsada (Responsivo/Minimizado) */
+        .sidebar.collapsed .sidebar-top {
+            justify-content: center !important;
+            padding: 0 !important;
+        }
+        .sidebar.collapsed .sidebar-brand {
+            display: none !important;
+        }
+        .sidebar.collapsed .sidebar-profile {
+            justify-content: center !important;
+            padding: 1.2rem 0 !important;
+        }
+        .sidebar.collapsed .sidebar-profile-name {
+            display: none !important;
+        }
+        .sidebar.collapsed .sidebar-link {
+            justify-content: center !important;
+            padding: 0.65rem 0 !important;
+            margin: 0.1rem 0.3rem !important;
+        }
+        .sidebar.collapsed .nav-section-label {
+            display: none !important;
+        }
+        .sidebar.collapsed .btn-logout {
+            justify-content: center !important;
+            padding: 0.5rem 0 !important;
+        }
+
+        /* SweetAlert2 Elegant Customization */
+        .swal2-elegant-popup {
+            font-family: 'Cormorant Garamond', Georgia, serif !important;
+            background-color: var(--cream) !important;
+            color: var(--ink-soft) !important;
+            border: 2px solid var(--gold) !important;
+            border-radius: var(--radius-lg) !important;
+        }
+        .swal2-elegant-popup .swal2-title {
+            font-family: 'Playfair Display', Georgia, serif !important;
+            color: var(--ink) !important;
+        }
+        .swal2-elegant-popup .swal2-html-container {
+            color: var(--ink-soft) !important;
+            font-size: 1.15rem !important;
+        }
+        .swal2-elegant-popup .swal2-confirm {
+            background-color: var(--gold) !important;
+            color: var(--ink) !important;
+            font-family: 'Playfair Display', Georgia, serif !important;
+            font-weight: bold !important;
+            border-radius: var(--radius-sm) !important;
+            border: 1px solid var(--gold-dim) !important;
+            padding: 0.6rem 1.8rem !important;
+        }
+        .swal2-elegant-popup .swal2-confirm:hover {
+            background-color: var(--gold-light) !important;
+        }
+        .swal2-elegant-popup .swal2-cancel {
+            background-color: transparent !important;
+            color: var(--gray-text) !important;
+            border: 1px solid var(--gray-line) !important;
+            border-radius: var(--radius-sm) !important;
+            padding: 0.6rem 1.8rem !important;
+        }
+        .swal2-elegant-popup .swal2-cancel:hover {
+            background-color: var(--gray-line) !important;
+            color: var(--ink-soft) !important;
+        }
+</style>
 </head>
 <body>
 
@@ -275,8 +345,12 @@
         </div>
 
         <div class="sidebar-profile">
-            <div class="profile-avatar">
-                <i class="bi bi-person-fill"></i>
+            <div class="profile-avatar" style="overflow: hidden;">
+                {% if request.user.perfil.foto %}
+                    <img src="{{ request.user.perfil.foto.url }}" alt="Foto de perfil" style="width:100%; height:100%; object-fit:cover;">
+                {% else %}
+                    <i class="bi bi-person-fill"></i>
+                {% endif %}
             </div>
             <div class="sidebar-profile-name">
                 <span class="profile-name">{{ request.user.username|title }}</span>
@@ -359,7 +433,13 @@
             </div>
             <div class="topbar-right">
                 <div class="topbar-user">
-                    <div class="topbar-avatar">G</div>
+                    <div class="topbar-avatar" style="overflow: hidden; display: flex; align-items: center; justify-content: center;">
+                        {% if request.user.perfil.foto %}
+                            <img src="{{ request.user.perfil.foto.url }}" alt="Foto" style="width: 100%; height: 100%; object-fit: cover;">
+                        {% else %}
+                            G
+                        {% endif %}
+                    </div>
                     <span class="topbar-username">{{ request.user.username }}</span>
                 </div>
             </div>
@@ -451,20 +531,7 @@
                         </div>
                     </div>
 
-                    <!-- Simulator Card -->
-                    <div class="section-card mb-4" style="border-style: dashed;">
-                        <div class="section-card-header bg-transparent border-0 pb-0">
-                            <h2 class="section-card-title text-muted">
-                                <i class="bi bi-cpu"></i> Simulador de Hardware (Software)
-                            </h2>
-                        </div>
-                        <div class="section-card-body pt-2">
-                            <p class="text-muted small">Clique no botão para injetar uma leitura fictícia e testar os fluxos da página em tempo real.</p>
-                            <button type="button" class="btn btn-outline-dark w-100" onclick="simularScanESP32()">
-                                <i class="bi bi-play-fill text-warning"></i> Simular Aproximação no ESP32
-                            </button>
-                        </div>
-                    </div>
+
 
                     <!-- Logs Card -->
                     <div class="section-card">
@@ -691,36 +758,53 @@
     }
 
     // Ações de API
-    async function simularScanESP32() {
-        const uids = ['04B8C1A2', '04A9E2F8', '04F5E6D7', '04C2D1F9', '0432F1A5'];
-        const randomUid = uids[Math.floor(Math.random() * uids.length)];
-        
-        try {
-            const res = await fetch("{% url 'instrumentos:api_iot_scan' %}", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ rfid: randomUid })
-            });
-            const data = await res.json();
-            if (data.sucesso) {
-                const tbody = document.getElementById('logs-tbody');
-                const tr = document.createElement('tr');
-                tr.innerHTML = `<td class="font-monospace fw-bold">${randomUid}</td><td class="text-muted">Aproximado agora</td>`;
-                tbody.insertBefore(tr, tbody.firstChild);
-                
-                pollUltimoScan();
-                carregarEstatisticasWeb();
-            }
-        } catch(err) {
-            alert("Erro ao simular scan.");
-        }
+
+    const swalConfig = {
+        customClass: {
+            popup: 'swal2-elegant-popup',
+            confirmButton: 'swal2-confirm',
+            cancelButton: 'swal2-cancel'
+        },
+        buttonsStyling: false
+    };
+
+    function mostrarErro(mensagem) {
+        return Swal.fire({
+            ...swalConfig,
+            icon: 'error',
+            title: 'Erro',
+            text: mensagem || 'Ocorreu um erro na operação.',
+            confirmButtonText: 'OK'
+        });
+    }
+
+    function mostrarAviso(mensagem) {
+        return Swal.fire({
+            ...swalConfig,
+            icon: 'warning',
+            title: 'Atenção',
+            text: mensagem,
+            confirmButtonText: 'OK'
+        });
+    }
+
+    function mostrarSucesso(mensagem) {
+        return Swal.fire({
+            ...swalConfig,
+            icon: 'success',
+            title: 'Sucesso!',
+            text: mensagem,
+            confirmButtonText: 'Excelente',
+            timer: 2500,
+            timerProgressBar: true
+        });
     }
 
     async function vincularTag(rfid) {
         const select = document.getElementById('select-instrumento');
         const instId = select.value;
         if (!instId) {
-            alert("Por favor, selecione um instrumento.");
+            mostrarAviso("Por favor, selecione um instrumento.");
             return;
         }
 
@@ -732,18 +816,29 @@
             });
             const data = await res.json();
             if (data.sucesso) {
-                alert("Vínculo realizado com sucesso!");
-                window.location.reload();
+                mostrarSucesso("Vínculo realizado com sucesso!").then(() => {
+                    window.location.reload();
+                });
             } else {
-                alert("Erro: " + data.erro);
+                mostrarErro(data.erro);
             }
         } catch(err) {
-            alert("Erro na requisição.");
+            mostrarErro("Erro na requisição.");
         }
     }
 
     async function desvincularTag(rfid) {
-        if (!confirm("Tem certeza que deseja desvincular a etiqueta deste instrumento?")) return;
+        const result = await Swal.fire({
+            ...swalConfig,
+            icon: 'question',
+            title: 'Desvincular Etiqueta',
+            text: 'Tem certeza que deseja desvincular a etiqueta deste instrumento?',
+            showCancelButton: true,
+            confirmButtonText: 'Sim, desvincular',
+            cancelButtonText: 'Cancelar'
+        });
+
+        if (!result.isConfirmed) return;
 
         try {
             const res = await fetch("{% url 'instrumentos:api_iot_desvincular' %}", {
@@ -753,13 +848,14 @@
             });
             const data = await res.json();
             if (data.sucesso) {
-                alert("Desvinculado com sucesso!");
-                window.location.reload();
+                mostrarSucesso("Etiqueta desvinculada com sucesso!").then(() => {
+                    window.location.reload();
+                });
             } else {
-                alert("Erro ao desvincular.");
+                mostrarErro("Erro ao desvincular.");
             }
         } catch(err) {
-            alert("Erro na requisição.");
+            mostrarErro("Erro na requisição.");
         }
     }
 
@@ -767,7 +863,7 @@
         const select = document.getElementById('select-aluno');
         const alunoId = select.value;
         if (!alunoId) {
-            alert("Por favor, selecione um aluno.");
+            mostrarAviso("Por favor, selecione um aluno.");
             return;
         }
 
@@ -779,15 +875,15 @@
             });
             const data = await res.json();
             if (data.sucesso) {
-                alert("Retirada registrada!");
+                mostrarSucesso("Retirada registrada com sucesso!");
                 ultimoRfidConhecido = null;
                 pollUltimoScan();
                 carregarEstatisticasWeb();
             } else {
-                alert("Erro: " + data.erro);
+                mostrarErro(data.erro);
             }
         } catch(err) {
-            alert("Erro na requisição.");
+            mostrarErro("Erro na requisição.");
         }
     }
 
@@ -800,15 +896,15 @@
             });
             const data = await res.json();
             if (data.sucesso) {
-                alert("Devolução registrada com sucesso!");
+                mostrarSucesso("Devolução registrada com sucesso!");
                 ultimoRfidConhecido = null;
                 pollUltimoScan();
                 carregarEstatisticasWeb();
             } else {
-                alert("Erro: " + data.erro);
+                mostrarErro(data.erro);
             }
         } catch(err) {
-            alert("Erro na requisição.");
+            mostrarErro("Erro na requisição.");
         }
     }
 

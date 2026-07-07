@@ -4,7 +4,7 @@ from django.urls import reverse
 from contas.models import Perfil
 from alunos.models import Aluno, GrupoMusical
 from professores.models import ProfessorModel
-from .models import Materia, MatriculaMateria
+from materias.models import Materia, MatriculaMateria
 
 class MateriasTestCase(TestCase):
     def setUp(self):

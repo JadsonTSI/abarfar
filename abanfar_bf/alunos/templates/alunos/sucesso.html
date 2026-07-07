@@ -89,7 +89,36 @@
         .success-title{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:900;color:var(--ink);margin-bottom:.6rem}
         .success-text{font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--gray-text);max-width:420px;margin:0 auto 2rem}
 
-    </style>
+    
+        /* Ajustes para a Sidebar Colapsada (Responsivo/Minimizado) */
+        .sidebar.collapsed .sidebar-top {
+            justify-content: center !important;
+            padding: 0 !important;
+        }
+        .sidebar.collapsed .sidebar-brand {
+            display: none !important;
+        }
+        .sidebar.collapsed .sidebar-profile {
+            justify-content: center !important;
+            padding: 1.2rem 0 !important;
+        }
+        .sidebar.collapsed .sidebar-profile-name {
+            display: none !important;
+        }
+        .sidebar.collapsed .sidebar-link {
+            justify-content: center !important;
+            padding: 0.65rem 0 !important;
+            margin: 0.1rem 0.3rem !important;
+        }
+        .sidebar.collapsed .nav-section-label {
+            display: none !important;
+        }
+        .sidebar.collapsed .btn-logout {
+            justify-content: center !important;
+            padding: 0.5rem 0 !important;
+        }
+
+</style>
 </head>
 <body>
 <div class="app-shell">
@@ -109,7 +138,13 @@
             <button class="btn-collapse" id="btnCollapse"><i class="bi bi-layout-sidebar-reverse" id="collapseIcon"></i></button>
         </div>
         <div class="sidebar-profile">
-            <div class="profile-avatar"><i class="bi bi-person-gear"></i></div>
+            <div class="profile-avatar" style="overflow: hidden;">
+                {% if request.user.perfil.foto %}
+                    <img src="{{ request.user.perfil.foto.url }}" alt="Foto de perfil" style="width:100%; height:100%; object-fit:cover;">
+                {% else %}
+                    <i class="bi bi-person-gear"></i>
+                {% endif %}
+            </div>
             <div class="sidebar-profile-name">
                 <span class="profile-name">{{ user.first_name|default:user.username }}</span>
                 <span class="profile-role">Gerente</span>
@@ -143,7 +178,13 @@
             </div>
             <div class="topbar-right">
                 <div class="topbar-user">
-                    <div class="topbar-avatar">{{ user.first_name|first|default:"G" }}</div>
+                    <div class="topbar-avatar" style="overflow: hidden; display: flex; align-items: center; justify-content: center;">
+                        {% if request.user.perfil.foto %}
+                            <img src="{{ request.user.perfil.foto.url }}" alt="Foto" style="width: 100%; height: 100%; object-fit: cover;">
+                        {% else %}
+                            {{ user.first_name|first|default:"G" }}
+                        {% endif %}
+                    </div>
                     <span class="topbar-username d-none d-sm-block">{{ user.first_name|default:user.username }}</span>
                 </div>
             </div>

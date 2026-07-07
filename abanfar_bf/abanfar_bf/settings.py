@@ -27,6 +27,11 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://*.loca.lt',
+    'https://*.lhr.life',
+]
+
 
 # Application definition
 

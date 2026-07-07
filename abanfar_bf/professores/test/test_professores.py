@@ -4,7 +4,7 @@ from django.urls import reverse
 import datetime
 from contas.models import Perfil
 from alunos.models import Aluno, GrupoMusical, Naipe
-from .models import EnsaiosproModel, ApresentacaoModel, ProfessorModel
+from professores.models import EnsaiosproModel, ApresentacaoModel, ProfessorModel
 
 class ProfessoresTestCase(TestCase):
     def setUp(self):
@@ -39,6 +39,7 @@ class ProfessoresTestCase(TestCase):
             descricao="Apresentação Anual",
             data=datetime.date(2026, 6, 25),
             horario="19:00",
+            horario_fim="21:00",
             local="Teatro Municipal",
             grupo="Orquestra"
         )
@@ -103,12 +104,13 @@ class ProfessoresTestCase(TestCase):
             'descricao': 'Show ao ar livre',
             'data': '2026-09-22',
             'horario': '18:00',
+            'horario_fim': '20:00',
             'local': 'Praça Central',
             'grupo': 'Banda'
         }
         response = self.client.post(reverse('professores:apresentacoes_create'), data)
         self.assertRedirects(response, reverse('professores:apresentacoes_list'))
-        self.assertTrue(ApresentacaoModel.objects.filter(titulo='Concerto da Primavera').exists())
+        self.assertTrue(ApresentacaoModel.objects.filter(titulo='Concerto da Primavera', horario_fim='20:00').exists())
 
     def test_apresentacoes_edit(self):
         self.client.login(username="prof", password="password123")
@@ -117,6 +119,7 @@ class ProfessoresTestCase(TestCase):
             'descricao': 'Nova descrição',
             'data': '2026-06-25',
             'horario': '19:30',
+            'horario_fim': '21:30',
             'local': 'Teatro Municipal',
             'grupo': 'Orquestra Sinfônica'
         }
@@ -124,6 +127,7 @@ class ProfessoresTestCase(TestCase):
         self.assertRedirects(response, reverse('professores:apresentacoes_list'))
         self.apresentacao.refresh_from_db()
         self.assertEqual(self.apresentacao.horario, '19:30')
+        self.assertEqual(self.apresentacao.horario_fim, '21:30')
 
     def test_apresentacoes_delete(self):
         self.client.login(username="prof", password="password123")
@@ -144,6 +148,20 @@ class ProfessoresTestCase(TestCase):
         self.assertRedirects(response2, reverse('professores:ensaios_professor'))
         self.ensaio.refresh_from_db()
         self.assertFalse(self.ensaio.cancelado)
+
+    def test_cancelar_and_restaurar_apresentacao(self):
+        self.client.login(username="prof", password="password123")
+        # Cancel
+        response = self.client.post(reverse('professores:cancelar_apresentacao', args=[self.apresentacao.id]))
+        self.assertRedirects(response, reverse('professores:apresentacoes_list'))
+        self.apresentacao.refresh_from_db()
+        self.assertTrue(self.apresentacao.cancelado)
+        
+        # Restore
+        response2 = self.client.post(reverse('professores:restaurar_apresentacao', args=[self.apresentacao.id]))
+        self.assertRedirects(response2, reverse('professores:apresentacoes_list'))
+        self.apresentacao.refresh_from_db()
+        self.assertFalse(self.apresentacao.cancelado)
 
     def test_professores_list(self):
         from materias.models import Materia

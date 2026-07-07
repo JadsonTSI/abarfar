@@ -64,6 +64,11 @@
         .page-eyebrow::before{content:'';width:24px;height:1px;background:var(--gold)}
         .page-title{font-family:'Playfair Display',serif;font-size:clamp(1.5rem,2.5vw,2rem);font-weight:900;color:var(--ink);margin:0 0 .3rem}
         .gold-rule{height:2px;background:linear-gradient(90deg,var(--gold),transparent);border:none;margin:1.5rem 0 2rem;opacity:.4}
+        .section-card{background:var(--white);border-radius:var(--radius-lg);border:1px solid var(--gray-line);box-shadow:var(--shadow-soft);overflow:hidden;margin-bottom:1.5rem}
+        .section-card-header{padding:1.1rem 1.5rem;border-bottom:1px solid var(--gray-line);display:flex;align-items:center;justify-content:space-between;background:var(--section-bg);flex-wrap:wrap;gap:.5rem}
+        .section-card-title{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;color:var(--ink);display:flex;align-items:center;gap:.5rem;margin:0}
+        .section-card-title i{color:var(--gold)}
+        .section-card-body{padding:1.5rem}
         .ensaio-card{background:var(--white);border-radius:var(--radius-lg);border:1px solid var(--gray-line);padding:1.5rem;height:100%;box-shadow:var(--shadow-soft);transition:transform var(--transition),box-shadow var(--transition);position:relative;overflow:hidden}
         .ensaio-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--gold-light));transform:scaleX(0);transform-origin:left;transition:transform .4s ease}
         .ensaio-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-gold)}
@@ -86,7 +91,7 @@
         
         .musico-item{display:flex;align-items:center;gap:.8rem;padding:.85rem 1rem;background:var(--section-bg);border-radius:var(--radius-sm);border:1px solid var(--gray-line);transition:border-color var(--transition),transform var(--transition)}
         .musico-item:hover{border-color:rgba(201,168,76,.4);transform:translateY(-2px)}
-        .musico-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--gold-pale),var(--gold));border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:700;color:var(--gold-dim);flex-shrink:0;font-size:1rem}
+        .musico-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--gold-pale),var(--gold));border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:700;color:var(--gold-dim);flex-shrink:0;font-size:1rem;overflow:hidden}
         .musico-name{font-family:'Playfair Display',serif;font-size:.92rem;font-weight:700;color:var(--ink);display:block;line-height:1.2}
         .musico-inst{font-family:'Cormorant Garamond',serif;font-size:.88rem;color:var(--gray-text);display:flex;align-items:center;gap:.3rem}
         .partitura-row{display:flex;align-items:center;justify-content:space-between;padding:.85rem 1rem;background:var(--section-bg);border-radius:var(--radius-sm);border:1px solid var(--gray-line);margin-bottom:.5rem;gap:.8rem;flex-wrap:wrap;transition:border-color var(--transition)}
@@ -128,7 +133,36 @@
         .btn-pdf-premium:hover i {
             transform: scale(1.15) translate(1px, -1px);
         }
-    </style>
+    
+        /* Ajustes para a Sidebar Colapsada (Responsivo/Minimizado) */
+        .sidebar.collapsed .sidebar-top {
+            justify-content: center !important;
+            padding: 0 !important;
+        }
+        .sidebar.collapsed .sidebar-brand {
+            display: none !important;
+        }
+        .sidebar.collapsed .sidebar-profile {
+            justify-content: center !important;
+            padding: 1.2rem 0 !important;
+        }
+        .sidebar.collapsed .sidebar-profile-name {
+            display: none !important;
+        }
+        .sidebar.collapsed .sidebar-link {
+            justify-content: center !important;
+            padding: 0.65rem 0 !important;
+            margin: 0.1rem 0.3rem !important;
+        }
+        .sidebar.collapsed .nav-section-label {
+            display: none !important;
+        }
+        .sidebar.collapsed .btn-logout {
+            justify-content: center !important;
+            padding: 0.5rem 0 !important;
+        }
+
+</style>
 </head>
 <body>
 <div class="app-shell">
@@ -153,8 +187,12 @@
         </div>
 
         <div class="sidebar-profile">
-            <div class="profile-avatar">
-                <i class="bi bi-person-fill"></i>
+            <div class="profile-avatar" style="overflow: hidden;">
+                {% if request.user.perfil.foto %}
+                    <img src="{{ request.user.perfil.foto.url }}" alt="Foto de perfil" style="width:100%; height:100%; object-fit:cover;">
+                {% else %}
+                    <i class="bi bi-person-fill"></i>
+                {% endif %}
             </div>
             <div class="sidebar-profile-name">
                 <span class="profile-name">{{ user.first_name|default:user.username }}</span>
@@ -224,7 +262,13 @@
             </div>
             <div class="topbar-right">
                 <div class="topbar-user">
-                    <div class="topbar-avatar">{{ user.first_name|first|default:"A" }}</div>
+                    <div class="topbar-avatar" style="overflow: hidden; display: flex; align-items: center; justify-content: center;">
+                        {% if request.user.perfil.foto %}
+                            <img src="{{ request.user.perfil.foto.url }}" alt="Foto" style="width: 100%; height: 100%; object-fit: cover;">
+                        {% else %}
+                            {{ user.first_name|first|default:"A" }}
+                        {% endif %}
+                    </div>
                     <span class="topbar-username d-none d-sm-block">{{ user.first_name|default:user.username }}</span>
                 </div>
             </div>
@@ -244,7 +288,13 @@
                         {% for aluno in musicos %}
                         <div class="col-md-6 col-lg-4">
                             <div class="musico-item">
-                                <div class="musico-avatar">{{ aluno.nome|first|upper }}</div>
+                                <div class="musico-avatar">
+                                    {% if aluno.perfil.foto %}
+                                        <img src="{{ aluno.perfil.foto.url }}" alt="{{ aluno.nome }}" style="width: 100%; height: 100%; object-fit: cover;">
+                                    {% else %}
+                                        {{ aluno.nome|first|upper }}
+                                    {% endif %}
+                                </div>
                                 <div>
                                     <span class="musico-name">{{ aluno.nome }} {{ aluno.sobrenome }}</span>
                                     <span class="musico-inst"><i class="bi bi-music-note" style="color:var(--gold);font-size:.75rem"></i> {{ aluno.instrumento.nome|default:"Sem instrumento" }}</span>
@@ -268,17 +318,43 @@
                 </div>
                 <div class="section-card-body">
                     {% if partituras %}
-                        {% for p in partituras %}
-                        <div class="partitura-row">
-                            <div style="display:flex;align-items:center;gap:.7rem">
-                                <i class="bi bi-file-earmark-pdf" style="color:var(--gold);font-size:1.3rem;flex-shrink:0"></i>
-                                <span style="font-family:'Playfair Display',serif;font-weight:700;color:var(--ink)">{{ p.titulo }}</span>
+                        <!-- Filtros e Busca -->
+                        <div class="search-filter-container" style="display:flex; gap:1rem; margin-bottom: 1.2rem; flex-wrap: wrap;">
+                            <div style="flex:1; min-width: 200px; position:relative;">
+                                <i class="bi bi-search" style="position:absolute; left:12px; top:50%; transform:translateY(-50%); color:var(--gray-text);"></i>
+                                <input type="text" id="partituraSearch" placeholder="Pesquisar partitura..." style="width:100%; padding:.5rem 1rem .5rem 2.2rem; border:1px solid var(--gray-line); border-radius:var(--radius-sm); font-family:'Cormorant Garamond',serif; font-size:1rem; outline:none; background:var(--white); transition: border-color .3s;" onfocus="this.style.borderColor='var(--gold)';" onblur="this.style.borderColor='var(--gray-line)';">
                             </div>
-                            <a href="{{ p.arquivo.url }}" target="_blank" class="btn-pdf-premium">
-                                <i class="bi bi-file-earmark-pdf-fill"></i> Abrir PDF
-                            </a>
+                            <div style="width:180px; position:relative;">
+                                <i class="bi bi-funnel" style="position:absolute; left:12px; top:50%; transform:translateY(-50%); color:var(--gray-text);"></i>
+                                <select id="partituraSort" style="width:100%; padding:.5rem 1rem .5rem 2.2rem; border:1px solid var(--gray-line); border-radius:var(--radius-sm); font-family:'Cormorant Garamond',serif; font-size:1rem; outline:none; background:var(--white); appearance:none; cursor:pointer;" onfocus="this.style.borderColor='var(--gold)';" onblur="this.style.borderColor='var(--gray-line)';">
+                                    <option value="az">A - Z</option>
+                                    <option value="za">Z - A</option>
+                                    <option value="recent">Mais Recentes</option>
+                                </select>
+                                <i class="bi bi-chevron-down" style="position:absolute; right:12px; top:50%; transform:translateY(-50%); color:var(--gray-text); pointer-events:none; font-size:.8rem;"></i>
+                            </div>
                         </div>
-                        {% endfor %}
+
+                        <div id="partiturasList">
+                            {% for p in partituras %}
+                            <div class="partitura-row" data-title="{{ p.titulo|lower }}" data-date="{{ p.data_envio|date:'U' }}">
+                                <div style="display:flex;align-items:center;gap:.7rem">
+                                    <i class="bi bi-file-earmark-pdf" style="color:var(--gold);font-size:1.3rem;flex-shrink:0"></i>
+                                    <span style="font-family:'Playfair Display',serif;font-weight:700;color:var(--ink)">{{ p.titulo }}</span>
+                                </div>
+                                <a href="{{ p.arquivo.url }}" target="_blank" class="btn-pdf-premium">
+                                    <i class="bi bi-file-earmark-pdf-fill"></i> Abrir PDF
+                                </a>
+                            </div>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Estado vazio de busca -->
+                        <div id="noPartiturasFound" class="empty-state" style="padding:2rem; display:none;">
+                            <span class="empty-icon">🔍</span>
+                            <div class="empty-title">Nenhuma partitura correspondente encontrada.</div>
+                            <p class="empty-text">Tente pesquisar por outro termo.</p>
+                        </div>
                     {% else %}
                     <div class="empty-state" style="padding:2rem">
                         <span class="empty-icon">𝄞</span>
@@ -304,6 +380,58 @@
             document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
             link.classList.add('active');
         }
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('partituraSearch');
+        const sortSelect = document.getElementById('partituraSort');
+        const partituraContainer = document.getElementById('partiturasList');
+        
+        if (!searchInput || !sortSelect || !partituraContainer) return;
+        
+        const rows = Array.from(partituraContainer.getElementsByClassName('partitura-row'));
+        
+        function filterAndSortPartituras() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const sortValue = sortSelect.value;
+            
+            let visibleCount = 0;
+            rows.forEach(row => {
+                const title = row.getAttribute('data-title');
+                if (title.includes(searchTerm)) {
+                    row.style.setProperty('display', 'flex', 'important');
+                    visibleCount++;
+                } else {
+                    row.style.setProperty('display', 'none', 'important');
+                }
+            });
+            
+            const noResultsDiv = document.getElementById('noPartiturasFound');
+            if (noResultsDiv) {
+                noResultsDiv.style.display = visibleCount === 0 ? 'block' : 'none';
+            }
+            
+            const sortedRows = [...rows].sort((a, b) => {
+                const titleA = a.getAttribute('data-title');
+                const titleB = b.getAttribute('data-title');
+                const dateA = parseInt(a.getAttribute('data-date') || 0);
+                const dateB = parseInt(b.getAttribute('data-date') || 0);
+                
+                if (sortValue === 'az') {
+                    return titleA.localeCompare(titleB);
+                } else if (sortValue === 'za') {
+                    return titleB.localeCompare(titleA);
+                } else if (sortValue === 'recent') {
+                    return dateB - dateA;
+                }
+                return 0;
+            });
+            
+            sortedRows.forEach(row => partituraContainer.appendChild(row));
+        }
+        
+        searchInput.addEventListener('input', filterAndSortPartituras);
+        sortSelect.addEventListener('change', filterAndSortPartituras);
     });
 </script>
 </body>

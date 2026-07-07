@@ -22,7 +22,7 @@ def editar_funcao(request, aluno_id):
 def grupo_detalhes(request, id):
     grupo = get_object_or_404(GrupoMusical, id=id)
     musicos = Aluno.objects.filter(grupo=grupo)
-    partituras = grupo.partituras.all()
+    partituras = grupo.partituras.all().order_by('titulo')
 
     contexto = {
         "grupo": grupo,

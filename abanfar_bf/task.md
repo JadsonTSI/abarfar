@@ -1,0 +1,6 @@
+- [x] Adicionar `paho-mqtt` no `requirements.txt` e instalá-lo no ambiente virtual.
+- [x] Criar o comando customizado do Django `mqtt_client.py` em `instrumentos/management/commands/`.
+- [x] Criar o script de simulação `simulate_mqtt_publish.py` em `scratch/`.
+- [x] Testar a comunicação MQTT localmente com o comando e o script simulador.
+- [/] Atualizar o arquivo `INSTRUCOES_SETUP.md` para documentar o uso e configuração do MQTT.
+- [ ] Executar a suite de testes unitários do Django para certificar a estabilidade.

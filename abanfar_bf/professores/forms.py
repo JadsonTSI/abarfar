@@ -9,6 +9,14 @@ class EnsaiosForm(forms.ModelForm):
     class Meta:
         model = EnsaiosproModel
         fields = '__all__'
+        widgets = {
+            'nome': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ex: Metais, Percussão...'}),
+            'dia_semana': forms.Select(attrs={'class': 'form-select'}),
+            'data': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+            'inicio': forms.TimeInput(attrs={'type': 'time', 'class': 'form-control'}),
+            'fim': forms.TimeInput(attrs={'type': 'time', 'class': 'form-control'}),
+            'local': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ex: Sala de Ensaios, Auditório...'}),
+        }
 
 
 # APRESENTAÇÕES
@@ -16,6 +24,15 @@ class ApresentacaoForm(forms.ModelForm):
     class Meta:
         model = ApresentacaoModel
         fields = "__all__"
+        widgets = {
+            'titulo': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ex: Concerto de Primavera...'}),
+            'descricao': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Breve descrição...'}),
+            'data': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+            'horario': forms.TextInput(attrs={'class': 'form-control'}),
+            'horario_fim': forms.TextInput(attrs={'class': 'form-control'}),
+            'local': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ex: Auditório Principal...'}),
+            'grupo': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ex: Banda Sinfônica...'}),
+        }
 
 
 # CADASTRO PROFESSOR

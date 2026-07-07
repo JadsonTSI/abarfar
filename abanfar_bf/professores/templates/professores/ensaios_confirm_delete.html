@@ -98,7 +98,36 @@ h1,h2,h3,h4,h5{font-family:'Playfair Display',Georgia,serif;color:var(--ink)}
 .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(26,22,18,.5);z-index:199}
 .sidebar-overlay.active{display:block}
 @media(max-width:991px){.sidebar{transform:translateX(-100%);width:var(--sidebar-w)!important}.sidebar.mobile-open{transform:translateX(0)}.main-area,.main-area.expanded{margin-left:0!important}}
-@media(max-width:576px){.page-content{padding:1.2rem}.topbar{padding:0 1rem}}</style>
+@media(max-width:576px){.page-content{padding:1.2rem}.topbar{padding:0 1rem}}
+        /* Ajustes para a Sidebar Colapsada (Responsivo/Minimizado) */
+        .sidebar.collapsed .sidebar-top {
+            justify-content: center !important;
+            padding: 0 !important;
+        }
+        .sidebar.collapsed .sidebar-brand {
+            display: none !important;
+        }
+        .sidebar.collapsed .sidebar-profile {
+            justify-content: center !important;
+            padding: 1.2rem 0 !important;
+        }
+        .sidebar.collapsed .sidebar-profile-name {
+            display: none !important;
+        }
+        .sidebar.collapsed .sidebar-link {
+            justify-content: center !important;
+            padding: 0.65rem 0 !important;
+            margin: 0.1rem 0.3rem !important;
+        }
+        .sidebar.collapsed .nav-section-label {
+            display: none !important;
+        }
+        .sidebar.collapsed .btn-logout {
+            justify-content: center !important;
+            padding: 0.5rem 0 !important;
+        }
+
+</style>
 </head>
 <body>
 <div class="app-shell">
@@ -121,7 +150,13 @@ h1,h2,h3,h4,h5{font-family:'Playfair Display',Georgia,serif;color:var(--ink)}
             </button>
         </div>
         <div class="sidebar-profile">
-            <div class="profile-avatar"><i class="bi bi-person-workspace"></i></div>
+            <div class="profile-avatar" style="overflow: hidden;">
+                {% if request.user.perfil.foto %}
+                    <img src="{{ request.user.perfil.foto.url }}" alt="Foto de perfil" style="width:100%; height:100%; object-fit:cover;">
+                {% else %}
+                    <i class="bi bi-person-workspace"></i>
+                {% endif %}
+            </div>
             <div class="sidebar-profile-name">
                 <span class="profile-name">{{ user.first_name|default:user.username }}</span>
                 <span class="profile-role">Professor</span>
@@ -160,7 +195,13 @@ h1,h2,h3,h4,h5{font-family:'Playfair Display',Georgia,serif;color:var(--ink)}
             </div>
             <div class="topbar-right">
                 <div class="topbar-user">
-                    <div class="topbar-avatar">{{ user.first_name|first|default:"U" }}</div>
+                    <div class="topbar-avatar" style="overflow: hidden; display: flex; align-items: center; justify-content: center;">
+                        {% if request.user.perfil.foto %}
+                            <img src="{{ request.user.perfil.foto.url }}" alt="Foto" style="width: 100%; height: 100%; object-fit: cover;">
+                        {% else %}
+                            {{ user.first_name|first|default:"U" }}
+                        {% endif %}
+                    </div>
                     <span class="topbar-username d-none d-sm-block">{{ user.first_name|default:user.username }}</span>
                 </div>
             </div>

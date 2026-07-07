@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.contrib.auth.models import User
 from django.urls import reverse
 from django.core.files.uploadedfile import SimpleUploadedFile
-from .models import Perfil
+from contas.models import Perfil
 from alunos.models import Aluno
 
 class ContasTestCase(TestCase):

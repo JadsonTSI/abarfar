@@ -8,10 +8,12 @@ def gerente_required(view_func):
             return redirect('contas:login')
         try:
             perfil = request.user.perfil
-            if perfil.tipo == 'gerente':
-                return view_func(request, *args, **kwargs)
+            is_allowed = (perfil.tipo == 'gerente')
         except Exception:
-            pass
+            is_allowed = False
+        
+        if is_allowed:
+            return view_func(request, *args, **kwargs)
         return redirect('contas:login')
     return _wrapped_view
 
@@ -22,10 +24,12 @@ def professor_required(view_func):
             return redirect('contas:login')
         try:
             perfil = request.user.perfil
-            if perfil.tipo == 'professor':
-                return view_func(request, *args, **kwargs)
+            is_allowed = (perfil.tipo == 'professor')
         except Exception:
-            pass
+            is_allowed = False
+            
+        if is_allowed:
+            return view_func(request, *args, **kwargs)
         return redirect('contas:login')
     return _wrapped_view
 
@@ -36,10 +40,12 @@ def aluno_required(view_func):
             return redirect('contas:login')
         try:
             perfil = request.user.perfil
-            if perfil.tipo == 'aluno':
-                return view_func(request, *args, **kwargs)
+            is_allowed = (perfil.tipo == 'aluno')
         except Exception:
-            pass
+            is_allowed = False
+            
+        if is_allowed:
+            return view_func(request, *args, **kwargs)
         return redirect('contas:login')
     return _wrapped_view
 
@@ -50,10 +56,12 @@ def gerente_ou_professor_required(view_func):
             return redirect('contas:login')
         try:
             perfil = request.user.perfil
-            if perfil.tipo in ['gerente', 'professor']:
-                return view_func(request, *args, **kwargs)
+            is_allowed = (perfil.tipo in ['gerente', 'professor'])
         except Exception:
-            pass
+            is_allowed = False
+            
+        if is_allowed:
+            return view_func(request, *args, **kwargs)
         return redirect('contas:login')
     return _wrapped_view
 

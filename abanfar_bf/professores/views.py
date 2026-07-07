@@ -163,6 +163,20 @@ def apresentacoes_delete(request, id):
 
     return render(request, "professores/apresentacoes_confirm_delete.html", {"apresentacao": apresentacao})
 
+@gerente_ou_professor_required
+def cancelar_apresentacao(request, id):
+    apresentacao = get_object_or_404(ApresentacaoModel, id=id)
+    apresentacao.cancelado = True
+    apresentacao.save()
+    return redirect("professores:apresentacoes_list")
+
+@gerente_ou_professor_required
+def restaurar_apresentacao(request, id):
+    apresentacao = get_object_or_404(ApresentacaoModel, id=id)
+    apresentacao.cancelado = False
+    apresentacao.save()
+    return redirect("professores:apresentacoes_list")
+
 #cancelar
 
 

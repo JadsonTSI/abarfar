@@ -64,8 +64,8 @@
         .page-eyebrow::before{content:'';width:24px;height:1px;background:var(--gold)}
         .page-title{font-family:'Playfair Display',serif;font-size:clamp(1.5rem,2.5vw,2rem);font-weight:900;color:var(--ink);margin:0 0 .3rem}
         .gold-rule{height:2px;background:linear-gradient(90deg,var(--gold),transparent);border:none;margin:1.5rem 0 2rem;opacity:.4}
-        .section-card{background:var(--white);border-radius:var(--radius-lg);border:1px solid var(--gray-line);box-shadow:var(--shadow-soft);overflow:hidden;margin-bottom:1.5rem}
-        .section-card-header{padding:1.1rem 1.5rem;border-bottom:1px solid var(--gray-line);display:flex;align-items:center;justify-content:space-between;background:var(--section-bg)}
+        .section-card{background:var(--white);border-radius:var(--radius-lg);border:1px solid var(--gray-line);box-shadow:var(--shadow-soft);overflow:visible;margin-bottom:1.5rem}
+        .section-card-header{padding:1.1rem 1.5rem;border-bottom:1px solid var(--gray-line);display:flex;align-items:center;justify-content:space-between;background:var(--section-bg);border-top-left-radius:calc(var(--radius-lg) - 1px);border-top-right-radius:calc(var(--radius-lg) - 1px)}
         .section-card-title{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;color:var(--ink);display:flex;align-items:center;gap:.5rem;margin:0}
         .section-card-title i{color:var(--gold)}
         .section-card-body{padding:1.5rem}
@@ -137,7 +137,303 @@
             border-color: var(--gold) !important;
         }
 
-        </style>
+        /* Customização dos seletores de data e hora */
+        input[type="date"], input[type="time"] {
+            cursor: pointer;
+        }
+        /* Ajustar o ícone de calendário/relógio nativo para a paleta dourada */
+        input[type="date"]::-webkit-calendar-picker-indicator,
+        input[type="time"]::-webkit-calendar-picker-indicator {
+            cursor: pointer;
+            filter: invert(66%) sepia(43%) saturate(543%) hue-rotate(5deg) brightness(91%) contrast(85%); /* Ajusta para a cor dourada */
+            padding: 4px;
+            border-radius: 4px;
+            transition: background var(--transition);
+        }
+        input[type="date"]::-webkit-calendar-picker-indicator:hover,
+        input[type="time"]::-webkit-calendar-picker-indicator:hover {
+            background: rgba(201,168,76,.15);
+        }
+        /* Bloqueio visual para o Dia da Semana automático */
+        select[name="dia_semana"] {
+            pointer-events: none;
+            background-color: var(--surf) !important;
+            opacity: 0.9;
+            cursor: not-allowed;
+            border-color: rgba(201, 168, 76, 0.4) !important;
+        }
+
+        /* ===========================================================
+           ABANFAR BF — Date & Time Picker
+           Paleta: dourado/creme, combinando com o painel existente
+           =========================================================== */
+
+        :root {
+          --abf-gold: #C99A3B;
+          --abf-gold-dark: #8A6A2E;
+          --abf-ink: #3A2E14;
+          --abf-cream: #FBF7EE;
+          --abf-cream-soft: #F5EEDD;
+          --abf-border: #D8C089;
+          --abf-radius: 10px;
+        }
+
+        /* ---------- Input base (igual aos outros campos do form) ---------- */
+        .abf-field {
+          position: relative;
+          width: 100%;
+        }
+
+        .abf-field input {
+          width: 100%;
+          box-sizing: border-box;
+          font-family: Georgia, 'Times New Roman', serif;
+          font-size: 15px;
+          color: var(--abf-ink);
+          background: #fff;
+          border: 1px solid var(--abf-border);
+          border-radius: var(--abf-radius);
+          padding: 10px 14px;
+          cursor: pointer;
+        }
+
+        .abf-field input:focus {
+          outline: none;
+          border-color: var(--abf-gold);
+          box-shadow: 0 0 0 3px rgba(201, 154, 59, 0.15);
+        }
+
+        .abf-field input::placeholder {
+          color: #b9ad8f;
+        }
+
+        /* ---------- Popover compartilhado (calendário e hora) ---------- */
+        .abf-popover {
+          position: absolute;
+          top: calc(100% + 8px);
+          left: 0;
+          z-index: 999; /* Garante que fique acima de outros elementos */
+          background: var(--abf-cream);
+          border: 1px solid var(--abf-border);
+          border-radius: var(--abf-radius);
+          box-shadow: 0 8px 24px rgba(58, 46, 20, 0.18);
+          padding: 16px;
+          display: none;
+        }
+
+        .abf-popover.abf-open {
+          display: block;
+        }
+
+        /* ===========================================================
+           CALENDÁRIO
+           =========================================================== */
+
+        .abf-calendar {
+          width: 264px;
+          bottom: calc(100% + 8px);
+          top: auto !important;
+          box-shadow: 0 -8px 24px rgba(58, 46, 20, 0.18) !important;
+        }
+
+        .abf-cal-header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          margin-bottom: 12px;
+        }
+
+        .abf-cal-nav {
+          width: 26px;
+          height: 26px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 50%;
+          color: var(--abf-gold-dark);
+          cursor: pointer;
+          user-select: none;
+          font-size: 16px;
+          border: none;
+          background: transparent;
+        }
+
+        .abf-cal-nav:hover {
+          background: var(--abf-cream-soft);
+        }
+
+        .abf-cal-title {
+          text-align: center;
+          font-family: Georgia, 'Times New Roman', serif;
+        }
+
+        .abf-cal-title .abf-month {
+          font-size: 16px;
+          letter-spacing: 0.5px;
+          color: var(--abf-ink);
+          display: block;
+        }
+
+        .abf-cal-title .abf-year {
+          font-size: 11px;
+          color: var(--abf-gold-dark);
+          letter-spacing: 1px;
+        }
+
+        .abf-cal-weekdays,
+        .abf-cal-days {
+          display: grid;
+          grid-template-columns: repeat(7, 1fr);
+          text-align: center;
+        }
+
+        .abf-cal-weekdays {
+          font-size: 11px;
+          color: #A4895A;
+          letter-spacing: 0.5px;
+          margin-bottom: 6px;
+        }
+
+        .abf-cal-weekdays div {
+          padding: 2px 0;
+        }
+
+        .abf-cal-days {
+          row-gap: 4px;
+        }
+
+        .abf-day {
+          font-size: 13px;
+          color: var(--abf-ink);
+          padding: 6px 0;
+          border-radius: 50%;
+          cursor: pointer;
+          font-family: Georgia, 'Times New Roman', serif;
+        }
+
+        .abf-day:hover {
+          background: var(--abf-cream-soft);
+        }
+
+        .abf-day.abf-muted {
+          color: #cabd9c;
+          cursor: default;
+        }
+
+        .abf-day.abf-muted:hover {
+          background: none;
+        }
+
+        .abf-day.abf-today {
+          border: 1px solid var(--abf-gold);
+          color: var(--abf-gold-dark);
+        }
+
+        .abf-day.abf-selected {
+          background: var(--abf-gold);
+          color: var(--abf-cream);
+        }
+
+        .abf-day.abf-selected:hover {
+          background: var(--abf-gold-dark);
+        }
+
+        /* ===========================================================
+           SELETOR DE HORA
+           =========================================================== */
+
+        .abf-timebox {
+          width: 180px;
+        }
+
+        .abf-time-display {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 6px;
+          margin-bottom: 4px;
+        }
+
+        .abf-time-unit {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .abf-time-arrow {
+          border: none;
+          background: transparent;
+          color: var(--abf-gold-dark);
+          font-size: 15px;
+          cursor: pointer;
+          padding: 2px 8px;
+          line-height: 1;
+        }
+
+        .abf-time-arrow:hover {
+          color: var(--abf-gold);
+        }
+
+        .abf-time-value {
+          font-family: Georgia, 'Times New Roman', serif;
+          font-size: 26px;
+          color: var(--abf-ink);
+          width: 46px;
+          text-align: center;
+        }
+
+        .abf-time-sep {
+          font-family: Georgia, 'Times New Roman', serif;
+          font-size: 22px;
+          color: var(--abf-gold-dark);
+        }
+
+        .abf-time-confirm {
+          width: 100%;
+          margin-top: 8px;
+          background: var(--abf-ink);
+          color: var(--abf-cream);
+          border: none;
+          border-radius: var(--abf-radius);
+          padding: 8px 0;
+          font-size: 12px;
+          letter-spacing: 0.5px;
+          cursor: pointer;
+        }
+
+        .abf-time-confirm:hover {
+          background: var(--abf-gold-dark);
+        }
+        
+        /* Ajustes para a Sidebar Colapsada (Responsivo/Minimizado) */
+        .sidebar.collapsed .sidebar-top {
+            justify-content: center !important;
+            padding: 0 !important;
+        }
+        .sidebar.collapsed .sidebar-brand {
+            display: none !important;
+        }
+        .sidebar.collapsed .sidebar-profile {
+            justify-content: center !important;
+            padding: 1.2rem 0 !important;
+        }
+        .sidebar.collapsed .sidebar-profile-name {
+            display: none !important;
+        }
+        .sidebar.collapsed .sidebar-link {
+            justify-content: center !important;
+            padding: 0.65rem 0 !important;
+            margin: 0.1rem 0.3rem !important;
+        }
+        .sidebar.collapsed .nav-section-label {
+            display: none !important;
+        }
+        .sidebar.collapsed .btn-logout {
+            justify-content: center !important;
+            padding: 0.5rem 0 !important;
+        }
+
+</style>
 </head>
 <body>
 <div class="app-shell">
@@ -157,7 +453,13 @@
             <button class="btn-collapse" id="btnCollapse"><i class="bi bi-layout-sidebar-reverse" id="collapseIcon"></i></button>
         </div>
         <div class="sidebar-profile">
-            <div class="profile-avatar"><i class="bi bi-person-workspace"></i></div>
+            <div class="profile-avatar" style="overflow: hidden;">
+                {% if request.user.perfil.foto %}
+                    <img src="{{ request.user.perfil.foto.url }}" alt="Foto de perfil" style="width:100%; height:100%; object-fit:cover;">
+                {% else %}
+                    <i class="bi bi-person-workspace"></i>
+                {% endif %}
+            </div>
             <div class="sidebar-profile-name">
                 <span class="profile-name">{{ user.first_name|default:user.username }}</span>
                 <span class="profile-role">Professor</span>
@@ -193,7 +495,13 @@
             </div>
             <div class="topbar-right">
                 <div class="topbar-user">
-                    <div class="topbar-avatar">{{ user.first_name|first|default:"U" }}</div>
+                    <div class="topbar-avatar" style="overflow: hidden; display: flex; align-items: center; justify-content: center;">
+                        {% if request.user.perfil.foto %}
+                            <img src="{{ request.user.perfil.foto.url }}" alt="Foto" style="width: 100%; height: 100%; object-fit: cover;">
+                        {% else %}
+                            {{ user.first_name|first|default:"U" }}
+                        {% endif %}
+                    </div>
                     <span class="topbar-username d-none d-sm-block">{{ user.first_name|default:user.username }}</span>
                 </div>
             </div>
@@ -218,20 +526,29 @@
                     {{ form.nome }}
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label-gold">Dia da Semana</label>
+                    <label class="form-label-gold">Dia da Semana <span class="badge bg-gold-light text-dark ms-1" style="font-size: 0.55rem; padding: 2px 6px; border-radius: 4px; font-family: 'Libre Baskerville', sans-serif;">Automático</span></label>
                     {{ form.dia_semana }}
                 </div>
                 <div class="col-md-6">
                     <label class="form-label-gold">Data do Ensaio</label>
-                    {{ form.data }}
+                    <div class="abf-field">
+                        <input type="text" id="data_ensaio_visual" placeholder="dd/mm/aaaa" readonly>
+                    </div>
+                    <div style="display:none;">{{ form.data }}</div>
                 </div>
                 <div class="col-md-3">
                     <label class="form-label-gold">Início</label>
-                    {{ form.inicio }}
+                    <div class="abf-field">
+                        <input type="text" id="inicio_visual" placeholder="00:00" readonly>
+                    </div>
+                    <div style="display:none;">{{ form.inicio }}</div>
                 </div>
                 <div class="col-md-3">
                     <label class="form-label-gold">Fim</label>
-                    {{ form.fim }}
+                    <div class="abf-field">
+                        <input type="text" id="fim_visual" placeholder="00:00" readonly>
+                    </div>
+                    <div style="display:none;">{{ form.fim }}</div>
                 </div>
                 <div class="col-12">
                     <label class="form-label-gold">Local do Ensaio</label>
@@ -257,6 +574,288 @@
     btnCollapse.addEventListener('click',()=>{sidebar.classList.toggle('collapsed');mainArea.classList.toggle('expanded');collapseIcon.className=sidebar.classList.contains('collapsed')?'bi bi-layout-sidebar':'bi bi-layout-sidebar-reverse'});
     btnMobile.addEventListener('click',()=>{sidebar.classList.toggle('mobile-open');overlay.classList.toggle('active')});
     overlay.addEventListener('click',()=>{sidebar.classList.remove('mobile-open');overlay.classList.remove('active')});
+
+    /* ===========================================================
+       ABANFAR BF — Date & Time Picker (vanilla JS, sem dependências)
+       =========================================================== */
+
+    const ABF_WEEKDAYS_PT = ['domingo', 'segunda-feira', 'terça-feira', 'quarta-feira', 'quinta-feira', 'sexta-feira', 'sábado'];
+    const ABF_MONTHS_PT = ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'];
+
+    function abfPad(n) {
+      return n < 10 ? '0' + n : '' + n;
+    }
+
+    function abfCreatePopover(input, className) {
+      const wrapper = input.closest('.abf-field') || input.parentElement;
+      wrapper.style.position = 'relative';
+      const pop = document.createElement('div');
+      pop.className = 'abf-popover ' + className;
+      wrapper.appendChild(pop);
+
+      function close(e) {
+        if (!wrapper.contains(e.target) && !pop.contains(e.target)) {
+          pop.classList.remove('abf-open');
+          document.removeEventListener('click', close);
+        }
+      }
+
+      input.addEventListener('click', () => {
+        const isOpen = pop.classList.contains('abf-open');
+        document.querySelectorAll('.abf-popover.abf-open').forEach(p => p.classList.remove('abf-open'));
+        if (!isOpen) {
+          pop.classList.add('abf-open');
+          document.addEventListener('click', close);
+        }
+      });
+
+      return pop;
+    }
+
+    /* CALENDÁRIO */
+    const ABFDatePicker = {
+      attach(selector, options) {
+        const input = typeof selector === 'string' ? document.querySelector(selector) : selector;
+        if (!input) return;
+        options = options || {};
+
+        const today = new Date();
+        let viewMonth = today.getMonth();
+        let viewYear = today.getFullYear();
+        let selectedDate = null;
+
+        // Se o input já tiver valor carregado
+        if (input.value) {
+          const parts = input.value.split('/');
+          if (parts.length === 3) {
+            selectedDate = new Date(parseInt(parts[2], 10), parseInt(parts[1], 10) - 1, parseInt(parts[0], 10));
+            viewMonth = selectedDate.getMonth();
+            viewYear = selectedDate.getFullYear();
+          }
+        }
+
+        const pop = abfCreatePopover(input, 'abf-calendar');
+
+        function render() {
+          const firstDay = new Date(viewYear, viewMonth, 1);
+          const startOffset = firstDay.getDay();
+          const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
+
+          let daysHtml = '';
+          for (let i = 0; i < startOffset; i++) {
+            daysHtml += '<div></div>';
+          }
+          for (let d = 1; d <= daysInMonth; d++) {
+            const isToday = d === today.getDate() && viewMonth === today.getMonth() && viewYear === today.getFullYear();
+            const isSelected = selectedDate && d === selectedDate.getDate() && viewMonth === selectedDate.getMonth() && viewYear === selectedDate.getFullYear();
+            let cls = 'abf-day';
+            if (isSelected) cls += ' abf-selected';
+            else if (isToday) cls += ' abf-today';
+            daysHtml += `<div class="${cls}" data-day="${d}">${d}</div>`;
+          }
+
+          pop.innerHTML = `
+            <div class="abf-cal-header">
+              <button type="button" class="abf-cal-nav" data-nav="prev" aria-label="Mês anterior">&#8249;</button>
+              <div class="abf-cal-title">
+                <span class="abf-month">${ABF_MONTHS_PT[viewMonth]}</span>
+                <span class="abf-year">${viewYear}</span>
+              </div>
+              <button type="button" class="abf-cal-nav" data-nav="next" aria-label="Próximo mês">&#8250;</button>
+            </div>
+            <div class="abf-cal-weekdays">
+              <div>D</div><div>S</div><div>T</div><div>Q</div><div>Q</div><div>S</div><div>S</div>
+            </div>
+            <div class="abf-cal-days">${daysHtml}</div>
+          `;
+
+          pop.querySelector('[data-nav="prev"]').onclick = (e) => {
+            e.stopPropagation();
+            viewMonth--;
+            if (viewMonth < 0) { viewMonth = 11; viewYear--; }
+            render();
+          };
+          pop.querySelector('[data-nav="next"]').onclick = (e) => {
+            e.stopPropagation();
+            viewMonth++;
+            if (viewMonth > 11) { viewMonth = 0; viewYear++; }
+            render();
+          };
+          pop.querySelectorAll('.abf-day[data-day]').forEach(el => {
+            el.onclick = (e) => {
+              e.stopPropagation();
+              const day = parseInt(el.dataset.day, 10);
+              selectedDate = new Date(viewYear, viewMonth, day);
+              input.value = abfPad(day) + '/' + abfPad(viewMonth + 1) + '/' + viewYear;
+              render();
+              pop.classList.remove('abf-open');
+              if (typeof options.onSelect === 'function') {
+                options.onSelect(selectedDate, ABF_WEEKDAYS_PT[selectedDate.getDay()]);
+              }
+            };
+          });
+        }
+
+        render();
+        return { render, getDate: () => selectedDate };
+      }
+    };
+
+    /* SELETOR DE HORA */
+    const ABFTimePicker = {
+      attach(selector, options) {
+        const input = typeof selector === 'string' ? document.querySelector(selector) : selector;
+        if (!input) return;
+        options = options || {};
+        const minuteStep = options.minuteStep || 5;
+
+        let hour = options.defaultHour != null ? options.defaultHour : 12;
+        let minute = options.defaultMinute != null ? options.defaultMinute : 0;
+
+        // Se o input já tiver valor carregado
+        if (input.value) {
+          const parts = input.value.split(':');
+          if (parts.length >= 2) {
+            hour = parseInt(parts[0], 10);
+            minute = parseInt(parts[1], 10);
+          }
+        }
+
+        const pop = abfCreatePopover(input, 'abf-timebox');
+
+        function applyValue() {
+          input.value = abfPad(hour) + ':' + abfPad(minute);
+        }
+
+        function render() {
+          pop.innerHTML = `
+            <div class="abf-time-display">
+              <div class="abf-time-unit">
+                <button type="button" class="abf-time-arrow" data-act="h-up" aria-label="Aumentar hora">&#9650;</button>
+                <div class="abf-time-value">${abfPad(hour)}</div>
+                <button type="button" class="abf-time-arrow" data-act="h-down" aria-label="Diminuir hora">&#9660;</button>
+              </div>
+              <div class="abf-time-sep">:</div>
+              <div class="abf-time-unit">
+                <button type="button" class="abf-time-arrow" data-act="m-up" aria-label="Aumentar minuto">&#9650;</button>
+                <div class="abf-time-value">${abfPad(minute)}</div>
+                <button type="button" class="abf-time-arrow" data-act="m-down" aria-label="Diminuir minuto">&#9660;</button>
+              </div>
+            </div>
+            <button type="button" class="abf-time-confirm">CONFIRMAR</button>
+          `;
+
+          pop.querySelector('[data-act="h-up"]').onclick = (e) => { e.stopPropagation(); hour = (hour + 1) % 24; render(); };
+          pop.querySelector('[data-act="h-down"]').onclick = (e) => { e.stopPropagation(); hour = (hour - 1 + 24) % 24; render(); };
+          pop.querySelector('[data-act="m-up"]').onclick = (e) => { e.stopPropagation(); minute = (minute + minuteStep) % 60; render(); };
+          pop.querySelector('[data-act="m-down"]').onclick = (e) => { e.stopPropagation(); minute = (minute - minuteStep + 60) % 60; render(); };
+          pop.querySelector('.abf-time-confirm').onclick = (e) => {
+            e.stopPropagation();
+            applyValue();
+            pop.classList.remove('abf-open');
+            if (typeof options.onSelect === 'function') {
+              options.onSelect(hour, minute);
+            }
+          };
+        }
+
+        render();
+        applyValue();
+        return { render, getTime: () => ({ hour, minute }) };
+      }
+    };
+
+    // Integração dos seletores visuais com os campos do Django e preenchimento de Edição
+    document.addEventListener("DOMContentLoaded", function() {
+        const djangoDataInput = document.querySelector('input[name="data"]');
+        const djangoInicioInput = document.querySelector('input[name="inicio"]');
+        const djangoFimInput = document.querySelector('input[name="fim"]');
+
+        const visualDataInput = document.getElementById('data_ensaio_visual');
+        const visualInicioInput = document.getElementById('inicio_visual');
+        const visualFimInput = document.getElementById('fim_visual');
+
+        const diaSemanaSelect = document.querySelector('select[name="dia_semana"]');
+
+        // Função de sincronização com o Dia da Semana
+        function atualizarDiaSemana(date) {
+            if (!date) return;
+            const dayOfWeek = date.getDay();
+            const diasMap = {
+                0: "Domingo",
+                1: "Segunda-feira",
+                2: "Terça-feira",
+                3: "Quarta-feira",
+                4: "Quinta-feira",
+                5: "Sexta-feira",
+                6: "Sábado"
+            };
+            if (diaSemanaSelect) {
+                diaSemanaSelect.value = diasMap[dayOfWeek];
+            }
+        }
+
+        // 1. Preencher valores iniciais se for EDIÇÃO
+        if (djangoDataInput && djangoDataInput.value && visualDataInput) {
+            const parts = djangoDataInput.value.split('-');
+            if (parts.length === 3) {
+                visualDataInput.value = parts[2] + '/' + parts[1] + '/' + parts[0];
+            }
+        }
+        if (djangoInicioInput && djangoInicioInput.value && visualInicioInput) {
+            const parts = djangoInicioInput.value.split(':');
+            if (parts.length >= 2) {
+                visualInicioInput.value = abfPad(parts[0]) + ':' + abfPad(parts[1]);
+            }
+        }
+        if (djangoFimInput && djangoFimInput.value && visualFimInput) {
+            const parts = djangoFimInput.value.split(':');
+            if (parts.length >= 2) {
+                visualFimInput.value = abfPad(parts[0]) + ':' + abfPad(parts[1]);
+            }
+        }
+
+        // 2. Anexar os Seletores customizados
+        if (visualDataInput) {
+            ABFDatePicker.attach(visualDataInput, {
+                onSelect: (date, weekdayStr) => {
+                    // Sincronizar com o campo oculto do Django (formato YYYY-MM-DD)
+                    if (djangoDataInput) {
+                        djangoDataInput.value = date.getFullYear() + '-' + abfPad(date.getMonth() + 1) + '-' + abfPad(date.getDate());
+                    }
+                    atualizarDiaSemana(date);
+                }
+            });
+            // Rodar sincronização de dia inicial na edição
+            if (visualDataInput.value) {
+                const parts = visualDataInput.value.split('/');
+                if (parts.length === 3) {
+                    const initDate = new Date(parseInt(parts[2], 10), parseInt(parts[1], 10) - 1, parseInt(parts[0], 10));
+                    atualizarDiaSemana(initDate);
+                }
+            }
+        }
+
+        if (visualInicioInput) {
+            ABFTimePicker.attach(visualInicioInput, {
+                onSelect: (hour, minute) => {
+                    if (djangoInicioInput) {
+                        djangoInicioInput.value = abfPad(hour) + ':' + abfPad(minute);
+                    }
+                }
+            });
+        }
+
+        if (visualFimInput) {
+            ABFTimePicker.attach(visualFimInput, {
+                onSelect: (hour, minute) => {
+                    if (djangoFimInput) {
+                        djangoFimInput.value = abfPad(hour) + ':' + abfPad(minute);
+                    }
+                }
+            });
+        }
+    });
 </script>
 </body>
 </html>

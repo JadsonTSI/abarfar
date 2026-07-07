@@ -64,17 +64,20 @@
         .page-eyebrow::before{content:'';width:24px;height:1px;background:var(--gold)}
         .page-title{font-family:'Playfair Display',serif;font-size:clamp(1.5rem,2.5vw,2rem);font-weight:900;color:var(--ink);margin:0 0 .3rem}
         .gold-rule{height:2px;background:linear-gradient(90deg,var(--gold),transparent);border:none;margin:1.5rem 0 2rem;opacity:.4}
-        .ensaio-card{background:var(--white);border-radius:var(--radius-lg);border:1px solid var(--gray-line);padding:1.5rem;height:100%;box-shadow:var(--shadow-soft);transition:transform var(--transition),box-shadow var(--transition);position:relative;overflow:hidden}
-        .ensaio-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--gold-light));transform:scaleX(0);transform-origin:left;transition:transform .4s ease}
-        .ensaio-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-gold)}
-        .ensaio-card:hover::before{transform:scaleX(1)}
+        .ensaio-card{background:var(--white);border-radius:var(--radius-lg);border:1px solid var(--gray-line);padding:0;height:100%;box-shadow:var(--shadow-soft);transition:transform var(--transition),box-shadow var(--transition);overflow:hidden}
         .ensaio-card.cancelado{border-color:#DCC8C8;opacity:.7}
-        .ensaio-card-icon{width:46px;height:46px;border-radius:50%;background:var(--gold-pale);display:flex;align-items:center;justify-content:center;color:var(--gold-dim);font-size:1.2rem;margin-bottom:1rem;transition:background var(--transition),color var(--transition)}
-        .ensaio-card:hover .ensaio-card-icon{background:var(--gold);color:var(--white)}
-        .ensaio-nome{font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:700;color:var(--ink);margin-bottom:.8rem}
+        .badge-cancelado{display:inline-flex;align-items:center;gap:.4rem;background:#FDECEA;color:#C0392B;border:1px solid #F5C6C2;font-family:'Libre Baskerville',serif;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .8rem;border-radius:2rem;margin-top:.8rem}
+        .ensaio-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-gold)}
+        .ensaio-card-header{background:linear-gradient(135deg,var(--ink) 0%,#2C2318 100%);padding:1.5rem;display:flex;align-items:center;gap:1rem;position:relative;overflow:hidden}
+        .ensaio-card-header::after{content:'𝄞';position:absolute;right:.5rem;top:50%;transform:translateY(-50%);font-size:6rem;color:var(--gold);opacity:.06;font-family:serif;pointer-events:none}
+        .ensaio-date-box{width:50px;height:50px;background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.3);border-radius:var(--radius-sm);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0}
+        .ensaio-day{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:900;color:var(--gold);line-height:1}
+        .ensaio-month{font-family:'Libre Baskerville',serif;font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;color:#6A6058}
+        .ensaio-titulo{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;color:var(--white);line-height:1.2}
+        .ensaio-sub{font-family:'Libre Baskerville',serif;font-size:.68rem;letter-spacing:.08em;color:var(--gold);margin-top:.2rem}
+        .ensaio-card-body{padding:1.2rem 1.5rem}
         .ensaio-info{display:flex;align-items:center;gap:.6rem;font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--ink-soft);margin-bottom:.4rem}
         .ensaio-info i{color:var(--gold);font-size:.9rem;width:16px;flex-shrink:0}
-        .badge-cancelado{display:inline-flex;align-items:center;gap:.4rem;background:#FDECEA;color:#C0392B;border:1px solid #F5C6C2;font-family:'Libre Baskerville',serif;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .8rem;border-radius:2rem;margin-top:.8rem}
         .empty-state{text-align:center;padding:4rem 2rem}
         .empty-icon{font-size:4rem;color:var(--gold);opacity:.2;display:block;margin-bottom:1rem}
         .empty-title{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:var(--ink)}
@@ -83,7 +86,36 @@
         .sidebar-overlay.active{display:block}
         @media(max-width:991px){.sidebar{transform:translateX(-100%);width:var(--sidebar-w)!important}.sidebar.mobile-open{transform:translateX(0)}.main-area,.main-area.expanded{margin-left:0!important}}
         @media(max-width:576px){.page-content{padding:1.2rem}.topbar{padding:0 1rem}}
-    </style>
+    
+        /* Ajustes para a Sidebar Colapsada (Responsivo/Minimizado) */
+        .sidebar.collapsed .sidebar-top {
+            justify-content: center !important;
+            padding: 0 !important;
+        }
+        .sidebar.collapsed .sidebar-brand {
+            display: none !important;
+        }
+        .sidebar.collapsed .sidebar-profile {
+            justify-content: center !important;
+            padding: 1.2rem 0 !important;
+        }
+        .sidebar.collapsed .sidebar-profile-name {
+            display: none !important;
+        }
+        .sidebar.collapsed .sidebar-link {
+            justify-content: center !important;
+            padding: 0.65rem 0 !important;
+            margin: 0.1rem 0.3rem !important;
+        }
+        .sidebar.collapsed .nav-section-label {
+            display: none !important;
+        }
+        .sidebar.collapsed .btn-logout {
+            justify-content: center !important;
+            padding: 0.5rem 0 !important;
+        }
+
+</style>
 </head>
 <body>
 <div class="app-shell">
@@ -108,8 +140,12 @@
         </div>
 
         <div class="sidebar-profile">
-            <div class="profile-avatar">
-                <i class="bi bi-person-fill"></i>
+            <div class="profile-avatar" style="overflow: hidden;">
+                {% if request.user.perfil.foto %}
+                    <img src="{{ request.user.perfil.foto.url }}" alt="Foto de perfil" style="width:100%; height:100%; object-fit:cover;">
+                {% else %}
+                    <i class="bi bi-person-fill"></i>
+                {% endif %}
             </div>
             <div class="sidebar-profile-name">
                 <span class="profile-name">{{ user.first_name|default:user.username }}</span>
@@ -184,7 +220,13 @@
             </div>
             <div class="topbar-right">
                 <div class="topbar-user">
-                    <div class="topbar-avatar">{{ user.first_name|first|default:"A" }}</div>
+                    <div class="topbar-avatar" style="overflow: hidden; display: flex; align-items: center; justify-content: center;">
+                        {% if request.user.perfil.foto %}
+                            <img src="{{ request.user.perfil.foto.url }}" alt="Foto" style="width: 100%; height: 100%; object-fit: cover;">
+                        {% else %}
+                            {{ user.first_name|first|default:"A" }}
+                        {% endif %}
+                    </div>
                     <span class="topbar-username d-none d-sm-block">{{ user.first_name|default:user.username }}</span>
                 </div>
             </div>
@@ -200,17 +242,25 @@
                     {% for ensaio in ensaios %}
                     <div class="col-md-6 col-lg-4">
                         <div class="ensaio-card {% if ensaio.cancelado %}cancelado{% endif %}">
-                            <div class="ensaio-card-icon">
-                                <i class="bi bi-music-note-beamed"></i>
+                            <div class="ensaio-card-header">
+                                <div class="ensaio-date-box">
+                                    <span class="ensaio-day">{{ ensaio.data|date:'d' }}</span>
+                                    <span class="ensaio-month">{{ ensaio.data|date:'M' }}</span>
+                                </div>
+                                <div>
+                                    <div class="ensaio-titulo">{{ ensaio.nome }}</div>
+                                    <div class="ensaio-sub"><i class="bi bi-music-note"></i> Ensaio</div>
+                                </div>
                             </div>
-                            <div class="ensaio-nome">{{ ensaio.nome }}</div>
-                            <div class="ensaio-info"><i class="bi bi-calendar3"></i> {{ ensaio.data|date:'d/m/Y' }}</div>
-                            <div class="ensaio-info"><i class="bi bi-clock"></i> {{ ensaio.inicio|time:'H:i' }} às {{ ensaio.fim|time:'H:i' }}</div>
-                            <div class="ensaio-info"><i class="bi bi-geo-alt-fill"></i> {{ ensaio.local }}</div>
-                            {% if ensaio.dia_semana %}<div class="ensaio-info"><i class="bi bi-calendar-week"></i> {{ ensaio.dia_semana }}</div>{% endif %}
-                            {% if ensaio.cancelado %}
-                                <div><span class="badge-cancelado"><i class="bi bi-x-circle"></i> Ensaio cancelado</span></div>
-                            {% endif %}
+                            <div class="ensaio-card-body">
+                                <div class="ensaio-info"><i class="bi bi-calendar3"></i> {{ ensaio.data|date:'d/m/Y' }}</div>
+                                <div class="ensaio-info"><i class="bi bi-clock"></i> {{ ensaio.inicio|time:'H:i' }} às {{ ensaio.fim|time:'H:i' }}</div>
+                                <div class="ensaio-info"><i class="bi bi-geo-alt-fill"></i> {{ ensaio.local }}</div>
+                                {% if ensaio.dia_semana %}<div class="ensaio-info"><i class="bi bi-calendar-week"></i> {{ ensaio.dia_semana }}</div>{% endif %}
+                                {% if ensaio.cancelado %}
+                                    <div><span class="badge-cancelado"><i class="bi bi-x-circle"></i> Ensaio cancelado</span></div>
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
                     {% endfor %}

@@ -421,7 +421,36 @@
             .page-content { padding: 1.2rem; }
             .topbar { padding: 0 1rem; }
         }
-    </style>
+    
+        /* Ajustes para a Sidebar Colapsada (Responsivo/Minimizado) */
+        .sidebar.collapsed .sidebar-top {
+            justify-content: center !important;
+            padding: 0 !important;
+        }
+        .sidebar.collapsed .sidebar-brand {
+            display: none !important;
+        }
+        .sidebar.collapsed .sidebar-profile {
+            justify-content: center !important;
+            padding: 1.2rem 0 !important;
+        }
+        .sidebar.collapsed .sidebar-profile-name {
+            display: none !important;
+        }
+        .sidebar.collapsed .sidebar-link {
+            justify-content: center !important;
+            padding: 0.65rem 0 !important;
+            margin: 0.1rem 0.3rem !important;
+        }
+        .sidebar.collapsed .nav-section-label {
+            display: none !important;
+        }
+        .sidebar.collapsed .btn-logout {
+            justify-content: center !important;
+            padding: 0.5rem 0 !important;
+        }
+
+</style>
 </head>
 <body>
 
@@ -451,8 +480,12 @@
         </div>
 
         <div class="sidebar-profile">
-            <div class="profile-avatar">
-                <i class="bi bi-person-fill"></i>
+            <div class="profile-avatar" style="overflow: hidden;">
+                {% if perfil.foto %}
+                    <img src="{{ perfil.foto.url }}" alt="Foto de perfil" style="width:100%; height:100%; object-fit:cover;">
+                {% else %}
+                    <i class="bi bi-person-fill"></i>
+                {% endif %}
             </div>
             <div class="sidebar-profile-name">
                 <span class="profile-name">{{ user.first_name|default:user.username }}</span>
@@ -540,8 +573,12 @@
                     <i class="bi bi-person"></i>
                 </a>
                 <div class="topbar-user">
-                    <div class="topbar-avatar">
-                        {{ user.first_name|first|default:"A" }}
+                    <div class="topbar-avatar" style="overflow: hidden; display: flex; align-items: center; justify-content: center;">
+                        {% if request.user.perfil.foto %}
+                            <img src="{{ request.user.perfil.foto.url }}" alt="Foto" style="width: 100%; height: 100%; object-fit: cover;">
+                        {% else %}
+                            {{ user.first_name|first|default:"A" }}
+                        {% endif %}
                     </div>
                     <span class="topbar-username d-none d-sm-block">
                         {{ user.first_name|default:user.username }}
@@ -657,17 +694,77 @@
 
             <!-- CHARTS SECTION -->
             <div class="row g-4 mb-4">
-                <!-- Radar Chart: Habilidades -->
+                <!-- Radar Chart: Habilidades -> Substituído por Eventos Reais -->
                 <div class="col-lg-6">
                     <div class="section-card h-100">
                         <div class="section-card-header">
                             <h2 class="section-card-title">
-                                <i class="bi bi-music-note-beamed"></i> Minhas Habilidades & Desenvolvimento
+                                <i class="bi bi-calendar-check-fill"></i> Próximos Ensaios & Apresentações
                             </h2>
                         </div>
-                        <div class="section-card-body">
-                            <div style="height: 250px; position: relative;">
-                                <canvas id="chartHabilidades"></canvas>
+                        <div class="section-card-body" style="display:flex; flex-direction:column; gap:1.2rem;">
+                            <!-- Ensaios -->
+                            <div class="event-section">
+                                <h4 class="event-section-title" style="font-family:'Playfair Display',serif; font-size:1rem; font-weight:700; color:var(--gold-dim); border-bottom:1px solid var(--gray-line); padding-bottom:0.3rem; margin-bottom:0.8rem; display:flex; align-items:center; gap:0.5rem;">
+                                    <i class="bi bi-music-note-beamed"></i> Ensaios
+                                </h4>
+                                {% if proximos_ensaios %}
+                                    <div class="event-list" style="display:flex; flex-direction:column; gap:0.6rem;">
+                                        {% for ensaio in proximos_ensaios %}
+                                            <div class="event-item" style="display:flex; align-items:center; justify-content:space-between; background:var(--cream); padding:0.6rem 0.9rem; border-radius:var(--radius-sm); border-left:3.5px solid var(--gold);">
+                                                <div>
+                                                    <strong style="color:var(--ink); font-size:0.95rem; font-family:'Playfair Display',serif;">{{ ensaio.nome }}</strong>
+                                                    <div style="font-size:0.8rem; color:var(--gray-text); font-family:'Libre Baskerville',serif; margin-top:0.1rem;">
+                                                        <i class="bi bi-calendar-event"></i> {{ ensaio.data|date:"d/m/Y" }} ({{ ensaio.dia_semana }})
+                                                        <span class="mx-1">|</span>
+                                                        <i class="bi bi-clock"></i> {{ ensaio.inicio|time:"H:i" }} - {{ ensaio.fim|time:"H:i" }}
+                                                    </div>
+                                                </div>
+                                                <div style="text-align:right;">
+                                                    <span style="font-size:0.75rem; color:var(--gray-text); font-family:'Libre Baskerville',serif;">
+                                                        <i class="bi bi-geo-alt-fill"></i> {{ ensaio.local }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    <div class="text-center py-3 text-muted" style="font-size:0.9rem; font-family:'Cormorant Garamond',serif;">
+                                        <i class="bi bi-info-circle"></i> Nenhum ensaio agendado para os próximos dias.
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Apresentações -->
+                            <div class="event-section">
+                                <h4 class="event-section-title" style="font-family:'Playfair Display',serif; font-size:1rem; font-weight:700; color:var(--gold-dim); border-bottom:1px solid var(--gray-line); padding-bottom:0.3rem; margin-bottom:0.8rem; display:flex; align-items:center; gap:0.5rem;">
+                                    <i class="bi bi-calendar-event"></i> Apresentações
+                                </h4>
+                                {% if proximas_apresentacoes %}
+                                    <div class="event-list" style="display:flex; flex-direction:column; gap:0.6rem;">
+                                        {% for ap in proximas_apresentacoes %}
+                                            <div class="event-item" style="display:flex; align-items:center; justify-content:space-between; background:var(--cream); padding:0.6rem 0.9rem; border-radius:var(--radius-sm); border-left:3.5px solid var(--gold-dim);">
+                                                <div>
+                                                    <strong style="color:var(--ink); font-size:0.95rem; font-family:'Playfair Display',serif;">{{ ap.titulo }}</strong>
+                                                    <div style="font-size:0.8rem; color:var(--gray-text); font-family:'Libre Baskerville',serif; margin-top:0.1rem;">
+                                                        <i class="bi bi-calendar-event"></i> {{ ap.data|date:"d/m/Y" }}
+                                                        <span class="mx-1">|</span>
+                                                        <i class="bi bi-clock"></i> {{ ap.horario }}{% if ap.horario_fim %} - {{ ap.horario_fim }}{% endif %}
+                                                    </div>
+                                                </div>
+                                                <div style="text-align:right;">
+                                                    <span style="font-size:0.75rem; color:var(--gray-text); font-family:'Libre Baskerville',serif;">
+                                                        <i class="bi bi-geo-alt-fill"></i> {{ ap.local }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    <div class="text-center py-3 text-muted" style="font-size:0.9rem; font-family:'Cormorant Garamond',serif;">
+                                        <i class="bi bi-info-circle"></i> Nenhuma apresentação agendada para os próximos dias.
+                                    </div>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
@@ -738,48 +835,6 @@
 
     // Gráficos Customizados do Aluno
     
-    // 1. Radar Chart: Habilidades
-    const ctxHabilidades = document.getElementById('chartHabilidades').getContext('2d');
-    new Chart(ctxHabilidades, {
-        type: 'radar',
-        data: {
-            labels: {{ chart_habilidades.labels|safe }},
-            datasets: [{
-                label: 'Habilidade (%)',
-                data: {{ chart_habilidades.data }},
-                backgroundColor: 'rgba(201, 168, 76, 0.2)',
-                borderColor: '#C9A84C',
-                pointBackgroundColor: '#C9A84C',
-                pointBorderColor: '#FDFAF3',
-                pointHoverBackgroundColor: '#FDFAF3',
-                pointHoverBorderColor: '#C9A84C',
-                borderWidth: 2
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: { display: false }
-            },
-            scales: {
-                r: {
-                    angleLines: { color: 'rgba(232, 224, 212, 0.6)' },
-                    grid: { color: 'rgba(232, 224, 212, 0.6)' },
-                    pointLabels: {
-                        color: '#3D3530',
-                        font: { family: 'Libre Baskerville', size: 10 }
-                    },
-                    ticks: {
-                        display: false,
-                        stepSize: 20
-                    },
-                    suggestedMin: 0,
-                    suggestedMax: 100
-                }
-            }
-        }
-    });
 
     // 2. Doughnut Chart: Resumo da Jornada
     const ctxJornada = document.getElementById('chartJornada').getContext('2d');

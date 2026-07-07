@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from contas.models import Perfil
 from alunos.models import Aluno, GrupoMusical
-from .models import Instrumento, InstrumentoEmprestimo, IoTScan
+from instrumentos.models import Instrumento, InstrumentoEmprestimo, IoTScan
 
 class InstrumentosTestCase(TestCase):
     def setUp(self):

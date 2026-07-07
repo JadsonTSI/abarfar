@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.core.files.uploadedfile import SimpleUploadedFile
 from contas.models import Perfil
 from alunos.models import Aluno, GrupoMusical
-from .models import Partitura
+from grupos.models import Partitura
 
 class GruposTestCase(TestCase):
     def setUp(self):
@@ -94,6 +94,7 @@ class GruposTestCase(TestCase):
     def test_grupos_listar_dynamic_counts(self):
         from professores.models import EnsaiosproModel
         import datetime
+        from django.utils import timezone
         
         # In setUp: self.grupo is active, self.aluno is associated with it.
         # Let's create:
@@ -109,7 +110,7 @@ class GruposTestCase(TestCase):
         EnsaiosproModel.objects.create(
             nome="Ensaio Quinteto",
             dia_semana="Sábado",
-            data=datetime.date.today(),
+            data=timezone.now().date(),
             inicio=datetime.time(14, 0),
             fim=datetime.time(16, 0),
             local="Auditório",
@@ -120,7 +121,7 @@ class GruposTestCase(TestCase):
         EnsaiosproModel.objects.create(
             nome="Ensaio Cancelado",
             dia_semana="Sábado",
-            data=datetime.date.today(),
+            data=timezone.now().date(),
             inicio=datetime.time(16, 0),
             fim=datetime.time(18, 0),
             local="Auditório",

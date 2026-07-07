@@ -231,11 +231,10 @@ def painel_aluno(request):
     total_apresentacoes = ApresentacaoModel.objects.count()
     total_colegas = Aluno.objects.filter(naipe=aluno.naipe).exclude(id=aluno.id).count() if aluno.naipe else 0
     
-    # Gráficos criativos / reais do Aluno
-    chart_habilidades = {
-        "labels": ["Ritmo", "Afinação", "Teoria", "Prática", "Presença"],
-        "data": [85, 90, min(60 + (total_materias * 12), 100), 80, 95]
-    }
+    # Eventos Reais do Aluno
+    hoje = timezone.now().date()
+    proximos_ensaios = EnsaiosproModel.objects.filter(cancelado=False, data__gte=hoje).order_by('data', 'inicio')[:3]
+    proximas_apresentacoes = ApresentacaoModel.objects.filter(cancelado=False, data__gte=hoje).order_by('data')[:3]
     
     chart_jornada = {
         "labels": ["Matérias", "Próximos Ensaios", "Colegas de Naipe"],
@@ -249,7 +248,8 @@ def painel_aluno(request):
         "total_ensaios": total_ensaios,
         "total_apresentacoes": total_apresentacoes,
         "total_colegas": total_colegas,
-        "chart_habilidades": chart_habilidades,
+        "proximos_ensaios": proximos_ensaios,
+        "proximas_apresentacoes": proximas_apresentacoes,
         "chart_jornada": chart_jornada,
     }
     return render(request, "contas/aluno_home.html", context)

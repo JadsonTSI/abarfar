@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from django.core.files.uploadedfile import SimpleUploadedFile
 from contas.models import Perfil
-from .models import Documento
+from transparencia.models import Documento
 
 class TransparenciaTestCase(TestCase):
     def setUp(self):

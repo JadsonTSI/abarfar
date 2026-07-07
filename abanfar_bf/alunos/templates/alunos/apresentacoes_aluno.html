@@ -65,6 +65,8 @@
         .page-title{font-family:'Playfair Display',serif;font-size:clamp(1.5rem,2.5vw,2rem);font-weight:900;color:var(--ink);margin:0 0 .3rem}
         .gold-rule{height:2px;background:linear-gradient(90deg,var(--gold),transparent);border:none;margin:1.5rem 0 2rem;opacity:.4}
         .ap-card{background:var(--white);border-radius:var(--radius-lg);border:1px solid var(--gray-line);padding:0;height:100%;box-shadow:var(--shadow-soft);transition:transform var(--transition),box-shadow var(--transition);overflow:hidden}
+        .ap-card.cancelado{border-color:#DCC8C8;opacity:.7}
+        .badge-cancelado{display:inline-flex;align-items:center;gap:.4rem;background:#FDECEA;color:#C0392B;border:1px solid #F5C6C2;font-family:'Libre Baskerville',serif;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .8rem;border-radius:2rem;margin-top:.8rem}
         .ap-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-gold)}
         .ap-card-header{background:linear-gradient(135deg,var(--ink) 0%,#2C2318 100%);padding:1.5rem;display:flex;align-items:center;gap:1rem;position:relative;overflow:hidden}
         .ap-card-header::after{content:'𝄞';position:absolute;right:.5rem;top:50%;transform:translateY(-50%);font-size:6rem;color:var(--gold);opacity:.06;font-family:serif;pointer-events:none}
@@ -84,7 +86,36 @@
         .sidebar-overlay.active{display:block}
         @media(max-width:991px){.sidebar{transform:translateX(-100%);width:var(--sidebar-w)!important}.sidebar.mobile-open{transform:translateX(0)}.main-area,.main-area.expanded{margin-left:0!important}}
         @media(max-width:576px){.page-content{padding:1.2rem}.topbar{padding:0 1rem}}
-    </style>
+    
+        /* Ajustes para a Sidebar Colapsada (Responsivo/Minimizado) */
+        .sidebar.collapsed .sidebar-top {
+            justify-content: center !important;
+            padding: 0 !important;
+        }
+        .sidebar.collapsed .sidebar-brand {
+            display: none !important;
+        }
+        .sidebar.collapsed .sidebar-profile {
+            justify-content: center !important;
+            padding: 1.2rem 0 !important;
+        }
+        .sidebar.collapsed .sidebar-profile-name {
+            display: none !important;
+        }
+        .sidebar.collapsed .sidebar-link {
+            justify-content: center !important;
+            padding: 0.65rem 0 !important;
+            margin: 0.1rem 0.3rem !important;
+        }
+        .sidebar.collapsed .nav-section-label {
+            display: none !important;
+        }
+        .sidebar.collapsed .btn-logout {
+            justify-content: center !important;
+            padding: 0.5rem 0 !important;
+        }
+
+</style>
 </head>
 <body>
 <div class="app-shell">
@@ -109,8 +140,12 @@
         </div>
 
         <div class="sidebar-profile">
-            <div class="profile-avatar">
-                <i class="bi bi-person-fill"></i>
+            <div class="profile-avatar" style="overflow: hidden;">
+                {% if request.user.perfil.foto %}
+                    <img src="{{ request.user.perfil.foto.url }}" alt="Foto de perfil" style="width:100%; height:100%; object-fit:cover;">
+                {% else %}
+                    <i class="bi bi-person-fill"></i>
+                {% endif %}
             </div>
             <div class="sidebar-profile-name">
                 <span class="profile-name">{{ user.first_name|default:user.username }}</span>
@@ -185,7 +220,13 @@
             </div>
             <div class="topbar-right">
                 <div class="topbar-user">
-                    <div class="topbar-avatar">{{ user.first_name|first|default:"A" }}</div>
+                    <div class="topbar-avatar" style="overflow: hidden; display: flex; align-items: center; justify-content: center;">
+                        {% if request.user.perfil.foto %}
+                            <img src="{{ request.user.perfil.foto.url }}" alt="Foto" style="width: 100%; height: 100%; object-fit: cover;">
+                        {% else %}
+                            {{ user.first_name|first|default:"A" }}
+                        {% endif %}
+                    </div>
                     <span class="topbar-username d-none d-sm-block">{{ user.first_name|default:user.username }}</span>
                 </div>
             </div>
@@ -200,7 +241,7 @@
                 <div class="row g-4">
                     {% for ap in apresentacoes %}
                     <div class="col-md-6 col-lg-4">
-                        <div class="ap-card">
+                        <div class="ap-card {% if ap.cancelado %}cancelado{% endif %}">
                             <div class="ap-card-header">
                                 <div class="ap-date-box">
                                     <span class="ap-day">{{ ap.data|date:'d' }}</span>
@@ -213,8 +254,11 @@
                             </div>
                             <div class="ap-card-body">
                                 <div class="ap-info"><i class="bi bi-calendar3"></i> {{ ap.data|date:'d/m/Y' }}</div>
-                                {% if ap.horario %}<div class="ap-info"><i class="bi bi-clock"></i> {{ ap.horario }}</div>{% endif %}
+                                {% if ap.horario %}<div class="ap-info"><i class="bi bi-clock"></i> {{ ap.horario }}{% if ap.horario_fim %} às {{ ap.horario_fim }}{% endif %}</div>{% endif %}
                                 {% if ap.local %}<div class="ap-info"><i class="bi bi-geo-alt-fill"></i> {{ ap.local }}</div>{% endif %}
+                                {% if ap.cancelado %}
+                                    <div><span class="badge-cancelado"><i class="bi bi-x-circle"></i> Apresentação cancelada</span></div>
+                                {% endif %}
                             </div>
                         </div>
                     </div>

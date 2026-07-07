@@ -23,9 +23,13 @@
 
     <!-- Profile -->
     <div class="sidebar-profile">
-        <div class="profile-avatar">
-            <i class="bi bi-person-fill"></i>
-        </div>
+        <div class="profile-avatar" style="overflow: hidden;">
+                {% if request.user.perfil.foto %}
+                    <img src="{{ request.user.perfil.foto.url }}" alt="Foto de perfil" style="width:100%; height:100%; object-fit:cover;">
+                {% else %}
+                    <i class="bi bi-person-fill"></i>
+                {% endif %}
+            </div>
         <div class="sidebar-profile-name">
             <span class="profile-name">{{ user.first_name|default:user.username }}</span>
             <span class="profile-role">Gerente</span>

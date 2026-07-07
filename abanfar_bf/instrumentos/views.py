@@ -115,8 +115,9 @@ def api_painel_geral(request):
     vencidos_count = 0
     prestamos_ativos = InstrumentoEmprestimo.objects.filter(devolvido=False)
     for p in prestamos_ativos:
-        dias = (hoje - p.data_emprestimo).days
-        if dias > 14:
+        # Prazo final para devolução sem atraso: 12 de Julho (02 de Julho + 10 dias de carência)
+        prazo_limite = timezone.datetime(p.data_emprestimo.year, 7, 12).date()
+        if hoje > prazo_limite:
             vencidos_count += 1
             
     ativos_prestamos = prestamos_ativos.count() - vencidos_count
@@ -385,17 +386,32 @@ def api_registrar_retirada(request):
 def api_registrar_devolucao(request):
     if request.method == "POST":
         try:
+            rfid = None
+            emprestimo_id = None
+            
             if request.content_type == 'application/json':
                 body = json.loads(request.body)
                 rfid = body.get('rfid')
+                emprestimo_id = body.get('emprestimo_id')
             else:
                 rfid = request.POST.get('rfid')
+                emprestimo_id = request.POST.get('emprestimo_id')
                 
-            inst = Instrumento.objects.get(rfid=rfid)
-            emprestimo = InstrumentoEmprestimo.objects.filter(instrumento=inst, devolvido=False).first()
-            
-            if not emprestimo:
-                return JsonResponse({"erro": "Nenhum emprestimo ativo encontrado para este instrumento"}, status=404)
+            if rfid:
+                try:
+                    inst = Instrumento.objects.get(rfid=rfid)
+                    emprestimo = InstrumentoEmprestimo.objects.filter(instrumento=inst, devolvido=False).first()
+                    if not emprestimo:
+                        return JsonResponse({"erro": "Nenhum emprestimo ativo encontrado para este instrumento"}, status=404)
+                except Instrumento.DoesNotExist:
+                    return JsonResponse({"erro": "Instrumento nao cadastrado"}, status=404)
+            elif emprestimo_id:
+                try:
+                    emprestimo = InstrumentoEmprestimo.objects.get(id=emprestimo_id)
+                except InstrumentoEmprestimo.DoesNotExist:
+                    return JsonResponse({"erro": "Emprestimo nao encontrado"}, status=404)
+            else:
+                return JsonResponse({"erro": "ID do Emprestimo ou RFID nao informado"}, status=400)
                 
             emprestimo.devolvido = True
             emprestimo.data_devolucao = timezone.now().date()
@@ -403,15 +419,13 @@ def api_registrar_devolucao(request):
             
             return JsonResponse({
                 "sucesso": True,
-                "msg": "Devolucao registrada com sucesso",
+                "msg": "Devolução registrada com sucesso",
                 "id": emprestimo.id
             })
-        except Instrumento.DoesNotExist:
-            return JsonResponse({"erro": "Instrumento nao cadastrado"}, status=404)
         except Exception as e:
             return JsonResponse({"erro": str(e)}, status=500)
             
-    return JsonResponse({"erro": "Metodo nao permitido"}, status=405)
+    return JsonResponse({"erro": "Método não permitido"}, status=405)
 
 
 @iot_api_required
@@ -423,9 +437,10 @@ def api_listar_emprestimos(request):
     for emp in emprestimos:
         dias_atraso = 0
         if not emp.devolvido:
-            dias = (hoje - emp.data_emprestimo).days
-            if dias > 14:
-                dias_atraso = dias - 14
+            # Prazo final para devolução sem atraso: 12 de Julho (02 de Julho + 10 dias de carência)
+            prazo_limite = timezone.datetime(emp.data_emprestimo.year, 7, 12).date()
+            if hoje > prazo_limite:
+                dias_atraso = (hoje - prazo_limite).days
                 
         data.append({
             "id": emp.id,
@@ -511,6 +526,7 @@ def api_iot_ultimo_scan(request):
             "id": inst.id,
             "identificador": inst.identificador,
             "nome": inst.nome,
+            "rfid": inst.rfid,
             "naipe": naipe_nome,
             "disponivel": disponivel,
             "ativo": inst.ativo,

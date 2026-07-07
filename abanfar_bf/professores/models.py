@@ -37,8 +37,10 @@ class ApresentacaoModel(models.Model):
     descricao = models.CharField(max_length=200)
     data = models.DateField()
     horario = models.CharField(max_length=100)
+    horario_fim = models.CharField(max_length=100, blank=True, null=True)
     local = models.CharField(max_length=150)
     grupo = models.CharField(max_length=150, blank=True, null=True)
+    cancelado = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.titulo} - {self.descricao}"
