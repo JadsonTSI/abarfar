@@ -4,6 +4,7 @@ from contas.decorators import gerente_required, professor_required, gerente_ou_p
 from .models import EnsaiosproModel, ApresentacaoModel, ProfessorModel
 from .forms import EnsaiosForm, ApresentacaoForm, ProfessorForm, ProfessorEditForm
 from django.http import HttpResponse
+from django.utils import timezone
 from alunos.models import Aluno, Naipe
 from materias.models import Materia, MatriculaMateria
 
@@ -59,8 +60,14 @@ def professores_home(request):
         "data": filtered_data
     }
     
+    hoje = timezone.now().date()
+    proximos_ensaios = EnsaiosproModel.objects.filter(cancelado=False, data__gte=hoje).order_by("data", "inicio")[:3]
+    proximas_apresentacoes = ApresentacaoModel.objects.filter(cancelado=False, data__gte=hoje).order_by("data")[:3]
+
     context = {
         "professor": professor,
+        "proximos_ensaios": proximos_ensaios,
+        "proximas_apresentacoes": proximas_apresentacoes,
         "total_materias": total_materias,
         "total_alunos": total_alunos,
         "total_ensaios": total_ensaios,
