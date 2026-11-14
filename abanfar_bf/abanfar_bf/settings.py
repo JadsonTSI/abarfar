@@ -75,6 +75,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'blog.context_processors.site',
             ],
         },
     },
@@ -170,3 +171,12 @@ else:
 IOT_API_KEY = os.environ.get('IOT_API_KEY', 'abanfar-iot-secret-token-2026')
 
 
+
+
+# Redes sociais exibidas no site público (rodapé, contato e home).
+# Preencha com as URLs oficiais; as que ficarem vazias não aparecem no site.
+REDES_SOCIAIS = {
+    "instagram": "",
+    "facebook": "",
+    "youtube": "",
+}

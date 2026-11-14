@@ -159,20 +159,7 @@
 <section class="section-padding">
     <div class="container">
         
-        <!-- MENSAGENS DE SUCESSO -->
-        {% if messages %}
-            <div class="row mb-4">
-                <div class="col-12">
-                    {% for message in messages %}
-                        <div class="alert alert-success alert-dismissible fade show" role="alert" style="font-family:'Cormorant Garamond', serif; font-size:1.15rem; border-color: var(--gold-light); background-color: var(--gold-pale); color: var(--gold-dim)">
-                            <i class="bi bi-check-circle-fill me-2" style="color:var(--gold-dim)"></i>
-                            {{ message }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                    {% endfor %}
-                </div>
-            </div>
-        {% endif %}
+
         
         <div class="row g-5">
             <!-- COLUNA ESQUERDA: INFORMAÇÕES DE CONTATO -->
@@ -204,17 +191,19 @@
                         </div>
                     </div>
                     
+                    {% if redes_sociais %}
                     <div class="contact-info-box">
                         <div class="contact-info-icon"><i class="bi bi-share-fill"></i></div>
                         <div class="contact-info-text">
                             <h4>Redes Sociais</h4>
                             <p>
-                                <a href="#" style="color:var(--gold-dim); margin-right: 1rem; text-decoration:none"><i class="bi bi-instagram me-1"></i>Instagram</a>
-                                <a href="#" style="color:var(--gold-dim); margin-right: 1rem; text-decoration:none"><i class="bi bi-facebook me-1"></i>Facebook</a>
-                                <a href="#" style="color:var(--gold-dim); text-decoration:none"><i class="bi bi-youtube me-1"></i>YouTube</a>
+                                {% for rede in redes_sociais %}
+                                <a href="{{ rede.url }}" target="_blank" rel="noopener" style="color:var(--gold-dim); margin-right: 1rem; text-decoration:none"><i class="bi {{ rede.icone }} me-1"></i>{{ rede.nome }}</a>
+                                {% endfor %}
                             </p>
                         </div>
                     </div>
+                    {% endif %}
                 </div>
             </div>
             
@@ -229,25 +218,29 @@
                             <div class="col-md-6">
                                 <div class="form-gold-group">
                                     <label for="id_nome">Nome Completo</label>
-                                    <input type="text" id="id_nome" name="nome" class="form-gold-control" placeholder="Seu nome" required>
+                                    <input type="text" id="id_nome" name="nome" class="form-gold-control{% if form.nome.errors %} is-invalid{% endif %}" placeholder="Seu nome" value="{{ form.nome.value|default:'' }}" autocomplete="name" maxlength="120" required>
+                                    {% for e in form.nome.errors %}<span class="field-error">{{ e }}</span>{% endfor %}
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-gold-group">
                                     <label for="id_email">E-mail</label>
-                                    <input type="email" id="id_email" name="email" class="form-gold-control" placeholder="Seu e-mail" required>
+                                    <input type="email" id="id_email" name="email" class="form-gold-control{% if form.email.errors %} is-invalid{% endif %}" placeholder="Seu e-mail" value="{{ form.email.value|default:'' }}" autocomplete="email" required>
+                                    {% for e in form.email.errors %}<span class="field-error">{{ e }}</span>{% endfor %}
                                 </div>
                             </div>
                         </div>
                         
                         <div class="form-gold-group">
                             <label for="id_assunto">Assunto</label>
-                            <input type="text" id="id_assunto" name="assunto" class="form-gold-control" placeholder="Ex: Matrícula de Aluno, Apoio, Dúvida" required>
+                            <input type="text" id="id_assunto" name="assunto" class="form-gold-control{% if form.assunto.errors %} is-invalid{% endif %}" placeholder="Ex: Matrícula de Aluno, Apoio, Dúvida" value="{{ form.assunto.value|default:'' }}" maxlength="150" required>
+                                    {% for e in form.assunto.errors %}<span class="field-error">{{ e }}</span>{% endfor %}
                         </div>
                         
                         <div class="form-gold-group">
                             <label for="id_mensagem">Mensagem</label>
-                            <textarea id="id_mensagem" name="mensagem" class="form-gold-control" placeholder="Sua mensagem..." required></textarea>
+                            <textarea id="id_mensagem" name="mensagem" class="form-gold-control{% if form.mensagem.errors %} is-invalid{% endif %}" placeholder="Sua mensagem..." required>{{ form.mensagem.value|default:'' }}</textarea>
+                            {% for e in form.mensagem.errors %}<span class="field-error">{{ e }}</span>{% endfor %}
                         </div>
                         
                         <div class="text-end">
