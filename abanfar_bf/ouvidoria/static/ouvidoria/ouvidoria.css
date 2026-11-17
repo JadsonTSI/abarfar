@@ -1,0 +1,149 @@
+/* ABANFAR BF — Ouvidoria */
+
+.ouv-header {
+    background: linear-gradient(135deg, #1A1612 0%, #2C2318 60%, #1A1612 100%);
+    padding: 5rem 0 4rem;
+    position: relative; overflow: hidden;
+    border-bottom: 2px solid var(--gold);
+}
+.ouv-header::after {
+    content: '\201C'; position: absolute; right: 8%; top: 55%; transform: translateY(-50%);
+    font-size: 18rem; line-height: 1; color: var(--gold); opacity: .06; font-family: 'Playfair Display', serif; pointer-events: none;
+}
+.ouv-eyebrow { font-family: 'Libre Baskerville', serif; font-size: .7rem; letter-spacing: .28em; text-transform: uppercase; color: var(--gold); display: inline-flex; align-items: center; gap: .6rem; }
+.ouv-eyebrow::before { content: ''; width: 24px; height: 1px; background: var(--gold); }
+.ouv-header h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.2rem, 6vw, 3.5rem); font-weight: 900; color: var(--white); margin: .8rem 0 1rem; }
+.ouv-header p { font-family: 'Cormorant Garamond', serif; font-size: 1.25rem; color: var(--gold-pale); max-width: 640px; margin: 0; line-height: 1.6; }
+
+.ouv-section { padding: 4rem 0 5rem; background: var(--cream); }
+
+.ouv-card {
+    background: var(--white); border: 1px solid var(--gray-line); border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-soft); padding: 2rem;
+}
+.ouv-card + .ouv-card { margin-top: 1.5rem; }
+.ouv-card-title { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; color: var(--ink); margin: 0 0 .4rem; display: flex; align-items: center; gap: .55rem; }
+.ouv-card-title i { color: var(--gold); }
+.ouv-card-sub { font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; color: var(--gray-text); margin: 0 0 1.5rem; line-height: 1.55; }
+.ouv-text { font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; color: var(--ink-soft); line-height: 1.65; }
+
+/* Passos "como funciona" */
+.ouv-steps { list-style: none; padding: 0; margin: 0; counter-reset: passo; }
+.ouv-steps li { counter-increment: passo; display: flex; gap: .9rem; padding: .7rem 0; border-bottom: 1px solid var(--gray-line); font-family: 'Cormorant Garamond', serif; font-size: 1.02rem; color: var(--ink-soft); line-height: 1.5; }
+.ouv-steps li:last-child { border-bottom: none; }
+.ouv-steps li::before {
+    content: counter(passo); flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%;
+    background: var(--ink); color: var(--gold); font-family: 'Playfair Display', serif; font-weight: 900; font-size: .9rem;
+    display: flex; align-items: center; justify-content: center; margin-top: .1rem;
+}
+.ouv-steps strong { font-family: 'Playfair Display', serif; color: var(--ink); }
+
+/* Formulário */
+.ouv-label { font-family: 'Libre Baskerville', serif; font-size: .7rem; text-transform: uppercase; letter-spacing: .1em; color: var(--ink-soft); font-weight: 700; display: block; margin-bottom: .5rem; }
+.ouv-label .opt { font-weight: 400; color: var(--gray-text); text-transform: none; letter-spacing: 0; font-family: 'Cormorant Garamond', serif; font-size: .95rem; }
+.ouv-field { margin-bottom: 1.4rem; }
+.ouv-input {
+    width: 100%; background: var(--cream); border: 1px solid var(--gray-line); border-radius: var(--radius-sm);
+    padding: .75rem 1rem; font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; color: var(--ink);
+    transition: border-color var(--transition), background var(--transition), box-shadow var(--transition);
+}
+.ouv-input:focus { outline: none; background: var(--white); border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,168,76,.15); }
+.ouv-input.is-invalid { border-color: #B04848; }
+textarea.ouv-input { min-height: 170px; resize: vertical; line-height: 1.55; }
+.ouv-hint { display: block; font-family: 'Cormorant Garamond', serif; font-size: .95rem; color: var(--gray-text); margin-top: .35rem; }
+.ouv-error { display: block; font-family: 'Cormorant Garamond', serif; font-size: .98rem; color: #B04848; margin-top: .35rem; }
+
+/* Tipos como cartões selecionáveis */
+.ouv-tipos { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: .7rem; border: 0; padding: 0; margin: 0; }
+.ouv-tipo input { position: absolute; opacity: 0; pointer-events: none; }
+.ouv-tipo label {
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .45rem; height: 100%;
+    text-align: center; cursor: pointer; padding: 1rem .6rem;
+    background: var(--cream); border: 1.5px solid var(--gray-line); border-radius: var(--radius-sm);
+    font-family: 'Libre Baskerville', serif; font-size: .68rem; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-soft);
+    transition: border-color var(--transition), background var(--transition), transform var(--transition);
+}
+.ouv-tipo label i { font-size: 1.35rem; color: var(--gold-dim); }
+.ouv-tipo label:hover { border-color: var(--gold); transform: translateY(-2px); }
+.ouv-tipo input:checked + label { background: var(--gold-pale); border-color: var(--gold); color: var(--ink); box-shadow: 0 0 0 3px rgba(201,168,76,.18); }
+.ouv-tipo input:focus-visible + label { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+/* Caixa "anônimo" */
+.ouv-check {
+    display: flex; align-items: flex-start; gap: .75rem; cursor: pointer;
+    background: var(--section-bg, #F9F5EC); border: 1px solid var(--gray-line); border-radius: var(--radius-sm); padding: .9rem 1rem;
+    font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; color: var(--ink-soft); line-height: 1.45;
+}
+.ouv-check input { width: 18px; height: 18px; margin-top: .2rem; accent-color: var(--gold-dim); flex-shrink: 0; }
+.ouv-check strong { font-family: 'Playfair Display', serif; color: var(--ink); }
+.ouv-ident { transition: opacity var(--transition); }
+.ouv-ident[hidden] { display: none; }
+.ouv-anon-note { display: none; font-family: 'Cormorant Garamond', serif; font-size: 1rem; color: var(--gold-dim); margin: -.6rem 0 1.4rem; }
+.is-anonima .ouv-anon-note { display: block; }
+
+.ouv-honeypot { position: absolute !important; left: -9999px !important; width: 1px; height: 1px; overflow: hidden; }
+
+.ouv-btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: .55rem;
+    background: var(--gold); color: var(--ink); border: none; border-radius: var(--radius-sm);
+    font-family: 'Libre Baskerville', serif; font-size: .75rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+    padding: .85rem 1.8rem; cursor: pointer; text-decoration: none; transition: background var(--transition), transform var(--transition);
+}
+.ouv-btn:hover { background: var(--gold-light); color: var(--ink); transform: translateY(-2px); }
+.ouv-btn-outline { background: transparent; border: 1.5px solid var(--gold); color: var(--gold-dim); }
+.ouv-btn-outline:hover { background: var(--gold-pale); color: var(--gold-dim); }
+
+/* Acompanhar (caixa lateral) */
+.ouv-track { background: var(--ink); border-radius: var(--radius-lg); padding: 1.8rem; color: var(--gold-pale); border: 1px solid rgba(201,168,76,.3); }
+.ouv-track h2 { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--white); margin: 0 0 .4rem; }
+.ouv-track p { font-family: 'Cormorant Garamond', serif; font-size: 1rem; color: #B8AEA4; margin: 0 0 1rem; }
+.ouv-track .ouv-input { background: rgba(255,255,255,.06); border-color: rgba(201,168,76,.3); color: var(--white); text-transform: uppercase; letter-spacing: .06em; }
+.ouv-track .ouv-input::placeholder { color: #8A8078; text-transform: none; letter-spacing: 0; }
+
+/* Protocolo em destaque */
+.ouv-protocolo {
+    display: inline-flex; align-items: center; gap: .8rem; flex-wrap: wrap; justify-content: center;
+    background: var(--ink); color: var(--gold); border-radius: var(--radius-sm); padding: .9rem 1.3rem;
+    font-family: 'Libre Baskerville', serif; font-size: clamp(1.05rem, 4vw, 1.5rem); font-weight: 700; letter-spacing: .12em;
+}
+.ouv-copy { background: rgba(201,168,76,.15); border: 1px solid rgba(201,168,76,.35); color: var(--gold-light); border-radius: 2rem; font-size: .65rem; letter-spacing: .1em; text-transform: uppercase; padding: .3rem .8rem; cursor: pointer; font-family: 'Libre Baskerville', serif; }
+.ouv-copy:hover { background: rgba(201,168,76,.28); }
+
+.ouv-success-icon { width: 76px; height: 76px; border-radius: 50%; background: var(--gold-pale); border: 2px solid var(--gold); color: var(--gold-dim); font-size: 2.2rem; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.2rem; }
+
+/* Situação */
+.ouv-meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin: 1.2rem 0 1.6rem; }
+.ouv-meta div { background: var(--cream); border: 1px solid var(--gray-line); border-radius: var(--radius-sm); padding: .8rem 1rem; }
+.ouv-meta span { display: block; font-family: 'Libre Baskerville', serif; font-size: .6rem; letter-spacing: .14em; text-transform: uppercase; color: var(--gray-text); }
+.ouv-meta strong { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--ink); }
+
+.ouv-timeline { display: flex; list-style: none; padding: 0; margin: 0 0 1.8rem; }
+.ouv-timeline li { flex: 1; text-align: center; position: relative; font-family: 'Libre Baskerville', serif; font-size: .62rem; letter-spacing: .08em; text-transform: uppercase; color: var(--gray-text); padding-top: 2.1rem; }
+.ouv-timeline li::before {
+    content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); z-index: 1;
+    width: 26px; height: 26px; border-radius: 50%; background: var(--white); border: 2px solid var(--gray-line);
+}
+.ouv-timeline li::after { content: ''; position: absolute; top: 12px; left: -50%; width: 100%; height: 2px; background: var(--gray-line); }
+.ouv-timeline li:first-child::after { display: none; }
+.ouv-timeline li.feito { color: var(--ink); font-weight: 700; }
+.ouv-timeline li.feito::before { background: var(--gold); border-color: var(--gold); }
+.ouv-timeline li.feito::after { background: var(--gold); }
+.ouv-timeline li.atual::before { box-shadow: 0 0 0 5px rgba(201,168,76,.25); }
+
+.ouv-resposta { background: var(--gold-pale); border: 1px solid rgba(201,168,76,.45); border-left: 4px solid var(--gold); border-radius: var(--radius-sm); padding: 1.2rem 1.4rem; }
+.ouv-resposta h3 { font-family: 'Playfair Display', serif; font-size: 1.05rem; margin: 0 0 .5rem; color: var(--ink); }
+.ouv-resposta p { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; color: var(--ink-soft); line-height: 1.6; margin: 0 0 .6rem; }
+.ouv-resposta p:last-child { margin-bottom: 0; }
+
+.ouv-badge { display: inline-block; font-family: 'Libre Baskerville', serif; font-size: .6rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; padding: .3rem .8rem; border-radius: 2rem; border: 1px solid; }
+.ouv-badge.recebida   { background: #F3F0EA; color: #6A6058; border-color: #DDD4C6; }
+.ouv-badge.em_analise { background: #EEF2FB; color: #3A5EA0; border-color: #C8D3EE; }
+.ouv-badge.respondida { background: #EEF5EE; color: #3A6B3A; border-color: #C5DCC5; }
+.ouv-badge.encerrada  { background: var(--gold-pale); color: var(--gold-dim); border-color: rgba(201,168,76,.4); }
+
+@media (max-width: 575.98px) {
+    .ouv-card, .ouv-track { padding: 1.4rem; }
+    .ouv-header { padding: 3.5rem 0 3rem; }
+    .ouv-tipos { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .ouv-timeline li { font-size: .52rem; letter-spacing: .02em; }
+}

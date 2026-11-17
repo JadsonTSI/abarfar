@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'materias',
     'grupos',
     'transparencia',
+    'ouvidoria',
 ]
 
 MIDDLEWARE = [

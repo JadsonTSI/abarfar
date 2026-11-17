@@ -82,6 +82,7 @@
                 <li class="nav-item"><a class="nav-link {% if path|slice:':6' == '/blog/' %}active{% endif %}" href="{% url 'post_list' %}" {% if path|slice:':6' == '/blog/' %}aria-current="page"{% endif %}>Notícias</a></li>
                 <li class="nav-item"><a class="nav-link {% if path == '/galeria/' %}active{% endif %}" href="{% url 'galeria' %}" {% if path == '/galeria/' %}aria-current="page"{% endif %}>Galeria</a></li>
                 <li class="nav-item"><a class="nav-link {% if path|slice:':15' == '/transparencia/' %}active{% endif %}" href="{% url 'transparencia:portal' %}" {% if path|slice:':15' == '/transparencia/' %}aria-current="page"{% endif %}>Transparência</a></li>
+                <li class="nav-item"><a class="nav-link {% if path|slice:':11' == '/ouvidoria/' %}active{% endif %}" href="{% url 'ouvidoria:index' %}" {% if path|slice:':11' == '/ouvidoria/' %}aria-current="page"{% endif %}>Ouvidoria</a></li>
                 <li class="nav-item"><a class="nav-link {% if path == '/contato/' %}active{% endif %}" href="{% url 'contato' %}" {% if path == '/contato/' %}aria-current="page"{% endif %}>Contato</a></li>
             </ul>
             <div class="d-flex align-items-center gap-2 ms-lg-3 mt-3 mt-lg-0">
@@ -154,6 +155,7 @@
                 <a href="{% url 'post_list' %}" class="footer-link">Notícias</a>
                 <a href="{% url 'galeria' %}" class="footer-link">Galeria</a>
                 <a href="{% url 'transparencia:portal' %}" class="footer-link">Transparência</a>
+                <a href="{% url 'ouvidoria:index' %}" class="footer-link">Ouvidoria</a>
                 <a href="{% url 'contato' %}" class="footer-link">Contato</a>
             </div>
 
