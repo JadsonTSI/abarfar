@@ -1,0 +1,120 @@
+{% load static %}<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Painel{% endblock %} — ABANFAR BF</title>
+    <link rel="icon" type="image/png" href="{% static 'img/logo_abanfar.png' %}?v=2">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Cormorant+Garamond:wght@300;400;600&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/painel.css' %}?v=2">
+    {% block extra_css %}{% endblock %}
+</head>
+<body class="preload">
+
+<div class="app-shell">
+
+    <!-- ============ SIDEBAR ============ -->
+    <aside class="sidebar" id="sidebar" aria-label="Menu principal">
+        <div class="sidebar-deco" aria-hidden="true">𝄞</div>
+
+        <div class="sidebar-top">
+            <a href="{% url 'home' %}" class="sidebar-brand" title="Ir para o site">
+                <div class="sidebar-logo-ring">
+                    <img src="{% static 'img/logo_abanfar.png' %}" alt="Logo ABANFAR BF"
+                         onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+                    <span class="sidebar-logo-placeholder" style="display:none">♪</span>
+                </div>
+                <div class="sidebar-brand-text">
+                    <span class="brand-name">ABANFAR BF</span>
+                    <span class="brand-sub">{% block painel_nome %}Painel{% endblock %}</span>
+                </div>
+            </a>
+            <button type="button" class="btn-collapse" id="btnCollapse" title="Recolher menu" aria-controls="sidebar" aria-expanded="true">
+                <i class="bi bi-layout-sidebar-reverse" id="collapseIcon"></i>
+            </button>
+            <button type="button" class="btn-close-sidebar" id="btnCloseSidebar" title="Fechar menu" aria-label="Fechar menu">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+
+        <div class="sidebar-profile">
+            <div class="profile-avatar">
+                {% if request.user.perfil.foto %}
+                    <img src="{{ request.user.perfil.foto.url }}" alt="Foto de perfil">
+                {% else %}
+                    <i class="bi {% block avatar_icon %}bi-person-fill{% endblock %}"></i>
+                {% endif %}
+            </div>
+            <div class="sidebar-profile-name">
+                <span class="profile-name">{{ user.first_name|default:user.username }}</span>
+                <span class="profile-role">{% block papel %}{% endblock %}</span>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            {% block nav %}{% endblock %}
+            <div class="nav-section-label">Conta</div>
+            <a href="{% url 'contas:perfil' %}" class="sidebar-link">
+                <i class="bi bi-person-circle"></i><span class="nav-label">Meu Perfil</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <span class="sidebar-footer-text">ABANFAR BF © {% now "Y" %}</span>
+            <a href="{% url 'contas:logout' %}" class="btn-logout">
+                <i class="bi bi-box-arrow-left"></i><span class="nav-label">Sair</span>
+            </a>
+        </div>
+    </aside>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- ============ ÁREA PRINCIPAL ============ -->
+    <div class="main-area" id="mainArea">
+
+        <header class="topbar">
+            <div class="topbar-left">
+                <button type="button" class="topbar-icon-btn d-lg-none" id="btnMobileMenu" aria-label="Abrir menu" aria-controls="sidebar" aria-expanded="false">
+                    <i class="bi bi-list"></i>
+                </button>
+                <div class="breadcrumb-custom">
+                    <span class="bc-root">ABANFAR BF</span><span class="bc-sep">♩</span>
+                    <span>{% block papel_breadcrumb %}{% endblock %}</span><span class="bc-sep">♩</span>
+                    <span class="bc-active">{% block pagina %}Início{% endblock %}</span>
+                </div>
+            </div>
+
+            <div class="topbar-right">
+                {% block topbar_extra %}{% endblock %}
+                <a href="{% url 'contas:perfil' %}" class="topbar-user" title="Meu perfil">
+                    <span class="topbar-avatar">
+                        {% if request.user.perfil.foto %}
+                            <img src="{{ request.user.perfil.foto.url }}" alt="">
+                        {% else %}
+                            {{ user.first_name|default:user.username|first }}
+                        {% endif %}
+                    </span>
+                    <span class="topbar-username d-none d-sm-block">{{ user.first_name|default:user.username }}</span>
+                </a>
+            </div>
+        </header>
+
+        <main class="page-content">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="{% static 'js/painel.js' %}?v=1"></script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

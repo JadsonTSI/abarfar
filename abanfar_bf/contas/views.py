@@ -148,7 +148,7 @@ def painel_gerente(request):
     sem_rfid = total_inst_ativos - com_rfid
     
     emprestados = InstrumentoEmprestimo.objects.filter(devolvido=False).count()
-    disponiveis = total_inst_ativos - emprestados
+    disponiveis = max(total_inst_ativos - emprestados, 0)
     
     # 6.1. Condições dos Instrumentos
     cond_otimo = Instrumento.objects.filter(condicao='otimo').count()
@@ -171,7 +171,7 @@ def painel_gerente(request):
     scans_counts = []
     for i in range(6, -1, -1):
         dia = hoje - datetime.timedelta(days=i)
-        labels_atividade.append(dia.strftime("%d/%b"))
+        labels_atividade.append(f"{dia.day:02d}/{meses[dia.month]}")
         
         cnt_emp = InstrumentoEmprestimo.objects.filter(data_emprestimo=dia).count()
         emprestimos_counts.append(cnt_emp)
@@ -224,17 +224,21 @@ def painel_professor(request):
 @aluno_required
 def painel_aluno(request):
     perfil = request.user.perfil
-    aluno = perfil.aluno
-    
-    total_materias = MatriculaMateria.objects.filter(aluno=aluno).count()
-    total_ensaios = EnsaiosproModel.objects.filter(cancelado=False).count()
-    total_apresentacoes = ApresentacaoModel.objects.count()
-    total_colegas = Aluno.objects.filter(naipe=aluno.naipe).exclude(id=aluno.id).count() if aluno.naipe else 0
-    
-    # Eventos Reais do Aluno
+    # Perfil de aluno pode existir sem o cadastro de Aluno vinculado: não quebrar a página
+    aluno = getattr(perfil, "aluno", None)
+
     hoje = timezone.now().date()
-    proximos_ensaios = EnsaiosproModel.objects.filter(cancelado=False, data__gte=hoje).order_by('data', 'inicio')[:3]
-    proximas_apresentacoes = ApresentacaoModel.objects.filter(cancelado=False, data__gte=hoje).order_by('data')[:3]
+    ensaios_futuros = EnsaiosproModel.objects.filter(cancelado=False, data__gte=hoje)
+    apresentacoes_futuras = ApresentacaoModel.objects.filter(cancelado=False, data__gte=hoje)
+
+    total_materias = MatriculaMateria.objects.filter(aluno=aluno).count() if aluno else 0
+    total_ensaios = ensaios_futuros.count()
+    total_apresentacoes = apresentacoes_futuras.count()
+    total_colegas = Aluno.objects.filter(naipe=aluno.naipe).exclude(id=aluno.id).count() if aluno and aluno.naipe else 0
+
+    # Eventos Reais do Aluno
+    proximos_ensaios = ensaios_futuros.order_by('data', 'inicio')[:3]
+    proximas_apresentacoes = apresentacoes_futuras.order_by('data')[:3]
     
     chart_jornada = {
         "labels": ["Matérias", "Próximos Ensaios", "Colegas de Naipe"],
@@ -540,4 +544,4 @@ def exportar_alunos_pdf(request):
     if pdf_response:
         pdf_response['Content-Disposition'] = 'attachment; filename="alunos.pdf"'
         return pdf_response
-    return HttpResponse("Erro ao gerar PDF", status=500)
+    return HttpResponse("Erro ao gerar PDF", status=500)
