@@ -14,5 +14,6 @@ urlpatterns = [
     path("materias/", include("materias.urls")),
     path("grupos/", include("grupos.urls")),
     path('transparencia/', include('transparencia.urls', namespace='transparencia')),
+    path('ouvidoria/', include('ouvidoria.urls')),
  
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

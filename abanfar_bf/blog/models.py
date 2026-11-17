@@ -18,3 +18,33 @@ class Post(models.Model):
 
     def __str__(self):
         return self.titulo
+
+
+class MensagemContato(models.Model):
+    nome = models.CharField("Nome", max_length=120)
+    email = models.EmailField("E-mail")
+    assunto = models.CharField("Assunto", max_length=150)
+    mensagem = models.TextField("Mensagem")
+    criada_em = models.DateTimeField("Recebida em", auto_now_add=True)
+    lida = models.BooleanField("Lida", default=False)
+
+    class Meta:
+        verbose_name = "Mensagem de contato"
+        verbose_name_plural = "Mensagens de contato"
+        ordering = ["-criada_em"]
+
+    def __str__(self):
+        return f"{self.nome} — {self.assunto}"
+
+
+class InscricaoNewsletter(models.Model):
+    email = models.EmailField("E-mail", unique=True)
+    criada_em = models.DateTimeField("Inscrito em", auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Inscrição na newsletter"
+        verbose_name_plural = "Inscrições na newsletter"
+        ordering = ["-criada_em"]
+
+    def __str__(self):
+        return self.email

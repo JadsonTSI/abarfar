@@ -1350,15 +1350,18 @@ img { max-width: 100%; display: block; }
 /* =============================================
    SCROLL REVEAL (JS-powered)
 ============================================= */
-.reveal {
-    opacity: 0;
-    transform: translateY(28px);
-    transition: opacity 0.7s ease, transform 0.7s ease;
-}
-
-.reveal.visible {
-    opacity: 1;
-    transform: translateY(0);
+/* Só esconde quando o JS está ativo e o usuário não pediu menos movimento:
+   sem JS (ou com movimento reduzido) o conteúdo aparece normalmente. */
+@media (prefers-reduced-motion: no-preference) {
+    html.js .reveal {
+        opacity: 0;
+        transform: translateY(28px);
+        transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    html.js .reveal.visible {
+        opacity: 1;
+        transform: none;
+    }
 }
 
 /* =============================================
@@ -1408,3 +1411,55 @@ img { max-width: 100%; display: block; }
 
     .gallery-item:first-child { grid-column: span 1; }
 }
+
+/* =============================================
+   AJUSTES GERAIS (melhorias)
+============================================= */
+html, body { overflow-x: clip; }
+img { max-width: 100%; }
+
+/* Bootstrap: gutters g-5 (3rem) são maiores que o padding do container em telas
+   pequenas e criam rolagem horizontal. */
+@media (max-width: 575.98px) {
+    .row.g-5, .row.gx-5 { --bs-gutter-x: 1.5rem; }
+    .top-bar .top-bar-local { display: none; }
+    .top-bar .container { justify-content: center !important; }
+}
+
+/* Mensagens do sistema */
+.site-messages { position: relative; z-index: 5; padding-top: 1.25rem; }
+.site-alert {
+    display: flex; align-items: flex-start; gap: .7rem;
+    font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; line-height: 1.5;
+    background: var(--gold-pale); color: var(--ink-soft);
+    border: 1px solid rgba(201,168,76,.45); border-left: 4px solid var(--gold);
+    border-radius: var(--radius-sm); padding: .8rem 2.8rem .8rem 1rem; margin-bottom: .75rem;
+    position: relative;
+}
+.site-alert i { color: var(--gold-dim); margin-top: .15rem; }
+.site-alert.alert-error { background: #FBEDEB; border-color: #E8BDB7; border-left-color: #B04848; }
+.site-alert.alert-error i { color: #B04848; }
+.site-alert .btn-close { position: absolute; top: .75rem; right: .75rem; font-size: .7rem; }
+
+/* Newsletter (rodapé e home) */
+.newsletter-inline input[type=email] {
+    width: 100%; background: rgba(255,255,255,.05); border: 1px solid rgba(201,168,76,.25);
+    border-radius: var(--radius-sm); padding: .45rem .8rem; margin-bottom: .5rem;
+    font-family: 'Cormorant Garamond', serif; font-size: .95rem; color: #C8BFB4; outline: none;
+}
+.newsletter-inline input[type=email]:focus { border-color: var(--gold); }
+.newsletter-inline button {
+    width: 100%; background: var(--gold); color: var(--ink); border: none; border-radius: var(--radius-sm);
+    font-family: 'Libre Baskerville', serif; font-size: .7rem; letter-spacing: .12em; text-transform: uppercase;
+    padding: .5rem; font-weight: 700; cursor: pointer; transition: background var(--transition);
+}
+.newsletter-inline button:hover { background: var(--gold-light); }
+
+/* Erros de formulário */
+.form-gold-control.is-invalid { border-color: #B04848 !important; }
+.field-error { display: block; font-family: 'Cormorant Garamond', serif; font-size: .95rem; color: #B04848; margin-top: .3rem; }
+
+/* Paginação real */
+.pagination-custom .page-btn.disabled { opacity: .4; pointer-events: none; }
+
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }

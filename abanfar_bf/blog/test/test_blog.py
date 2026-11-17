@@ -76,11 +76,85 @@ class BlogViewsTestCase(TestCase):
             'assunto': 'Matrícula',
             'mensagem': 'Gostaria de matricular meu filho.'
         }
-        response = self.client.post(reverse('contato'), data)
+        response = self.client.post(reverse('contato'), data, follow=True)
         self.assertEqual(response.status_code, 200)
+        self.assertRedirects(response, reverse('contato'))
         self.assertTemplateUsed(response, 'blog/contato.html')
         # Check if success message is displayed
         messages = list(response.context['messages'])
         self.assertEqual(len(messages), 1)
         self.assertIn("Obrigado, João Silva!", str(messages[0]))
 
+
+
+class MelhoriasSitePublicoTests(TestCase):
+    def test_contato_salva_mensagem(self):
+        from blog.models import MensagemContato
+        self.client.post(reverse('contato'), {
+            'nome': 'Ana', 'email': 'ana@example.com', 'assunto': 'Apoio', 'mensagem': 'Quero ajudar.'
+        })
+        msg = MensagemContato.objects.get()
+        self.assertEqual(msg.nome, 'Ana')
+        self.assertFalse(msg.lida)
+
+    def test_contato_invalido_nao_salva_e_mostra_erros(self):
+        from blog.models import MensagemContato
+        response = self.client.post(reverse('contato'), {
+            'nome': '   ', 'email': 'nao-e-email', 'assunto': 'X', 'mensagem': 'Oi'
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(MensagemContato.objects.count(), 0)
+        self.assertContains(response, 'field-error')
+        # mantém o que a pessoa digitou
+        self.assertContains(response, 'value="nao-e-email"')
+
+    def test_newsletter_inscreve_uma_vez(self):
+        from blog.models import InscricaoNewsletter
+        url = reverse('newsletter')
+        r1 = self.client.post(url, {'email': 'Fulano@Example.com', 'next': '/sobre/'})
+        self.assertRedirects(r1, '/sobre/', fetch_redirect_response=False)
+        self.client.post(url, {'email': 'fulano@example.com', 'next': '/'})
+        self.assertEqual(InscricaoNewsletter.objects.count(), 1)
+        self.assertEqual(InscricaoNewsletter.objects.get().email, 'fulano@example.com')
+
+    def test_newsletter_ignora_redirect_externo(self):
+        r = self.client.post(reverse('newsletter'), {'email': 'a@b.com', 'next': 'https://malicioso.example/'})
+        self.assertRedirects(r, '/', fetch_redirect_response=False)
+
+    def test_newsletter_so_aceita_post(self):
+        self.assertEqual(self.client.get(reverse('newsletter')).status_code, 405)
+
+    def test_lista_de_noticias_pagina(self):
+        from datetime import date
+        from blog.models import Post
+        for i in range(8):
+            Post.objects.create(titulo=f'Post {i}', tag='Notícias', resumo='r', conteudo='c', data_publicacao=date(2025, 1, i + 1))
+        r1 = self.client.get(reverse('post_list'))
+        self.assertEqual(r1.status_code, 200)
+        self.assertEqual(len(r1.context['posts']), 6)
+        self.assertContains(r1, '?pagina=2')
+        r2 = self.client.get(reverse('post_list') + '?pagina=2')
+        self.assertEqual(len(r2.context['posts']), 2)
+        # página inválida não quebra
+        self.assertEqual(self.client.get(reverse('post_list') + '?pagina=abc').status_code, 200)
+
+    def test_datas_em_portugues(self):
+        from datetime import date
+        from blog.models import Post
+        post = Post.objects.create(titulo='Data teste', tag='Notícias', resumo='r', conteudo='c', data_publicacao=date(2025, 3, 7))
+        r = self.client.get(reverse('post_detail', args=[post.slug]))
+        self.assertContains(r, '7 de março de 2025')
+
+    def test_home_sem_links_mortos(self):
+        r = self.client.get(reverse('home'))
+        self.assertNotContains(r, 'href="#"')
+
+    def test_botao_painel_respeita_o_perfil(self):
+        from django.contrib.auth.models import User
+        from contas.models import Perfil
+        user = User.objects.create_user('prof_teste', password='x')
+        Perfil.objects.create(user=user, tipo='professor')
+        self.client.force_login(user)
+        r = self.client.get(reverse('home'))
+        self.assertEqual(r.context['painel_url'], reverse('professores:professoreshome'))
+        self.assertContains(r, 'Meu painel')

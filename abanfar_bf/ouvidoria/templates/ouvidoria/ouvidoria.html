@@ -1,0 +1,161 @@
+{% extends "blog/base.html" %}
+{% load static %}
+
+{% block title %}Ouvidoria — ABANFAR BF{% endblock %}
+{% block meta_description %}Ouvidoria da ABANFAR BF: envie reclamações, sugestões, elogios, denúncias ou pedidos de informação, inclusive de forma anônima, e acompanhe pelo protocolo.{% endblock %}
+{% block og_title %}Ouvidoria da ABANFAR BF{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'ouvidoria/ouvidoria.css' %}?v=1">
+{% endblock %}
+
+{% block content %}
+<header class="ouv-header">
+    <div class="container">
+        <span class="ouv-eyebrow">Sua voz importa</span>
+        <h1>Ouvidoria</h1>
+        <p>Um canal direto para você enviar reclamações, sugestões, elogios, denúncias ou pedidos de informação sobre a ABANFAR BF, inclusive de forma anônima.</p>
+    </div>
+</header>
+
+<section class="ouv-section">
+    <div class="container">
+        <div class="row g-4">
+
+            <!-- FORMULÁRIO -->
+            <div class="col-lg-8 order-lg-2">
+                <div class="ouv-card">
+                    <h2 class="ouv-card-title"><i class="bi bi-chat-square-text"></i> Registrar manifestação</h2>
+                    <p class="ouv-card-sub">Preencha os campos abaixo. Ao enviar, você recebe um número de protocolo para acompanhar a resposta.</p>
+
+                    <form method="post" action="{% url 'ouvidoria:index' %}" id="formOuvidoria" novalidate
+                          class="{% if form.anonima.value %}is-anonima{% endif %}">
+                        {% csrf_token %}
+
+                        <div class="ouv-field">
+                            <fieldset>
+                                <legend class="ouv-label">Tipo de manifestação</legend>
+                                <div class="ouv-tipos">
+                                    {% for valor, rotulo in tipos.choices %}
+                                    <div class="ouv-tipo">
+                                        <input type="radio" name="tipo" id="tipo_{{ valor }}" value="{{ valor }}" required
+                                               {% if form.tipo.value == valor %}checked{% endif %}>
+                                        <label for="tipo_{{ valor }}">
+                                            <i class="bi {% if valor == 'reclamacao' %}bi-exclamation-triangle{% elif valor == 'sugestao' %}bi-lightbulb{% elif valor == 'elogio' %}bi-hand-thumbs-up{% elif valor == 'denuncia' %}bi-shield-exclamation{% else %}bi-question-circle{% endif %}"></i>
+                                            {{ rotulo }}
+                                        </label>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </fieldset>
+                            {% for e in form.tipo.errors %}<span class="ouv-error">{{ e }}</span>{% endfor %}
+                        </div>
+
+                        <div class="ouv-field">
+                            <label class="ouv-check" for="id_anonima">
+                                <input type="checkbox" name="anonima" id="id_anonima" {% if form.anonima.value %}checked{% endif %}>
+                                <span><strong>Quero me manifestar de forma anônima.</strong> Seus dados de identificação não serão solicitados nem guardados.</span>
+                            </label>
+                        </div>
+                        <p class="ouv-anon-note"><i class="bi bi-info-circle me-1"></i>Sem e-mail não conseguimos responder diretamente a você. Guarde o protocolo para acompanhar a resposta aqui no site.</p>
+
+                        <div class="ouv-ident" id="camposIdentificacao" {% if form.anonima.value %}hidden{% endif %}>
+                            <div class="row g-3">
+                                <div class="col-md-6 ouv-field mb-0">
+                                    <label class="ouv-label" for="id_nome">Nome</label>
+                                    <input type="text" name="nome" id="id_nome" class="ouv-input{% if form.nome.errors %} is-invalid{% endif %}" value="{{ form.nome.value|default:'' }}" maxlength="120" autocomplete="name">
+                                    {% for e in form.nome.errors %}<span class="ouv-error">{{ e }}</span>{% endfor %}
+                                </div>
+                                <div class="col-md-6 ouv-field mb-0">
+                                    <label class="ouv-label" for="id_email">E-mail</label>
+                                    <input type="email" name="email" id="id_email" class="ouv-input{% if form.email.errors %} is-invalid{% endif %}" value="{{ form.email.value|default:'' }}" autocomplete="email">
+                                    {% for e in form.email.errors %}<span class="ouv-error">{{ e }}</span>{% endfor %}
+                                </div>
+                                <div class="col-md-6 ouv-field">
+                                    <label class="ouv-label" for="id_telefone">Telefone <span class="opt">(opcional)</span></label>
+                                    <input type="tel" name="telefone" id="id_telefone" class="ouv-input{% if form.telefone.errors %} is-invalid{% endif %}" value="{{ form.telefone.value|default:'' }}" maxlength="30" autocomplete="tel" placeholder="(84) 9 0000-0000">
+                                    {% for e in form.telefone.errors %}<span class="ouv-error">{{ e }}</span>{% endfor %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ouv-field">
+                            <label class="ouv-label" for="id_assunto">Assunto</label>
+                            <input type="text" name="assunto" id="id_assunto" class="ouv-input{% if form.assunto.errors %} is-invalid{% endif %}" value="{{ form.assunto.value|default:'' }}" maxlength="150" required placeholder="Resuma em poucas palavras">
+                            {% for e in form.assunto.errors %}<span class="ouv-error">{{ e }}</span>{% endfor %}
+                        </div>
+
+                        <div class="ouv-field">
+                            <label class="ouv-label" for="id_mensagem">Relato</label>
+                            <textarea name="mensagem" id="id_mensagem" class="ouv-input{% if form.mensagem.errors %} is-invalid{% endif %}" required placeholder="Conte o que aconteceu ou o que você gostaria de sugerir. Se possível, informe datas, locais e pessoas envolvidas.">{{ form.mensagem.value|default:'' }}</textarea>
+                            {% for e in form.mensagem.errors %}<span class="ouv-error">{{ e }}</span>{% endfor %}
+                        </div>
+
+                        <div class="ouv-honeypot" aria-hidden="true">
+                            <label for="id_site">Não preencha este campo</label>
+                            <input type="text" name="site" id="id_site" tabindex="-1" autocomplete="off">
+                        </div>
+
+                        <div class="ouv-field">
+                            <label class="ouv-check" for="id_concordo">
+                                <input type="checkbox" name="concordo" id="id_concordo" required {% if form.concordo.value %}checked{% endif %}>
+                                <span>Declaro que as informações são verdadeiras e autorizo o uso dos dados informados exclusivamente para o tratamento desta manifestação.</span>
+                            </label>
+                            {% for e in form.concordo.errors %}<span class="ouv-error">{{ e }}</span>{% endfor %}
+                        </div>
+
+                        <div class="d-flex flex-wrap gap-2 justify-content-end">
+                            <button type="submit" class="ouv-btn"><i class="bi bi-send"></i> Enviar manifestação</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- LATERAL -->
+            <aside class="col-lg-4 order-lg-1">
+                <div class="ouv-track">
+                    <h2><i class="bi bi-search me-1" style="color:var(--gold)"></i> Acompanhar manifestação</h2>
+                    <p>Já enviou uma manifestação? Digite o protocolo para ver a situação e a resposta.</p>
+                    <form method="get" action="{% url 'ouvidoria:acompanhar' %}">
+                        <label for="trackProtocolo" class="visually-hidden">Número do protocolo</label>
+                        <input type="text" name="protocolo" id="trackProtocolo" class="ouv-input mb-2" placeholder="Ex.: OUV-2026-K7M4QX9P" maxlength="20" required autocomplete="off">
+                        <button type="submit" class="ouv-btn w-100"><i class="bi bi-arrow-right-circle"></i> Consultar</button>
+                    </form>
+                </div>
+
+                <div class="ouv-card mt-4">
+                    <h2 class="ouv-card-title" style="font-size:1.1rem"><i class="bi bi-signpost-split"></i> Como funciona</h2>
+                    <ol class="ouv-steps">
+                        <li><span><strong>Envie</strong> sua manifestação pelo formulário.</span></li>
+                        <li><span><strong>Guarde o protocolo</strong> que aparece na tela de confirmação.</span></li>
+                        <li><span><strong>Nossa equipe analisa</strong> e registra a resposta.</span></li>
+                        <li><span><strong>Consulte</strong> a resposta aqui, com o protocolo.</span></li>
+                    </ol>
+                </div>
+
+                <div class="ouv-card mt-4">
+                    <h2 class="ouv-card-title" style="font-size:1.1rem"><i class="bi bi-lock"></i> Sigilo e privacidade</h2>
+                    <p class="ouv-text mb-0">Os dados enviados são vistos apenas pela equipe responsável pela ouvidoria e usados somente para tratar a sua manifestação. Denúncias podem ser feitas de forma anônima.</p>
+                </div>
+            </aside>
+
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+(function () {
+    const form = document.getElementById('formOuvidoria');
+    const anonima = document.getElementById('id_anonima');
+    const ident = document.getElementById('camposIdentificacao');
+    function atualizar() {
+        ident.hidden = anonima.checked;
+        form.classList.toggle('is-anonima', anonima.checked);
+    }
+    anonima.addEventListener('change', atualizar);
+    atualizar();
+})();
+</script>
+{% endblock %}

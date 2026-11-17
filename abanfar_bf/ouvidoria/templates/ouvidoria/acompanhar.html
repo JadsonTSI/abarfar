@@ -1,0 +1,87 @@
+{% extends "blog/base.html" %}
+{% load static blog_tags %}
+
+{% block title %}Acompanhar manifestação — Ouvidoria ABANFAR BF{% endblock %}
+
+{% block extra_css %}
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="{% static 'ouvidoria/ouvidoria.css' %}?v=1">
+{% endblock %}
+
+{% block content %}
+<header class="ouv-header">
+    <div class="container">
+        <span class="ouv-eyebrow">Ouvidoria</span>
+        <h1>Acompanhar manifestação</h1>
+        <p>Digite o número de protocolo que você recebeu ao enviar a manifestação.</p>
+    </div>
+</header>
+
+<section class="ouv-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+
+                <div class="ouv-card">
+                    <form method="get" action="{% url 'ouvidoria:acompanhar' %}" class="row g-2 align-items-start">
+                        <div class="col-sm">
+                            <label for="id_protocolo" class="visually-hidden">Número do protocolo</label>
+                            <input type="text" name="protocolo" id="id_protocolo" class="ouv-input{% if form.protocolo.errors %} is-invalid{% endif %}"
+                                   value="{{ form.protocolo.value|default:'' }}" placeholder="Ex.: OUV-2026-K7M4QX9P" maxlength="20" required autocomplete="off"
+                                   style="text-transform:uppercase;letter-spacing:.06em">
+                            {% for e in form.protocolo.errors %}<span class="ouv-error">{{ e }}</span>{% endfor %}
+                        </div>
+                        <div class="col-sm-auto">
+                            <button type="submit" class="ouv-btn w-100"><i class="bi bi-search"></i> Consultar</button>
+                        </div>
+                    </form>
+                </div>
+
+                {% if nao_encontrada %}
+                <div class="ouv-card">
+                    <h2 class="ouv-card-title"><i class="bi bi-question-circle"></i> Protocolo não encontrado</h2>
+                    <p class="ouv-text mb-0">Confira se o número foi digitado corretamente, incluindo os hífens (ex.: OUV-2026-K7M4QX9P). Se o problema continuar, <a href="{% url 'contato' %}" style="color:var(--gold-dim)">fale com a gente</a>.</p>
+                </div>
+                {% endif %}
+
+                {% if manifestacao %}
+                {% with s=manifestacao.status %}
+                <div class="ouv-card">
+                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+                        <h2 class="ouv-card-title mb-0"><i class="bi bi-file-earmark-text"></i> {{ manifestacao.protocolo }}</h2>
+                        <span class="ouv-badge {{ s }}">{{ manifestacao.get_status_display }}</span>
+                    </div>
+
+                    <div class="ouv-meta">
+                        <div><span>Tipo</span><strong>{{ manifestacao.get_tipo_display }}</strong></div>
+                        <div><span>Recebida em</span><strong>{{ manifestacao.criada_em|data_curta }}</strong></div>
+                        <div><span>Assunto</span><strong>{{ manifestacao.assunto|truncatechars:60 }}</strong></div>
+                    </div>
+
+                    <ol class="ouv-timeline" aria-label="Andamento">
+                        <li class="feito {% if s == 'recebida' %}atual{% endif %}">Recebida</li>
+                        <li class="{% if s != 'recebida' %}feito{% endif %} {% if s == 'em_analise' %}atual{% endif %}">Em análise</li>
+                        <li class="{% if s == 'respondida' or s == 'encerrada' %}feito{% endif %} {% if s == 'respondida' %}atual{% endif %}">Respondida</li>
+                        <li class="{% if s == 'encerrada' %}feito atual{% endif %}">Encerrada</li>
+                    </ol>
+
+                    {% if manifestacao.resposta %}
+                    <div class="ouv-resposta">
+                        <h3><i class="bi bi-reply me-1" style="color:var(--gold-dim)"></i> Resposta da ABANFAR BF{% if manifestacao.respondida_em %} <small style="font-family:'Libre Baskerville',serif;font-size:.65rem;color:var(--gray-text);font-weight:400">· {{ manifestacao.respondida_em|data_curta }}</small>{% endif %}</h3>
+                        {{ manifestacao.resposta|linebreaks }}
+                    </div>
+                    {% else %}
+                    <p class="ouv-text mb-0"><i class="bi bi-hourglass-split me-1" style="color:var(--gold-dim)"></i> Sua manifestação está com a nossa equipe. A resposta aparecerá aqui assim que for registrada.</p>
+                    {% endif %}
+                </div>
+                {% endwith %}
+                {% endif %}
+
+                <p class="text-center mt-4 mb-0">
+                    <a href="{% url 'ouvidoria:index' %}" class="ouv-btn ouv-btn-outline"><i class="bi bi-plus-circle"></i> Nova manifestação</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

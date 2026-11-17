@@ -1,7 +1,12 @@
 {% extends "blog/base.html" %}
-{% load static %}
+{% load static blog_tags %}
 
 {% block title %}{{ post.titulo }} — ABANFAR BF{% endblock %}
+{% block meta_description %}{{ post.resumo|truncatechars:160 }}{% endblock %}
+{% block og_type %}article{% endblock %}
+{% block og_title %}{{ post.titulo }}{% endblock %}
+{% block og_description %}{{ post.resumo|truncatechars:200 }}{% endblock %}
+{% block og_image %}{% if post.imagem_estatica %}{{ request.scheme }}://{{ request.get_host }}{% static post.imagem_estatica %}{% else %}{{ block.super }}{% endif %}{% endblock %}
 
 {% block extra_css %}
 <style>
@@ -57,8 +62,8 @@
     <div class="container">
         
         <!-- Back Button -->
-        <a href="{% url 'home' %}#blog" class="btn btn-outline-secondary btn-sm mb-4 px-3 py-2" style="font-family:'Libre Baskerville',serif;font-size:0.75rem;letter-spacing:0.06em">
-            <i class="bi bi-arrow-left me-1"></i> Voltar para o Blog
+        <a href="{% url 'post_list' %}" class="btn btn-outline-secondary btn-sm mb-4 px-3 py-2" style="font-family:'Libre Baskerville',serif;font-size:0.75rem;letter-spacing:0.06em">
+            <i class="bi bi-arrow-left me-1"></i> Todas as notícias
         </a>
 
         <div class="row g-5">
@@ -70,7 +75,7 @@
                 <h1 class="post-detail-title">{{ post.titulo }}</h1>
                 
                 <div class="post-detail-meta">
-                    <span><i class="bi bi-calendar3"></i> {{ post.data_publicacao|date:"d \d\e F \d\e Y" }}</span>
+                    <span><i class="bi bi-calendar3"></i> {{ post.data_publicacao|data_extenso }}</span>
                     <span><i class="bi bi-person"></i> {{ post.autor }}</span>
                     <span><i class="bi bi-folder-fill"></i> Publicações</span>
                 </div>
@@ -138,7 +143,7 @@
                                 <a href="{% url 'post_detail' rp.slug %}" class="widget-posts-link">
                                     {{ rp.titulo }}
                                 </a>
-                                <span class="widget-posts-meta">{{ rp.data_publicacao|date:"d \d\e M \d\e Y" }}</span>
+                                <span class="widget-posts-meta">{{ rp.data_publicacao|data_curta }}</span>
                             </li>
                             {% empty %}
                             <li class="text-muted" style="font-family:'Cormorant Garamond',serif">Nenhuma outra publicação disponível.</li>

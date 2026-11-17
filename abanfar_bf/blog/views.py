@@ -1,6 +1,10 @@
-from django.shortcuts import render, get_object_or_404
+from django.core.paginator import Paginator
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
-from .models import Post
+from django.utils.http import url_has_allowed_host_and_scheme
+from django.views.decorators.http import require_POST
+from .forms import ContatoForm, NewsletterForm
+from .models import Post, InscricaoNewsletter
 from datetime import date
 
 def popular_posts():
@@ -46,37 +50,82 @@ def popular_posts():
             data_publicacao=date(2025, 1, 18)
         )
 
+POSTS_NA_HOME = 4
+POSTS_POR_PAGINA = 6
+
+
 def home(request):
     popular_posts()
     posts = Post.objects.order_by('-data_publicacao')
-    featured_post = posts.first() if posts.exists() else None
-    grid_posts = list(posts[1:]) if posts.count() > 1 else []
-    
+    featured_post = posts.first()
+    grid_posts = list(posts[1:POSTS_NA_HOME + 1])
+
     context = {
         'featured_post': featured_post,
         'grid_posts': grid_posts,
+        'tem_mais_posts': posts.count() > POSTS_NA_HOME + 1,
     }
     return render(request, "blog/home.html", context)
+
+
+def post_list(request):
+    popular_posts()
+    paginator = Paginator(Post.objects.order_by('-data_publicacao'), POSTS_POR_PAGINA)
+    page_obj = paginator.get_page(request.GET.get('pagina'))
+    return render(request, "blog/post_list.html", {
+        "page_obj": page_obj,
+        "posts": page_obj.object_list,
+    })
+
 
 def post_detail(request, slug):
     post = get_object_or_404(Post, slug=slug)
     recent_posts = Post.objects.exclude(id=post.id).order_by('-data_publicacao')[:4]
     return render(request, "blog/post_detail.html", {"post": post, "recent_posts": recent_posts})
 
+
 def sobre(request):
     return render(request, "blog/sobre.html")
+
 
 def projetos(request):
     return render(request, "blog/projetos.html")
 
+
 def galeria(request):
     return render(request, "blog/galeria.html")
 
+
 def contato(request):
     if request.method == "POST":
-        nome = request.POST.get("nome")
-        email = request.POST.get("email")
-        assunto = request.POST.get("assunto")
-        mensagem = request.POST.get("mensagem")
-        messages.success(request, f"Obrigado, {nome}! Sua mensagem foi enviada com sucesso e responderemos em breve.")
-    return render(request, "blog/contato.html")
+        form = ContatoForm(request.POST)
+        if form.is_valid():
+            mensagem = form.save()
+            messages.success(
+                request,
+                f"Obrigado, {mensagem.nome}! Sua mensagem foi recebida e responderemos em breve.",
+            )
+            return redirect("contato")
+        messages.error(request, "Não foi possível enviar: confira os campos destacados.")
+    else:
+        form = ContatoForm()
+    return render(request, "blog/contato.html", {"form": form})
+
+
+@require_POST
+def newsletter(request):
+    destino = request.POST.get("next") or ""
+    if not url_has_allowed_host_and_scheme(destino, allowed_hosts={request.get_host()}, require_https=request.is_secure()):
+        destino = "/"
+
+    form = NewsletterForm(request.POST)
+    if form.is_valid():
+        email = form.cleaned_data["email"].lower()
+        _, criada = InscricaoNewsletter.objects.get_or_create(email=email)
+        if criada:
+            messages.success(request, "Inscrição confirmada! Você vai receber as novidades da ABANFAR BF.")
+        else:
+            messages.info(request, "Este e-mail já está inscrito na nossa newsletter.")
+    else:
+        messages.error(request, form.errors["email"][0])
+    return redirect(destino)
