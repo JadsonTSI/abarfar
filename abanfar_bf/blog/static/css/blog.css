@@ -390,64 +390,103 @@ img { max-width: 100%; display: block; }
     margin-top: 0.3rem;
 }
 
-/* Emblem / logo circle */
+/* Emblem: logo no centro, 3 anéis e uma nota orbitando em cada anel */
 .hero-musical-emblem {
-    width: 380px; height: 380px;
+    width: 420px; height: 420px;
     border-radius: 50%;
     border: 1px solid rgba(201,168,76,0.25);
     display: flex; align-items: center; justify-content: center;
     position: relative;
 }
 
-.hero-musical-emblem::before {
-    content: '';
-    position: absolute; inset: 12px;
-    border-radius: 50%;
-    border: 1px solid rgba(201,168,76,0.15);
-}
-
+.hero-musical-emblem::before,
 .hero-musical-emblem::after {
     content: '';
-    position: absolute; inset: 28px;
+    position: absolute;
     border-radius: 50%;
-    border: 1px solid rgba(201,168,76,0.1);
+    pointer-events: none;
 }
+.hero-musical-emblem::before { inset: 12px; border: 1px solid rgba(201,168,76,0.15); }
+.hero-musical-emblem::after  { inset: 28px; border: 1px solid rgba(201,168,76,0.1); }
 
-.emblem-clef {
-    font-size: 11rem;
-    color: var(--gold);
-    opacity: 0.7;
-    position: relative; z-index: 1;
-    font-family: serif;
-    line-height: 1;
-    animation: pulseGlow 4s ease-in-out infinite;
+.emblem-logo {
+    position: relative; z-index: 2;
+    /* Ocupa quase todo o anel interno; borda fina e pouco respiro para a logo ficar grande */
+    width: 318px; height: 318px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 50% 42%, #FFFFFF 0%, #FFFBF0 60%, var(--gold-pale) 100%);
+    border: 1px solid rgba(201,168,76,0.7);
+    /* margem que respeita a curva do círculo: o slogan da logo vai quase de ponta a ponta */
+    padding: 40px;
+    display: flex; align-items: center; justify-content: center;
+    animation: emblemGlow 4s ease-in-out infinite;
 }
+.emblem-logo img { width: 100%; height: 100%; object-fit: contain; }
 
+/* Usado também pelo ícone da seção "Apoie a música" */
 @keyframes pulseGlow {
     0%, 100% { text-shadow: 0 0 40px rgba(201,168,76,0.3); }
     50%       { text-shadow: 0 0 80px rgba(201,168,76,0.6), 0 0 120px rgba(201,168,76,0.2); }
 }
 
-/* Orbit animation */
-.orbit-ring {
-    position: absolute; inset: -20px;
-    border-radius: 50%;
-    animation: orbit 18s linear infinite;
+@keyframes emblemGlow {
+    0%, 100% { box-shadow: 0 0 30px rgba(201,168,76,0.25); }
+    50%      { box-shadow: 0 0 70px rgba(201,168,76,0.45); }
 }
+
+/* Cada órbita tem o tamanho de um anel e gira; a nota fica no topo dela */
+.emblem-orbit {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 3;
+    animation: orbit var(--orbit-tempo) linear infinite;
+    animation-delay: var(--orbit-atraso, 0s);
+}
+.orbit-1 { inset: -1px; --orbit-tempo: 22s; --orbit-atraso: -3s; }
+.orbit-2 { inset: 12px; --orbit-tempo: 16s; --orbit-atraso: -9s;  animation-direction: reverse; }
+.orbit-3 { inset: 28px; --orbit-tempo: 12s; --orbit-atraso: -2s; }
 
 @keyframes orbit {
     from { transform: rotate(0deg); }
     to   { transform: rotate(360deg); }
 }
 
-.orbit-dot {
+.orbit-note {
     position: absolute;
     top: 0; left: 50%;
-    transform: translateX(-50%);
-    width: 10px; height: 10px;
-    background: var(--gold);
+    width: 34px; height: 34px;
+    margin: -17px 0 0 -17px;
     border-radius: 50%;
-    box-shadow: 0 0 8px rgba(201,168,76,0.8);
+    background: var(--ink);
+    border: 1px solid rgba(201,168,76,0.55);
+    box-shadow: 0 0 14px rgba(201,168,76,0.45);
+    display: flex; align-items: center; justify-content: center;
+}
+/* Gira ao contrário da órbita para a nota ficar sempre em pé */
+.orbit-note > span {
+    display: block;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.15rem;
+    line-height: 1;
+    color: var(--gold-light);
+    animation: orbit var(--orbit-tempo) linear infinite reverse;
+    animation-delay: var(--orbit-atraso, 0s);
+}
+.orbit-2 .orbit-note > span { animation-direction: normal; }
+
+/* Quem pede "menos movimento" (ex.: animações do Windows desligadas) ainda vê as notas
+   girando, mas bem devagar e sem o brilho pulsando. */
+@media (prefers-reduced-motion: reduce) {
+    .orbit-1 { --orbit-tempo: 60s; }
+    .orbit-2 { --orbit-tempo: 48s; }
+    .orbit-3 { --orbit-tempo: 40s; }
+    .emblem-logo { animation: none; box-shadow: 0 0 40px rgba(201,168,76,0.3); }
+}
+
+@media (max-width: 1199.98px) {
+    .hero-musical-emblem { width: 350px; height: 350px; }
+    .emblem-logo { width: 262px; height: 262px; padding: 33px; }
 }
 
 /* =============================================

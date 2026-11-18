@@ -228,8 +228,13 @@
             </div>
             <div class="col-lg-5 d-none d-lg-flex justify-content-center">
                 <div class="hero-musical-emblem">
-                    <div class="orbit-ring"><div class="orbit-dot"></div></div>
-                    <span class="emblem-clef">𝄞</span>
+                    <!-- Uma nota girando em cada um dos 3 anéis -->
+                    <div class="emblem-orbit orbit-1" aria-hidden="true"><span class="orbit-note"><span>♪</span></span></div>
+                    <div class="emblem-orbit orbit-2" aria-hidden="true"><span class="orbit-note"><span>♫</span></span></div>
+                    <div class="emblem-orbit orbit-3" aria-hidden="true"><span class="orbit-note"><span>♩</span></span></div>
+                    <div class="emblem-logo">
+                        <img src="{% static 'img/logo_abanfar.png' %}" alt="Logo da ABANFAR BF" width="363" height="347">
+                    </div>
                 </div>
             </div>
         </div>
@@ -483,6 +488,9 @@
                             <button type="submit" class="btn-newsletter">
                                 <i class="bi bi-send"></i> Assinar newsletter
                             </button>
+                            <p style="font-family:'Cormorant Garamond',serif;font-size:.92rem;color:var(--gray-text);margin:.6rem 0 0;line-height:1.45">
+                                Você pode cancelar quando quiser. <a href="{% url 'privacidade' %}" style="color:var(--gold-dim)">Privacidade</a>
+                            </p>
                         </form>
                     </div>
                 </div>

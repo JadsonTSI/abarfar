@@ -29,4 +29,8 @@ def site(request):
         )
         if redes.get(chave)
     ]
-    return {"painel_url": painel_url, "redes_sociais": redes_sociais}
+    org = dict(getattr(settings, "ORGANIZACAO", {}) or {})
+    numero = "".join(ch for ch in org.get("whatsapp", "") if ch.isdigit())
+    org["whatsapp_url"] = f"https://wa.me/{numero}" if numero else ""
+    org["encarregado_email"] = org.get("encarregado_email") or org.get("email", "")
+    return {"painel_url": painel_url, "redes_sociais": redes_sociais, "org": org}

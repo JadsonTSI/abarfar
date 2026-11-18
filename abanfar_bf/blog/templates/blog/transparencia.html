@@ -79,7 +79,12 @@
         .empty-docs { text-align: center; padding: 5rem 2rem; background: var(--white); border-radius: var(--radius-lg); border: 1px solid var(--gray-line); }
         .empty-docs .empty-icon { font-size: 4rem; color: var(--gold); opacity: .2; display: block; margin-bottom: 1rem; }
         .empty-docs .empty-title { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; color: var(--ink); margin-bottom: .4rem; }
-        .empty-docs .empty-text { font-family: 'Cormorant Garamond', serif; font-size: 1rem; color: var(--gray-text); }
+        .empty-docs .empty-text { font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; color: var(--gray-text); max-width: 560px; margin-left: auto; margin-right: auto; }
+        .empty-docs .empty-text a { color: var(--gold-dim); }
+        .empty-list { list-style: none; padding: 0; margin: 1rem auto 1.4rem; max-width: 460px; text-align: left; }
+        .empty-list li { font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; color: var(--ink-soft); padding: .45rem 0; border-bottom: 1px dashed var(--gray-line); display: flex; gap: .6rem; align-items: center; }
+        .empty-list li:last-child { border-bottom: none; }
+        .empty-list i { color: var(--gold-dim); }
 
         .info-widget { background: var(--white); border-radius: var(--radius-lg); border: 1px solid var(--gray-line); overflow: hidden; margin-bottom: 1.75rem; box-shadow: var(--shadow-soft); }
         .widget-hd { background: var(--ink); padding: .9rem 1.3rem; display: flex; align-items: center; gap: .5rem; border-bottom: 2px solid var(--gold); }
@@ -305,8 +310,22 @@
 
                         <div class="empty-docs reveal">
                             <span class="empty-icon">♩</span>
-                            <div class="empty-title">Nenhum documento publicado ainda</div>
-                            <p class="empty-text">Os documentos serão publicados aqui assim que o gerente os cadastrar no sistema.</p>
+                            <div class="empty-title">Documentos em fase de publicação</div>
+                            <p class="empty-text">
+                                A associação está organizando seus documentos para disponibilizá-los aqui, com acesso livre e gratuito.
+                                Este espaço reunirá, entre outros:
+                            </p>
+                            <ul class="empty-list">
+                                <li><i class="bi bi-bank"></i> Estatuto social e documentos de constituição</li>
+                                <li><i class="bi bi-people"></i> Atas de eleição e composição da diretoria</li>
+                                <li><i class="bi bi-graph-up"></i> Balanços e demonstrações financeiras</li>
+                                <li><i class="bi bi-journal-text"></i> Relatórios anuais de atividades</li>
+                                <li><i class="bi bi-file-earmark-check"></i> Termos de parceria, convênios e prestações de contas</li>
+                            </ul>
+                            <p class="empty-text mb-0">
+                                Precisa de alguma informação agora? Fale com a gente pelo <a href="{% url 'contato' %}">Contato</a>
+                                ou registre um pedido na <a href="{% url 'ouvidoria:index' %}">Ouvidoria</a>.
+                            </p>
                         </div>
 
                     {% endif %}
@@ -324,6 +343,13 @@
                         <h3>Sobre este portal</h3>
                     </div>
                     <div class="widget-bd">
+                        {% if org.cnpj or org.endereco %}
+                        <p style="margin-bottom:.8rem">
+                            <strong>{{ org.razao_social }}</strong><br>
+                            {% if org.cnpj %}CNPJ {{ org.cnpj }}<br>{% endif %}
+                            {% if org.endereco %}{{ org.endereco }}{% endif %}
+                        </p>
+                        {% endif %}
                         <p>
                             Em conformidade com os princípios de transparência e gestão responsável,
                             a ABANFAR BF disponibiliza publicamente seus documentos institucionais,
@@ -390,7 +416,7 @@
                             <div class="c-icon"><i class="bi bi-envelope-fill"></i></div>
                             <div>
                                 <div class="c-lbl">E-mail</div>
-                                <div class="c-val">contato@abanfarbf.org</div>
+                                <div class="c-val">{{ org.email }}</div>
                             </div>
                         </div>
                         <div class="contact-row">

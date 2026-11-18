@@ -10,6 +10,11 @@
 
 {% block extra_css %}
 <style>
+        .post-breadcrumb{list-style:none;display:flex;flex-wrap:wrap;gap:.35rem;padding:0;margin:0;font-family:'Libre Baskerville',serif;font-size:.72rem;letter-spacing:.04em;color:var(--gray-text)}
+        .post-breadcrumb li+li::before{content:'›';color:var(--gold);margin-right:.35rem}
+        .post-breadcrumb a{color:var(--gold-dim);text-decoration:none}
+        .post-breadcrumb a:hover{text-decoration:underline}
+        .post-breadcrumb [aria-current]{color:var(--ink)}
         /* ARTICLE STYLING */
         .article-section{padding:4.5rem 0}
         .post-detail-tag{display:inline-flex;background:var(--gold-pale);color:var(--gold-dim);font-family:'Libre Baskerville',serif;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;padding:.35rem 1.1rem;border-radius:2rem;font-weight:700;border:1px solid rgba(201,168,76,.35);margin-bottom:1.5rem}
@@ -61,10 +66,14 @@
 <main class="article-section">
     <div class="container">
         
-        <!-- Back Button -->
-        <a href="{% url 'post_list' %}" class="btn btn-outline-secondary btn-sm mb-4 px-3 py-2" style="font-family:'Libre Baskerville',serif;font-size:0.75rem;letter-spacing:0.06em">
-            <i class="bi bi-arrow-left me-1"></i> Todas as notícias
-        </a>
+        <!-- Trilha de navegação -->
+        <nav aria-label="Você está em" class="mb-4">
+            <ol class="post-breadcrumb">
+                <li><a href="{% url 'home' %}">Início</a></li>
+                <li><a href="{% url 'post_list' %}">Notícias</a></li>
+                <li aria-current="page">{{ post.titulo|truncatechars:60 }}</li>
+            </ol>
+        </nav>
 
         <div class="row g-5">
             
