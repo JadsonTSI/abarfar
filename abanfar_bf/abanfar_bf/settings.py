@@ -16,21 +16,54 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
+import os
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-m$4yi$z1+8q%y3252$w&gale+x$o^*ka30cog0)h3qw9uqq2!u'
+from django.core.exceptions import ImproperlyConfigured
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# Carrega variáveis de ambiente de um arquivo .env (na pasta do manage.py), se existir.
+# Em produção esse arquivo fica só no servidor; ele não vai para o git.
+env_path = BASE_DIR / '.env'
+if env_path.exists():
+    with open(env_path, 'r', encoding='utf-8') as f:
+        for line in f:
+            line = line.strip()
+            if line and not line.startswith('#') and '=' in line:
+                key, val = line.split('=', 1)
+                os.environ.setdefault(key.strip(), val.strip())
 
-ALLOWED_HOSTS = ['*']
+
+def env_bool(nome, padrao=False):
+    return os.environ.get(nome, str(padrao)).strip().lower() in ('1', 'true', 'sim', 'yes', 'on')
+
+
+def env_list(nome, padrao=''):
+    return [item.strip() for item in os.environ.get(nome, padrao).split(',') if item.strip()]
+
+
+# Desenvolvimento: DEBUG ligado por padrão. Produção: DJANGO_DEBUG=0 no .env do servidor.
+DEBUG = env_bool('DJANGO_DEBUG', True)
+
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', '')
+if not SECRET_KEY:
+    if not DEBUG:
+        raise ImproperlyConfigured('Defina DJANGO_SECRET_KEY no .env do servidor.')
+    SECRET_KEY = 'chave-apenas-para-desenvolvimento-local-nao-use-em-producao'
+
+ALLOWED_HOSTS = env_list('DJANGO_ALLOWED_HOSTS', '*' if DEBUG else '')
 
 CSRF_TRUSTED_ORIGINS = [
     'https://*.loca.lt',
     'https://*.lhr.life',
-]
+    'https://*.pythonanywhere.com',
+] + env_list('DJANGO_CSRF_TRUSTED_ORIGINS')
+
+if not DEBUG:
+    # Só HTTPS para cookies de login/sessão; o PythonAnywhere já serve com HTTPS.
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    SECURE_REFERRER_POLICY = 'same-origin'
 
 
 # Application definition
@@ -91,7 +124,8 @@ WSGI_APPLICATION = 'abanfar_bf.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        # Permite apontar para outro arquivo (ex.: testes locais do modo produção)
+        'NAME': os.environ.get('DJANGO_SQLITE_PATH') or BASE_DIR / 'db.sqlite3',
     }
 }
 
@@ -120,7 +154,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Fortaleza'  # Baía Formosa/RN (UTC-3)
 
 USE_I18N = True
 
@@ -137,24 +171,13 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-STATIC_URL = 'static/'
+# Destino do "collectstatic" no servidor (o PythonAnywhere serve esta pasta em /static/)
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 LOGIN_URL = 'contas:login'
-
-import os
-
-# Carrega variáveis de ambiente de um arquivo .env se ele existir
-env_path = BASE_DIR / '.env'
-if env_path.exists():
-    with open(env_path, 'r', encoding='utf-8') as f:
-        for line in f:
-            line = line.strip()
-            if line and not line.startswith('#') and '=' in line:
-                key, val = line.split('=', 1)
-                os.environ[key.strip()] = val.strip()
 
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
@@ -170,8 +193,6 @@ else:
     DEFAULT_FROM_EMAIL = 'no-reply@abanfarbf.org'
 
 IOT_API_KEY = os.environ.get('IOT_API_KEY', 'abanfar-iot-secret-token-2026')
-
-
 
 
 # Redes sociais exibidas no site público (rodapé, contato e home).
