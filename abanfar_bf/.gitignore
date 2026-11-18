@@ -65,3 +65,6 @@ local_settings.py
 *.bak
 *.swp
 *~
+
+# Modelo de configuração (sem segredos): deve ir para o git
+!.env.exemplo
