@@ -33,7 +33,7 @@ def criar_materia(request):
         nome = request.POST.get("nome")
         professor_id = request.POST.get("professor")
 
-        professor = ProfessorModel.objects.get(id=professor_id)
+        professor = get_object_or_404(ProfessorModel, id=professor_id)
 
         Materia.objects.create(nome=nome, professor=professor)
         return redirect("materias:materias_gerente")
@@ -43,12 +43,12 @@ def criar_materia(request):
 
 @gerente_required
 def matricular_alunos(request, materia_id):
-    materia = Materia.objects.get(id=materia_id)
+    materia = get_object_or_404(Materia, id=materia_id)
     alunos = Aluno.objects.all()
 
     if request.method == "POST":
         aluno_id = request.POST.get("aluno")
-        aluno = Aluno.objects.get(id=aluno_id)
+        aluno = get_object_or_404(Aluno, id=aluno_id)
 
         MatriculaMateria.objects.get_or_create(materia=materia, aluno=aluno)
         return redirect("materias:materias_gerente")
@@ -70,7 +70,8 @@ def minhas_materias_professor(request):
 @professor_required
 def editar_link(request, materia_id):
     professor = request.user.perfil.professor
-    materia = Materia.objects.get(id=materia_id, professor=professor)
+    # Matéria de outro professor (ou inexistente) → 404, não erro 500
+    materia = get_object_or_404(Materia, id=materia_id, professor=professor)
 
     if request.method == "POST":
         materia.google_classroom_link = request.POST.get("link")

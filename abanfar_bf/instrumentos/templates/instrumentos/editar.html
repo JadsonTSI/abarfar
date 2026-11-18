@@ -151,6 +151,7 @@
         }
 
 </style>
+    <link rel="stylesheet" href="{% static 'css/painel-ajustes.css' %}?v=3">
 </head>
 <body>
 <div class="app-shell">
@@ -193,7 +194,6 @@
             <a href="{% url 'instrumentos:iot_web_control' %}" class="sidebar-link"><i class="bi bi-cpu-fill"></i><span class="nav-label">Controle IoT</span></a>
             <a href="{% url 'grupos:listar' %}" class="sidebar-link"><i class="bi bi-music-note-beamed"></i><span class="nav-label">Grupos Musicais</span></a>
             <div class="nav-section-label mt-2">Sistema</div>
-            <a href="#" class="sidebar-link"><i class="bi bi-gear"></i><span class="nav-label">Configurações</span></a>
         </nav>
         <div class="sidebar-footer">
             <span class="sidebar-footer-text">ABANFAR BF © {% now "Y" %}</span>

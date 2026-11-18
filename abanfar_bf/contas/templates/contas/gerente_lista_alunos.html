@@ -524,6 +524,7 @@
             display: flex; align-items: center; justify-content: center;
             font-size: 0.85rem; text-decoration: none; cursor: pointer;
             border: 1px solid transparent; transition: all var(--transition);
+            padding: 0; font-family: inherit;
         }
 
         .btn-action-edit {
@@ -704,6 +705,7 @@
         }
 
 </style>
+    <link rel="stylesheet" href="{% static 'css/painel-ajustes.css' %}?v=3">
 </head>
 <body>
 
@@ -1032,17 +1034,13 @@
                                            title="Editar aluno">
                                             <i class="bi bi-pencil-fill"></i>
                                         </a>
-                                        <a href="#"
-                                           class="btn-action btn-action-view"
-                                           title="Ver detalhes">
-                                            <i class="bi bi-eye-fill"></i>
-                                        </a>
-                                        <a href="{% url 'alunos:excluir' aluno.id %}"
-                                           class="btn-action btn-action-delete"
-                                           title="Excluir aluno"
-                                           onclick="return confirm('Tem certeza que deseja excluir {{ aluno.nome }}?');">
-                                            <i class="bi bi-trash-fill"></i>
-                                        </a>
+                                        <form method="post" action="{% url 'alunos:excluir' aluno.id %}" class="d-inline m-0"
+                                              onsubmit="return confirm('Tem certeza que deseja excluir {{ aluno.nome|escapejs }}?');">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn-action btn-action-delete" title="Excluir aluno" aria-label="Excluir {{ aluno.nome }}">
+                                                <i class="bi bi-trash-fill"></i>
+                                            </button>
+                                        </form>
                                     </div>
                                 </td>
                             </tr>

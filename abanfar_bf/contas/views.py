@@ -24,15 +24,21 @@ def login_view(request):
         user = authenticate(request, username=username, password=senha)
 
         if user:
-            login(request, user)
-            perfil = Perfil.objects.get(user=user)
-
-            if perfil.tipo == "gerente":
-                return redirect("contas:painel_gerente")
-            elif perfil.tipo == "professor":
-                return redirect("professores:professoreshome")
-            elif perfil.tipo == "aluno":
-                return redirect("contas:painel_aluno")
+            perfil = Perfil.objects.filter(user=user).first()
+            destinos = {
+                "gerente": "contas:painel_gerente",
+                "professor": "professores:professoreshome",
+                "aluno": "contas:painel_aluno",
+            }
+            if perfil and perfil.tipo in destinos:
+                login(request, user)
+                return redirect(destinos[perfil.tipo])
+            if user.is_staff:
+                # Conta só de administração (ex.: criada com createsuperuser): vai para o admin
+                login(request, user)
+                return redirect("admin:index")
+            messages.error(request, "Sua conta ainda não tem um perfil configurado. Fale com a coordenação.")
+            return redirect("contas:login")
 
         messages.error(request, "Usuário ou senha incorretos!")
         return redirect("contas:login")
