@@ -1,0 +1,149 @@
+{% extends "blog/base.html" %}
+
+{% block title %}Política de Privacidade — ABANFAR BF{% endblock %}
+{% block meta_description %}Como a ABANFAR BF coleta, usa e protege dados pessoais, em conformidade com a Lei Geral de Proteção de Dados (Lei nº 13.709/2018).{% endblock %}
+
+{% block extra_css %}
+<style>
+    .legal-header { background: linear-gradient(135deg, #1A1612 0%, #2C2318 60%, #1A1612 100%); padding: 4.5rem 0 3.5rem; border-bottom: 2px solid var(--gold); }
+    .legal-header .eyebrow { font-family: 'Libre Baskerville', serif; font-size: .7rem; letter-spacing: .28em; text-transform: uppercase; color: var(--gold); display: inline-flex; align-items: center; gap: .6rem; }
+    .legal-header .eyebrow::before { content: ''; width: 24px; height: 1px; background: var(--gold); }
+    .legal-header h1 { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 5vw, 3rem); font-weight: 900; color: var(--white); margin: .8rem 0 .6rem; }
+    .legal-header p { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; color: var(--gold-pale); margin: 0; max-width: 680px; }
+    .legal-body { padding: 3.5rem 0 5rem; background: var(--cream); }
+    .legal-card { background: var(--white); border: 1px solid var(--gray-line); border-radius: var(--radius-lg); box-shadow: var(--shadow-soft); padding: clamp(1.4rem, 4vw, 2.8rem); }
+    .legal-card h2 { font-family: 'Playfair Display', serif; font-size: 1.35rem; font-weight: 700; color: var(--ink); margin: 2.2rem 0 .8rem; padding-top: 1.4rem; border-top: 1px solid var(--gray-line); }
+    .legal-card h2:first-of-type { margin-top: 0; padding-top: 0; border-top: none; }
+    .legal-card p, .legal-card li { font-family: 'Cormorant Garamond', serif; font-size: 1.12rem; color: var(--ink-soft); line-height: 1.7; }
+    .legal-card ul { padding-left: 1.2rem; }
+    .legal-card li { margin-bottom: .35rem; }
+    .legal-card strong { color: var(--ink); }
+    .legal-card a { color: var(--gold-dim); }
+    .legal-toc { font-family: 'Libre Baskerville', serif; font-size: .78rem; line-height: 2; }
+    .legal-toc a { color: var(--ink-soft); text-decoration: none; }
+    .legal-toc a:hover { color: var(--gold-dim); }
+    .legal-meta { font-family: 'Libre Baskerville', serif; font-size: .7rem; letter-spacing: .06em; color: var(--gray-text); margin-bottom: 1.6rem; }
+    .legal-table { width: 100%; border-collapse: collapse; margin: .6rem 0 1rem; }
+    .legal-table th, .legal-table td { text-align: left; vertical-align: top; padding: .65rem .8rem; border-bottom: 1px solid var(--gray-line); font-family: 'Cormorant Garamond', serif; font-size: 1.02rem; color: var(--ink-soft); }
+    .legal-table th { font-family: 'Libre Baskerville', serif; font-size: .65rem; letter-spacing: .12em; text-transform: uppercase; color: var(--gray-text); background: var(--cream); }
+    @media (max-width: 767.98px) { .legal-table-wrap { overflow-x: auto; } .legal-table { min-width: 560px; } }
+</style>
+{% endblock %}
+
+{% block content %}
+<header class="legal-header">
+    <div class="container">
+        <span class="eyebrow">LGPD · Lei nº 13.709/2018</span>
+        <h1>Política de Privacidade</h1>
+        <p>Como a {{ org.sigla }} coleta, usa, guarda e protege os dados pessoais de quem usa este site e participa das nossas atividades.</p>
+    </div>
+</header>
+
+<section class="legal-body">
+    <div class="container">
+        <div class="row g-4">
+            <aside class="col-lg-3 d-none d-lg-block">
+                <nav class="legal-card legal-toc position-sticky" style="top:110px" aria-label="Nesta página">
+                    <a href="#controlador">1. Quem somos</a><br>
+                    <a href="#dados">2. Dados coletados</a><br>
+                    <a href="#criancas">3. Crianças e adolescentes</a><br>
+                    <a href="#compartilhamento">4. Compartilhamento</a><br>
+                    <a href="#cookies">5. Cookies</a><br>
+                    <a href="#guarda">6. Guarda e segurança</a><br>
+                    <a href="#direitos">7. Seus direitos</a><br>
+                    <a href="#contato">8. Como falar conosco</a>
+                </nav>
+            </aside>
+
+            <div class="col-lg-9">
+                <article class="legal-card">
+                    <p class="legal-meta">Última atualização: 18 de novembro de 2026</p>
+
+                    <h2 id="controlador">1. Quem é responsável pelos seus dados</h2>
+                    <p>
+                        O controlador dos dados pessoais tratados neste site é a <strong>{{ org.razao_social }} ({{ org.sigla }})</strong>,
+                        associação sem fins lucrativos{% if org.cnpj %}, inscrita no CNPJ sob o nº <strong>{{ org.cnpj }}</strong>{% endif %},
+                        com sede em {% if org.endereco %}{{ org.endereco }}{% else %}{{ org.cidade }}{% endif %}.
+                    </p>
+
+                    <h2 id="dados">2. Quais dados coletamos e para quê</h2>
+                    <p>Coletamos apenas o necessário para cada finalidade:</p>
+                    <div class="legal-table-wrap">
+                        <table class="legal-table">
+                            <thead><tr><th>Onde</th><th>Dados</th><th>Para quê</th><th>Base legal (LGPD)</th></tr></thead>
+                            <tbody>
+                                <tr><td>Formulário de contato</td><td>Nome, e-mail, assunto e mensagem</td><td>Responder à sua mensagem</td><td>Legítimo interesse e atendimento a pedido do titular (art. 7º, IX e V)</td></tr>
+                                <tr><td>Newsletter</td><td>E-mail</td><td>Enviar notícias e convites da associação</td><td>Consentimento (art. 7º, I), que pode ser retirado a qualquer momento</td></tr>
+                                <tr><td>Ouvidoria</td><td>Tipo, assunto e relato; nome, e-mail e telefone apenas se você não escolher o anonimato</td><td>Registrar, apurar e responder manifestações</td><td>Legítimo interesse e exercício regular de direitos (art. 7º, IX e VI)</td></tr>
+                                <tr><td>Área restrita (alunos, professores e gestão)</td><td>Dados cadastrais, instrumento, grupo, matérias, frequência em atividades e foto de perfil</td><td>Organizar as aulas, ensaios, apresentações e o empréstimo de instrumentos</td><td>Execução das atividades da associação e, no caso de menores, consentimento dos responsáveis (art. 7º, V e art. 14)</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p>Não usamos seus dados para publicidade, não vendemos dados e não fazemos perfis automatizados.</p>
+
+                    <h2 id="criancas">3. Dados de crianças e adolescentes</h2>
+                    <p>
+                        Grande parte dos nossos alunos são crianças e adolescentes. O tratamento dos dados deles segue o
+                        <strong>melhor interesse da criança</strong> (art. 14 da LGPD e Estatuto da Criança e do Adolescente):
+                    </p>
+                    <ul>
+                        <li>O cadastro de alunos menores de idade é feito pela equipe da associação, com o <strong>consentimento de pelo menos um dos pais ou responsável legal</strong>.</li>
+                        <li>Os dados dos alunos <strong>não ficam públicos</strong>: só a equipe autorizada vê, na área restrita, mediante login.</li>
+                        <li>Fotos e vídeos de alunos só são publicados no site com <strong>autorização de uso de imagem</strong> assinada pelo responsável.</li>
+                        <li>Os responsáveis podem, a qualquer momento, pedir acesso, correção ou exclusão dos dados do aluno.</li>
+                    </ul>
+
+                    <h2 id="compartilhamento">4. Com quem compartilhamos</h2>
+                    <p>Não compartilhamos dados pessoais com terceiros para fins próprios deles. Para o site funcionar, utilizamos:</p>
+                    <ul>
+                        <li><strong>Hospedagem</strong> do site e do banco de dados em provedor especializado (PythonAnywhere), que guarda os dados em nosso nome;</li>
+                        <li><strong>Fontes e bibliotecas visuais</strong> carregadas de serviços públicos (Google Fonts e jsDelivr), que recebem apenas dados técnicos de acesso, como o endereço IP;</li>
+                        <li><strong>Google Maps</strong>, na página de contato, <strong>somente se você clicar para carregar o mapa</strong>.</li>
+                    </ul>
+                    <p>Também poderemos fornecer dados quando exigido por lei ou por ordem de autoridade competente.</p>
+
+                    <h2 id="cookies">5. Cookies</h2>
+                    <p>
+                        Usamos apenas <strong>cookies essenciais</strong>: um para manter o login na área restrita e outro de segurança
+                        que protege os formulários contra envios falsificados. Não usamos cookies de publicidade nem ferramentas de
+                        rastreamento ou estatística de visitantes.
+                    </p>
+
+                    <h2 id="guarda">6. Por quanto tempo guardamos e como protegemos</h2>
+                    <ul>
+                        <li><strong>Mensagens de contato:</strong> pelo tempo necessário para o atendimento e o histórico da associação, podendo ser excluídas a pedido.</li>
+                        <li><strong>Newsletter:</strong> até você cancelar a inscrição.</li>
+                        <li><strong>Ouvidoria:</strong> pelo prazo necessário para a apuração e para a prestação de contas da associação.</li>
+                        <li><strong>Dados de alunos:</strong> enquanto durar o vínculo com a associação e, depois, apenas o que for exigido para prestação de contas a parceiros e órgãos públicos.</li>
+                    </ul>
+                    <p>
+                        O site funciona apenas com conexão segura (HTTPS), o acesso à área restrita exige login e cada perfil
+                        (gerente, professor, aluno) vê somente o que precisa para sua função.
+                    </p>
+
+                    <h2 id="direitos">7. Seus direitos</h2>
+                    <p>Pelo art. 18 da LGPD, você (ou o responsável pelo aluno menor de idade) pode pedir a qualquer momento:</p>
+                    <ul>
+                        <li>confirmação de que tratamos seus dados e acesso a eles;</li>
+                        <li>correção de dados incompletos, inexatos ou desatualizados;</li>
+                        <li>anonimização, bloqueio ou eliminação de dados desnecessários;</li>
+                        <li>informação sobre com quem compartilhamos seus dados;</li>
+                        <li>retirada do consentimento, como o <a href="{% url 'newsletter_cancelar' %}">cancelamento da newsletter</a>;</li>
+                        <li>eliminação dos dados tratados com base no consentimento.</li>
+                    </ul>
+                    <p>Você também pode apresentar reclamação à Autoridade Nacional de Proteção de Dados (ANPD).</p>
+
+                    <h2 id="contato">8. Como falar conosco sobre seus dados</h2>
+                    <p>
+                        {% if org.encarregado_nome %}O encarregado pelo tratamento de dados pessoais da associação é <strong>{{ org.encarregado_nome }}</strong>.{% endif %}
+                        Para exercer seus direitos ou tirar dúvidas, escreva para
+                        <a href="mailto:{{ org.encarregado_email }}">{{ org.encarregado_email }}</a>{% if org.whatsapp_url %} ou fale pelo <a href="{{ org.whatsapp_url }}" target="_blank" rel="noopener">WhatsApp</a>{% endif %}.
+                        Você também pode usar a <a href="{% url 'ouvidoria:index' %}">Ouvidoria</a>. Responderemos no menor prazo possível.
+                    </p>
+                    <p>Esta política pode ser atualizada. A data da última versão fica sempre no topo desta página.</p>
+                </article>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

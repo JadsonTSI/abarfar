@@ -129,3 +129,21 @@ def newsletter(request):
     else:
         messages.error(request, form.errors["email"][0])
     return redirect(destino)
+
+
+def privacidade(request):
+    return render(request, "blog/privacidade.html")
+
+
+def newsletter_cancelar(request):
+    """Retirada do consentimento (LGPD art. 8º, §5º): remove o e-mail da newsletter."""
+    if request.method == "POST":
+        form = NewsletterForm(request.POST)
+        if form.is_valid():
+            InscricaoNewsletter.objects.filter(email__iexact=form.cleaned_data["email"]).delete()
+            # Mesma resposta exista ou não o e-mail, para não revelar quem é inscrito
+            messages.success(request, "Pronto: se este e-mail estava inscrito, ele foi removido da newsletter.")
+            return redirect("newsletter_cancelar")
+    else:
+        form = NewsletterForm()
+    return render(request, "blog/newsletter_cancelar.html", {"form": form})

@@ -202,3 +202,21 @@ REDES_SOCIAIS = {
     "facebook": "",
     "youtube": "",
 }
+
+
+# Dados institucionais exibidos no site (rodapé, Transparência, Política de Privacidade).
+# Campo vazio = não aparece no site. Não preencha com dados provisórios.
+ORGANIZACAO = {
+    "razao_social": "Associação de Bandas, Fanfarras e Regentes de Baía Formosa/RN",
+    "sigla": "ABANFAR BF",
+    "cnpj": "",                 # ex.: "00.000.000/0001-00"
+    "endereco": "",             # ex.: "Rua X, 123 — Centro, Baía Formosa/RN, CEP 59194-000"
+    "cidade": "Baía Formosa — RN",
+    "email": "contato@abanfarbf.org",
+    "telefone": "",             # ex.: "(84) 99999-9999"
+    "whatsapp": "",             # só números, com DDI e DDD: "5584999999999"
+    "horario": "Seg – Sex, 8h às 17h",
+    # LGPD: pessoa responsável por atender os titulares de dados (encarregado)
+    "encarregado_nome": "",
+    "encarregado_email": "",    # vazio = usa o e-mail de contato
+}

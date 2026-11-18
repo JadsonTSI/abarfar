@@ -133,6 +133,11 @@
         height: 350px;
         background: #eee;
     }
+    .map-consent { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .8rem; text-align: center; padding: 1.5rem; background: linear-gradient(135deg, #F9F5EC, #F5E9C8); }
+    .map-consent > i { font-size: 2.4rem; color: var(--gold-dim); }
+    .map-consent p { font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; color: var(--gray-text); max-width: 440px; margin: 0; }
+    .map-consent-link { font-family: 'Libre Baskerville', serif; font-size: .7rem; letter-spacing: .06em; color: var(--gold-dim); }
+    .req { color: #B04848; margin-left: .15rem; }
     .map-container iframe {
         width: 100%;
         height: 100%;
@@ -179,7 +184,7 @@
                         <div class="contact-info-icon"><i class="bi bi-envelope-fill"></i></div>
                         <div class="contact-info-text">
                             <h4>E-mail</h4>
-                            <p><a href="mailto:contato@abanfarbf.org" style="color:inherit; text-decoration:none">contato@abanfarbf.org</a></p>
+                            <p><a href="mailto:{{ org.email }}" style="color:inherit; text-decoration:none">{{ org.email }}</a></p>
                         </div>
                     </div>
                     
@@ -200,6 +205,16 @@
                         </div>
                     </div>
                     
+                    {% if org.whatsapp_url or org.telefone %}
+                    <div class="contact-info-box">
+                        <div class="contact-info-icon"><i class="bi {% if org.whatsapp_url %}bi-whatsapp{% else %}bi-telephone-fill{% endif %}"></i></div>
+                        <div class="contact-info-text">
+                            <h4>{% if org.whatsapp_url %}WhatsApp{% else %}Telefone{% endif %}</h4>
+                            <p>{% if org.whatsapp_url %}<a href="{{ org.whatsapp_url }}" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">{{ org.telefone|default:"Enviar mensagem" }}</a>{% else %}{{ org.telefone }}{% endif %}</p>
+                        </div>
+                    </div>
+                    {% endif %}
+
                     {% if redes_sociais %}
                     <div class="contact-info-box">
                         <div class="contact-info-icon"><i class="bi bi-share-fill"></i></div>
@@ -226,14 +241,14 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-gold-group">
-                                    <label for="id_nome">Nome Completo</label>
+                                    <label for="id_nome">Nome Completo<span class="req" aria-hidden="true">*</span></label>
                                     <input type="text" id="id_nome" name="nome" class="form-gold-control{% if form.nome.errors %} is-invalid{% endif %}" placeholder="Seu nome" value="{{ form.nome.value|default:'' }}" autocomplete="name" maxlength="120" required>
                                     {% for e in form.nome.errors %}<span class="field-error">{{ e }}</span>{% endfor %}
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-gold-group">
-                                    <label for="id_email">E-mail</label>
+                                    <label for="id_email">E-mail<span class="req" aria-hidden="true">*</span></label>
                                     <input type="email" id="id_email" name="email" class="form-gold-control{% if form.email.errors %} is-invalid{% endif %}" placeholder="Seu e-mail" value="{{ form.email.value|default:'' }}" autocomplete="email" required>
                                     {% for e in form.email.errors %}<span class="field-error">{{ e }}</span>{% endfor %}
                                 </div>
@@ -241,17 +256,21 @@
                         </div>
                         
                         <div class="form-gold-group">
-                            <label for="id_assunto">Assunto</label>
+                            <label for="id_assunto">Assunto<span class="req" aria-hidden="true">*</span></label>
                             <input type="text" id="id_assunto" name="assunto" class="form-gold-control{% if form.assunto.errors %} is-invalid{% endif %}" placeholder="Ex: Matrícula de Aluno, Apoio, Dúvida" value="{{ form.assunto.value|default:'' }}" maxlength="150" required>
                                     {% for e in form.assunto.errors %}<span class="field-error">{{ e }}</span>{% endfor %}
                         </div>
                         
                         <div class="form-gold-group">
-                            <label for="id_mensagem">Mensagem</label>
+                            <label for="id_mensagem">Mensagem<span class="req" aria-hidden="true">*</span></label>
                             <textarea id="id_mensagem" name="mensagem" class="form-gold-control{% if form.mensagem.errors %} is-invalid{% endif %}" placeholder="Sua mensagem..." required>{{ form.mensagem.value|default:'' }}</textarea>
                             {% for e in form.mensagem.errors %}<span class="field-error">{{ e }}</span>{% endfor %}
                         </div>
                         
+                        <p style="font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--gray-text);margin:-.4rem 0 1.2rem">
+                            <span class="req">*</span> campos obrigatórios. Usamos seus dados apenas para responder a esta mensagem —
+                            veja a <a href="{% url 'privacidade' %}" style="color:var(--gold-dim)">Política de Privacidade</a>.
+                        </p>
                         <div class="text-end">
                             <button type="submit" class="btn-entrar" style="border:none; padding:.75rem 2rem">
                                 <i class="bi bi-send me-2"></i>Enviar Mensagem
@@ -266,12 +285,33 @@
         <div class="row mt-5">
             <div class="col-12">
                 <div class="map-container">
-                    <!-- Embed de mapa placeholder do Google para Baía Formosa -->
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15848.403565575518!2d-35.01842065!3d-6.381593!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x7ad15ffcb9893d5%3A0xe54d3ca24d31405e!2zQmHDrWEgRm9ybW9zYSwgUk4sIDU5MTk0LTAwMA!5e0!3m2!1spt-BR!2sbr!4v1700000000000!5m2!1spt-BR!2sbr" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    <!-- Mapa do Google: carregado só com o clique do visitante -->
+                    <div class="map-consent" id="mapConsent">
+                        <i class="bi bi-geo-alt-fill"></i>
+                        <p>O mapa é fornecido pelo Google Maps. Ao carregá-lo, o Google recebe dados do seu acesso (como o IP).</p>
+                        <button type="button" class="btn-entrar" style="border:none;padding:.6rem 1.4rem" id="btnCarregarMapa" data-src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15848.403565575518!2d-35.01842065!3d-6.381593!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x7ad15ffcb9893d5%3A0xe54d3ca24d31405e!2zQmHDrWEgRm9ybW9zYSwgUk4sIDU5MTk0LTAwMA!5e0!3m2!1spt-BR!2sbr!4v1700000000000!5m2!1spt-BR!2sbr">
+                            <i class="bi bi-map me-1"></i> Carregar mapa
+                        </button>
+                        <a href="https://www.google.com/maps/search/?api=1&query=Ba%C3%ADa+Formosa+RN" target="_blank" rel="noopener" class="map-consent-link">ou abrir no Google Maps <i class="bi bi-box-arrow-up-right"></i></a>
+                    </div>
                 </div>
             </div>
         </div>
         
     </div>
 </section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.getElementById('btnCarregarMapa')?.addEventListener('click', function () {
+    const iframe = document.createElement('iframe');
+    iframe.src = this.dataset.src;
+    iframe.title = 'Mapa de Baía Formosa (Google Maps)';
+    iframe.loading = 'lazy';
+    iframe.referrerPolicy = 'no-referrer-when-downgrade';
+    iframe.allowFullscreen = true;
+    document.getElementById('mapConsent').replaceWith(iframe);
+});
+</script>
 {% endblock %}

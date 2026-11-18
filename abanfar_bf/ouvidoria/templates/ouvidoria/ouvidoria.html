@@ -99,7 +99,7 @@
                         <div class="ouv-field">
                             <label class="ouv-check" for="id_concordo">
                                 <input type="checkbox" name="concordo" id="id_concordo" required {% if form.concordo.value %}checked{% endif %}>
-                                <span>Declaro que as informações são verdadeiras e autorizo o uso dos dados informados exclusivamente para o tratamento desta manifestação.</span>
+                                <span>Declaro que as informações são verdadeiras e autorizo o uso dos dados informados exclusivamente para o tratamento desta manifestação, conforme a <a href="{% url 'privacidade' %}" target="_blank" style="color:var(--gold-dim)">Política de Privacidade</a>.</span>
                             </label>
                             {% for e in form.concordo.errors %}<span class="ouv-error">{{ e }}</span>{% endfor %}
                         </div>

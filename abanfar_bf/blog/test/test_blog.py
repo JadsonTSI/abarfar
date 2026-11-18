@@ -158,3 +158,55 @@ class MelhoriasSitePublicoTests(TestCase):
         r = self.client.get(reverse('home'))
         self.assertEqual(r.context['painel_url'], reverse('professores:professoreshome'))
         self.assertContains(r, 'Meu painel')
+
+
+class LgpdETransparenciaTests(TestCase):
+    def test_politica_de_privacidade(self):
+        r = self.client.get(reverse('privacidade'))
+        self.assertEqual(r.status_code, 200)
+        self.assertContains(r, 'Lei nº 13.709/2018')
+        self.assertContains(r, 'Crianças e adolescentes')
+
+    def test_link_da_politica_em_todas_as_paginas(self):
+        for nome in ('home', 'contato', 'sobre'):
+            self.assertContains(self.client.get(reverse(nome)), reverse('privacidade'))
+
+    def test_cancelar_newsletter(self):
+        from blog.models import InscricaoNewsletter
+        InscricaoNewsletter.objects.create(email='sair@example.com')
+        r = self.client.post(reverse('newsletter_cancelar'), {'email': 'SAIR@example.com'}, follow=True)
+        self.assertEqual(InscricaoNewsletter.objects.count(), 0)
+        self.assertContains(r, 'removido da newsletter')
+        # e-mail que não existe recebe a mesma resposta (não revela quem é inscrito)
+        r2 = self.client.post(reverse('newsletter_cancelar'), {'email': 'nunca@example.com'}, follow=True)
+        self.assertContains(r2, 'removido da newsletter')
+
+    def test_mapa_do_google_so_carrega_com_clique(self):
+        r = self.client.get(reverse('contato'))
+        self.assertNotContains(r, '<iframe src="https://www.google.com/maps')
+        self.assertContains(r, 'Carregar mapa')
+
+    def test_programas_do_rodape_levam_a_secao_certa(self):
+        html = self.client.get(reverse('home')).content.decode()
+        projetos = self.client.get(reverse('projetos')).content.decode()
+        for ancora in ('musicalizacao-infantil', 'orquestra-de-flautas', 'banda-francisco-magalhaes', 'orquestra-filarmonica'):
+            self.assertIn(f'/projetos/#{ancora}', html)
+            self.assertIn(f'id="{ancora}"', projetos)
+        self.assertNotIn('Ensino de Teoria Musical', html)
+
+    def test_transparencia_vazia_explica_o_que_sera_publicado(self):
+        r = self.client.get(reverse('transparencia:portal'))
+        self.assertContains(r, 'Documentos em fase de publicação')
+        self.assertNotContains(r, 'assim que o gerente os cadastrar')
+
+    def test_dados_institucionais_so_aparecem_quando_preenchidos(self):
+        from django.test import override_settings
+        from django.conf import settings
+        r = self.client.get(reverse('home'))
+        self.assertNotContains(r, 'CNPJ')
+        self.assertNotContains(r, 'wa.me')
+        org = dict(settings.ORGANIZACAO, cnpj='12.345.678/0001-90', whatsapp='5584999990000')
+        with override_settings(ORGANIZACAO=org):
+            r = self.client.get(reverse('home'))
+            self.assertContains(r, 'CNPJ 12.345.678/0001-90')
+            self.assertContains(r, 'https://wa.me/5584999990000')

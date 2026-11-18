@@ -27,13 +27,19 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Cormorant+Garamond:wght@300;400;600&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/blog.css' %}?v=4">
+    <link rel="stylesheet" href="{% static 'css/blog.css' %}?v=8">
 
     <style>
         /* Evita quebra do navbar em telas médias/pequenas */
         .brand-text .brand-sub { white-space: normal !important; max-width: 210px; display: block; }
         .main-navbar .navbar-nav .nav-link { padding: 0.5rem 0.75rem !important; }
-        @media (max-width: 1200px) { .brand-text .brand-sub { display: none !important; } }
+        /* Com 8 itens no menu, o subtítulo da marca só cabe em telas bem largas */
+        @media (max-width: 1399.98px) { .brand-text .brand-sub { display: none !important; } }
+        /* Entre 1200 e 1400px os 8 itens + botão não cabiam: menu um pouco mais compacto */
+        @media (min-width: 1200px) and (max-width: 1399.98px) {
+            .main-navbar .navbar-nav .nav-link { padding: .5rem .5rem !important; letter-spacing: .06em; }
+            .main-navbar .navbar-nav .nav-link::after { left: .5rem; right: .5rem; }
+        }
     </style>
     {% block extra_css %}{% endblock %}
 </head>
@@ -45,7 +51,8 @@
     <div class="container d-flex justify-content-between align-items-center">
         <div class="top-bar-local"><i class="bi bi-geo-alt-fill me-1"></i>Baía Formosa, RN</div>
         <div class="d-flex gap-3 align-items-center">
-            <a href="mailto:contato@abanfarbf.org"><i class="bi bi-envelope-fill me-1"></i>contato@abanfarbf.org</a>
+            {% if org.whatsapp_url %}<a href="{{ org.whatsapp_url }}" target="_blank" rel="noopener"><i class="bi bi-whatsapp me-1"></i>WhatsApp</a>{% endif %}
+            <a href="mailto:{{ org.email }}"><i class="bi bi-envelope-fill me-1"></i><span class="d-none d-sm-inline">{{ org.email }}</span><span class="d-sm-none">E-mail</span></a>
             {% for rede in redes_sociais %}
                 <a href="{{ rede.url }}" target="_blank" rel="noopener" aria-label="{{ rede.nome }}" class="d-none d-md-inline"><i class="bi {{ rede.icone }}"></i></a>
             {% endfor %}
@@ -161,23 +168,29 @@
 
             <div class="col-sm-6 col-lg-3">
                 <div class="footer-col-title">Programas</div>
-                <a href="{% url 'projetos' %}" class="footer-link">Musicalização Infantil</a>
-                <a href="{% url 'projetos' %}" class="footer-link">Banda Magalhães</a>
-                <a href="{% url 'projetos' %}" class="footer-link">Orquestra de Flautas</a>
-                <a href="{% url 'projetos' %}" class="footer-link">Ensino de Teoria Musical</a>
+                <a href="{% url 'projetos' %}#musicalizacao-infantil" class="footer-link">Musicalização Infantil</a>
+                <a href="{% url 'projetos' %}#orquestra-de-flautas" class="footer-link">Orquestra de Flautas Doce</a>
+                <a href="{% url 'projetos' %}#banda-francisco-magalhaes" class="footer-link">Banda Musical Francisco Magalhães</a>
+                <a href="{% url 'projetos' %}#orquestra-filarmonica" class="footer-link">Orquestra Filarmônica</a>
             </div>
 
             <div class="col-lg-3">
                 <div class="footer-col-title">Contato</div>
                 <p style="font-size:.9rem;color:#8A8078;font-family:'Cormorant Garamond',serif;line-height:1.9;margin:0">
-                    <i class="bi bi-geo-alt" style="color:var(--gold)"></i> Baía Formosa — RN, Brasil
+                    <i class="bi bi-geo-alt" style="color:var(--gold)"></i> {% if org.endereco %}{{ org.endereco }}{% else %}{{ org.cidade }}, Brasil{% endif %}
                 </p>
+                {% if org.telefone or org.whatsapp_url %}
+                <p style="font-size:.9rem;color:#8A8078;font-family:'Cormorant Garamond',serif;line-height:1.9;margin:0">
+                    {% if org.whatsapp_url %}<i class="bi bi-whatsapp" style="color:var(--gold)"></i> <a href="{{ org.whatsapp_url }}" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">{{ org.telefone|default:"WhatsApp" }}</a>
+                    {% else %}<i class="bi bi-telephone" style="color:var(--gold)"></i> {{ org.telefone }}{% endif %}
+                </p>
+                {% endif %}
                 <p style="font-size:.9rem;color:#8A8078;font-family:'Cormorant Garamond',serif;line-height:1.9;margin:0">
                     <i class="bi bi-envelope" style="color:var(--gold)"></i>
-                    <a href="mailto:contato@abanfarbf.org" style="color:inherit;text-decoration:none">contato@abanfarbf.org</a>
+                    <a href="mailto:{{ org.email }}" style="color:inherit;text-decoration:none">{{ org.email }}</a>
                 </p>
                 <p style="font-size:.9rem;color:#8A8078;font-family:'Cormorant Garamond',serif;line-height:1.9;margin:0">
-                    <i class="bi bi-clock" style="color:var(--gold)"></i> Seg – Sex, 8h às 17h
+                    <i class="bi bi-clock" style="color:var(--gold)"></i> {{ org.horario }}
                 </p>
                 <form method="post" action="{% url 'newsletter' %}" class="newsletter-inline mt-4 p-3" style="background:rgba(201,168,76,.08);border-radius:var(--radius-sm);border:1px solid rgba(201,168,76,.15)">
                     {% csrf_token %}
@@ -187,14 +200,20 @@
                     </label>
                     <input type="email" id="newsletterFooterEmail" name="email" placeholder="Seu e-mail" required autocomplete="email">
                     <button type="submit">Assinar</button>
+                    <p style="font-family:'Cormorant Garamond',serif;font-size:.85rem;line-height:1.45;color:#8A8078;margin:.6rem 0 0">
+                        Novidades e convites da associação. Usamos seu e-mail só para isso.
+                        <a href="{% url 'newsletter_cancelar' %}" style="color:var(--gold)">Cancelar</a> ·
+                        <a href="{% url 'privacidade' %}" style="color:var(--gold)">Privacidade</a>
+                    </p>
                 </form>
             </div>
         </div>
     </div>
     <div class="footer-bottom">
         <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 text-center">
-            <p>&copy; {% now "Y" %} ABANFAR BF — Todos os direitos reservados.</p>
-            <p>Desenvolvido com <a href="https://www.djangoproject.com/" target="_blank" rel="noopener">Django</a> &amp; <a href="https://getbootstrap.com/" target="_blank" rel="noopener">Bootstrap</a> &nbsp;♩&nbsp; Música para transformar vidas</p>
+            <p>&copy; {% now "Y" %} {{ org.razao_social }}{% if org.cnpj %} — CNPJ {{ org.cnpj }}{% endif %}</p>
+            <p><a href="{% url 'privacidade' %}">Política de Privacidade</a> &nbsp;·&nbsp; <a href="{% url 'transparencia:portal' %}">Transparência</a> &nbsp;·&nbsp; <a href="{% url 'ouvidoria:index' %}">Ouvidoria</a></p>
+
         </div>
     </div>
 </footer>

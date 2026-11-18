@@ -1,0 +1,35 @@
+{% extends "blog/base.html" %}
+
+{% block title %}Cancelar newsletter — ABANFAR BF{% endblock %}
+
+{% block extra_css %}
+<meta name="robots" content="noindex">
+<style>
+    .unsub { padding: 5rem 0; background: var(--cream); }
+    .unsub-card { max-width: 520px; margin: 0 auto; background: var(--white); border: 1px solid var(--gray-line); border-radius: var(--radius-lg); box-shadow: var(--shadow-soft); padding: 2.2rem; }
+    .unsub-card h1 { font-family: 'Playfair Display', serif; font-size: 1.7rem; font-weight: 700; color: var(--ink); margin-bottom: .5rem; }
+    .unsub-card p { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; color: var(--gray-text); }
+    .unsub-card label { font-family: 'Libre Baskerville', serif; font-size: .7rem; letter-spacing: .1em; text-transform: uppercase; font-weight: 700; color: var(--ink-soft); display: block; margin-bottom: .5rem; }
+    .unsub-card input[type=email] { width: 100%; background: var(--cream); border: 1px solid var(--gray-line); border-radius: var(--radius-sm); padding: .75rem 1rem; font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; margin-bottom: 1rem; }
+    .unsub-card input[type=email]:focus { outline: none; border-color: var(--gold); background: var(--white); }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="unsub">
+    <div class="container">
+        <div class="unsub-card">
+            <h1>Cancelar a newsletter</h1>
+            <p>Informe o e-mail cadastrado para deixar de receber nossas novidades. Ele será removido da nossa lista.</p>
+            <form method="post">
+                {% csrf_token %}
+                <label for="id_email_cancelar">E-mail</label>
+                <input type="email" name="email" id="id_email_cancelar" required autocomplete="email" value="{{ form.email.value|default:'' }}">
+                {% for e in form.email.errors %}<span class="field-error">{{ e }}</span>{% endfor %}
+                <button type="submit" class="btn-entrar" style="border:none;padding:.7rem 1.6rem">Cancelar inscrição</button>
+            </form>
+            <p class="mt-4 mb-0" style="font-size:1rem">Saiba como tratamos seus dados na <a href="{% url 'privacidade' %}" style="color:var(--gold-dim)">Política de Privacidade</a>.</p>
+        </div>
+    </div>
+</section>
+{% endblock %}

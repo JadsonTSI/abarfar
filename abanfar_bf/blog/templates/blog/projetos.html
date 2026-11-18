@@ -5,6 +5,8 @@
 
 {% block extra_css %}
 <style>
+    /* âncoras dos programas não ficam escondidas atrás do menu fixo */
+    .project-card { scroll-margin-top: 110px; }
     .page-header {
         background: linear-gradient(135deg, #1A1612 0%, #2C2318 60%, #1A1612 100%);
         padding: 6rem 0;
@@ -160,7 +162,7 @@
             <div class="col-lg-10 mx-auto">
                 
                 <!-- PROJETO 1: MUSICALIZAÇÃO INFANTIL -->
-                <div class="project-card">
+                <div class="project-card" id="musicalizacao-infantil">
                     <div class="project-header-bar">
                         <div class="project-title-group">
                             <div class="project-card-icon"><i class="bi bi-balloon"></i></div>
@@ -191,7 +193,7 @@
                 </div>
 
                 <!-- PROJETO 2: ORQUESTRA DE FLAUTAS DOCE -->
-                <div class="project-card">
+                <div class="project-card" id="orquestra-de-flautas">
                     <div class="project-header-bar">
                         <div class="project-title-group">
                             <div class="project-card-icon"><i class="bi bi-music-note-beamed"></i></div>
@@ -222,7 +224,7 @@
                 </div>
 
                 <!-- PROJETO 3: BANDA MUSICAL FRANCISCO MAGALHÃES -->
-                <div class="project-card">
+                <div class="project-card" id="banda-francisco-magalhaes">
                     <div class="project-header-bar">
                         <div class="project-title-group">
                             <div class="project-card-icon"><i class="bi bi-megaphone"></i></div>
@@ -253,7 +255,7 @@
                 </div>
 
                 <!-- PROJETO 4: ORQUESTRA FILARMÔNICA -->
-                <div class="project-card">
+                <div class="project-card" id="orquestra-filarmonica">
                     <div class="project-header-bar">
                         <div class="project-title-group">
                             <div class="project-card-icon"><i class="bi bi-stars"></i></div>
