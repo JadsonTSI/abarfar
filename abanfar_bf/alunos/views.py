@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from contas.decorators import gerente_required, iot_api_required
@@ -77,6 +78,7 @@ def editar_aluno(request, id):
 
     return render(request, "alunos/editar_aluno.html", {"form": form, "aluno": aluno})
 
+@require_POST
 @gerente_required
 def excluir_aluno(request, id):
     aluno = get_object_or_404(Aluno, id=id)
