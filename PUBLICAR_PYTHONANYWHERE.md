@@ -134,8 +134,8 @@ Depois clique em **Reload** na aba **Web**.
 
 ## Manter o site no ar
 
-No plano gratuito, o site é desligado se ninguém renovar. A cada 3 meses, entre na aba **Web** e
-clique em **Run until 3 months from today**. O PythonAnywhere manda um e-mail lembrando antes do prazo.
+No plano gratuito, o site é desligado se ninguém renovar. **Uma vez por mês**, entre na aba **Web** e
+clique em **Run until 1 month from today**. O PythonAnywhere manda um e-mail uma semana antes do prazo.
 
 ## Limitações do plano gratuito
 
