@@ -230,3 +230,9 @@ NUMEROS_INSTITUCIONAIS = [
     {"valor": "3 anos", "rotulo": "De formação gratuita"},
     {"valor": "~40", "rotulo": "Músicos na Banda"},
 ]
+
+
+# Depoimentos da Home. A seção só aparece com pelo menos um item.
+# Use apenas depoimentos REAIS, com autorização da pessoa para publicar nome e frase.
+# Exemplo: {"nome": "Fulana de Tal", "papel": "Mãe de aluno", "texto": "..."}
+DEPOIMENTOS = []

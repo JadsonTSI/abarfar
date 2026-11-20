@@ -1196,13 +1196,13 @@ img { max-width: 100%; display: block; }
     background: var(--section-bg);
 }
 
-.gallery-grid {
+.gallery-section .gallery-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 1rem;
 }
 
-.gallery-item {
+.gallery-section .gallery-item {
     border-radius: var(--radius-sm);
     overflow: hidden;
     position: relative;
@@ -1210,11 +1210,11 @@ img { max-width: 100%; display: block; }
     background: var(--ink);
 }
 
-.gallery-item:first-child {
+.gallery-section .gallery-item:first-child {
     grid-column: span 2;
 }
 
-.gallery-item img {
+.gallery-section .gallery-item img {
     width: 100%; height: 100%;
     object-fit: cover;
     position: absolute; inset: 0;
@@ -1224,14 +1224,14 @@ img { max-width: 100%; display: block; }
     z-index: 2;
 }
 
-.gallery-placeholder {
+.gallery-section .gallery-placeholder {
     min-height: 200px;
     display: flex; align-items: center; justify-content: center;
 }
 
-.gallery-placeholder:first-child { min-height: 280px; }
+.gallery-section .gallery-placeholder:first-child { min-height: 280px; }
 
-.gallery-placeholder i {
+.gallery-section .gallery-placeholder i {
     color: var(--gold);
     opacity: 0.3;
     font-size: 3.5rem;
@@ -1240,10 +1240,10 @@ img { max-width: 100%; display: block; }
     z-index: 1;
 }
 
-.gallery-item:hover .gallery-placeholder i { opacity: 0.6; }
-.gallery-item:hover img { transform: scale(1.07); opacity: 0.8; }
+.gallery-section .gallery-item:hover .gallery-placeholder i { opacity: 0.6; }
+.gallery-section .gallery-item:hover img { transform: scale(1.07); opacity: 0.8; }
 
-.gallery-overlay {
+.gallery-section .gallery-overlay {
     position: absolute; inset: 0;
     background: linear-gradient(to top, rgba(26,22,18,0.75) 0%, transparent 55%);
     opacity: 0;
@@ -1253,9 +1253,9 @@ img { max-width: 100%; display: block; }
     z-index: 3;
 }
 
-.gallery-item:hover .gallery-overlay { opacity: 1; }
+.gallery-section .gallery-item:hover .gallery-overlay { opacity: 1; }
 
-.gallery-overlay-text {
+.gallery-section .gallery-overlay-text {
     font-family: 'Playfair Display', serif;
     font-size: 1rem;
     color: var(--white);
@@ -1427,11 +1427,11 @@ img { max-width: 100%; display: block; }
 
     .stat-item .stat-number { font-size: 2rem; }
 
-    .gallery-grid {
+    .gallery-section .gallery-grid {
         grid-template-columns: 1fr 1fr;
     }
 
-    .gallery-item:first-child { grid-column: span 2; }
+    .gallery-section .gallery-item:first-child { grid-column: span 2; }
 
     .programs-section,
     .blog-section,
@@ -1446,9 +1446,9 @@ img { max-width: 100%; display: block; }
         justify-content: center;
     }
 
-    .gallery-grid { grid-template-columns: 1fr; }
+    .gallery-section .gallery-grid { grid-template-columns: 1fr; }
 
-    .gallery-item:first-child { grid-column: span 1; }
+    .gallery-section .gallery-item:first-child { grid-column: span 1; }
 }
 
 /* =============================================
@@ -1506,4 +1506,53 @@ img { max-width: 100%; }
 /* Números do topo da home em grade 2×2 no celular (antes quebravam 2 + 1 + 1) */
 @media (max-width: 575.98px) {
     .hero-stats { display: grid !important; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.2rem 1.5rem; }
+}
+
+/* =============================================
+   REFINO DE DESIGN (legibilidade e acabamento)
+============================================= */
+:root {
+    /* Dourado escuro para TEXTO pequeno sobre fundo claro: o --gold (#C9A84C)
+       sobre creme tem contraste ~2:1 (ilegível); este passa de 4,5:1 (WCAG AA). */
+    --gold-text: #7A5F22;
+}
+
+/* Rótulos de seção em fundo claro */
+.section-label { color: var(--gold-text); }
+.section-label i { color: var(--gold); }
+.quote-banner .section-label, .support-section .section-label, .site-footer .section-label { color: var(--gold); }
+.post-read-more { color: var(--gold-text); }
+.post-read-more:hover { color: var(--ink); }
+
+/* Título do topo: 3 linhas no computador em vez de 4 */
+.hero-title { font-size: clamp(2.6rem, 5.4vw, 4.7rem); letter-spacing: -0.01em; }
+.hero-description { color: #D9CFC3; }
+
+/* Notícias sem foto: fundo claro com a logo, no lugar do bloco escuro */
+.blog-card .card-img-wrap:not(:has(img)),
+.post-featured .feat-img:not(:has(img)) {
+    background: radial-gradient(circle at 50% 45%, #FFFDF7 0%, var(--gold-pale) 100%) !important;
+}
+.blog-card .card-img-wrap:not(:has(img))::before,
+.post-featured .feat-img:not(:has(img))::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: url('/static/img/logo_abanfar.png') center / auto 62% no-repeat;
+    opacity: .9;
+}
+.blog-card .card-img-wrap:not(:has(img)) .img-placeholder-icon,
+.post-featured .feat-img:not(:has(img)) .feat-img-placeholder { display: none; }
+
+/* Rodapé: textos com contraste suficiente sobre o fundo escuro */
+.footer-link { color: #B5AA9F; }
+.footer-brand-tagline { color: #A89E94; }
+.footer-bottom p { color: #9A9086; }
+.footer-bottom a { color: var(--gold-light); }
+
+/* Cartões: sombra e borda um pouco mais suaves e consistentes */
+.program-card, .blog-card, .sidebar-widget { border-color: #EDE6DA; }
+
+/* Foco visível em links e botões (navegação por teclado) */
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+    outline: 2px solid var(--gold); outline-offset: 2px;
 }

@@ -27,7 +27,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Cormorant+Garamond:wght@300;400;600&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/blog.css' %}?v=9">
+    <link rel="stylesheet" href="{% static 'css/blog.css' %}?v=10">
 
     <style>
         /* Evita quebra do navbar em telas médias/pequenas */
@@ -134,7 +134,7 @@
                     Música, educação e cidadania para transformar vidas em Baía Formosa/RN.
                 </p>
                 <div class="footer-divider-gold"></div>
-                <p style="font-size:.85rem;color:#8A8078;font-family:'Cormorant Garamond',serif;line-height:1.7">
+                <p style="font-size:.85rem;color:#B0A69B;font-family:'Cormorant Garamond',serif;line-height:1.7">
                     Associação apartidária, filantrópica e sem fins lucrativos, dedicada à
                     inclusão social por meio da arte musical desde 2014.
                 </p>
@@ -176,20 +176,20 @@
 
             <div class="col-lg-3">
                 <div class="footer-col-title">Contato</div>
-                <p style="font-size:.9rem;color:#8A8078;font-family:'Cormorant Garamond',serif;line-height:1.9;margin:0">
+                <p style="font-size:.9rem;color:#B0A69B;font-family:'Cormorant Garamond',serif;line-height:1.9;margin:0">
                     <i class="bi bi-geo-alt" style="color:var(--gold)"></i> {% if org.endereco %}{{ org.endereco }}{% else %}{{ org.cidade }}, Brasil{% endif %}
                 </p>
                 {% if org.telefone or org.whatsapp_url %}
-                <p style="font-size:.9rem;color:#8A8078;font-family:'Cormorant Garamond',serif;line-height:1.9;margin:0">
+                <p style="font-size:.9rem;color:#B0A69B;font-family:'Cormorant Garamond',serif;line-height:1.9;margin:0">
                     {% if org.whatsapp_url %}<i class="bi bi-whatsapp" style="color:var(--gold)"></i> <a href="{{ org.whatsapp_url }}" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">{{ org.telefone|default:"WhatsApp" }}</a>
                     {% else %}<i class="bi bi-telephone" style="color:var(--gold)"></i> {{ org.telefone }}{% endif %}
                 </p>
                 {% endif %}
-                <p style="font-size:.9rem;color:#8A8078;font-family:'Cormorant Garamond',serif;line-height:1.9;margin:0">
+                <p style="font-size:.9rem;color:#B0A69B;font-family:'Cormorant Garamond',serif;line-height:1.9;margin:0">
                     <i class="bi bi-envelope" style="color:var(--gold)"></i>
                     <a href="mailto:{{ org.email }}" style="color:inherit;text-decoration:none">{{ org.email }}</a>
                 </p>
-                <p style="font-size:.9rem;color:#8A8078;font-family:'Cormorant Garamond',serif;line-height:1.9;margin:0">
+                <p style="font-size:.9rem;color:#B0A69B;font-family:'Cormorant Garamond',serif;line-height:1.9;margin:0">
                     <i class="bi bi-clock" style="color:var(--gold)"></i> {{ org.horario }}
                 </p>
                 <form method="post" action="{% url 'newsletter' %}" class="newsletter-inline mt-4 p-3" style="background:rgba(201,168,76,.08);border-radius:var(--radius-sm);border:1px solid rgba(201,168,76,.15)">

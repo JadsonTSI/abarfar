@@ -234,3 +234,23 @@ class HistoriaOficialTests(TestCase):
         self.assertIn('todos os níveis', projetos)
         self.assertNotIn('Orquestra de Flautas', projetos)
         self.assertNotIn('banca interna', projetos)
+
+
+class RefinoDesignTests(TestCase):
+    def test_depoimentos_so_aparecem_quando_configurados(self):
+        from django.conf import settings
+        from django.test import override_settings
+        r = self.client.get(reverse('home'))
+        self.assertNotContains(r, 'O que dizem sobre nós')
+        self.assertNotContains(r, 'Maria das Graças')
+        dep = [{'nome': 'Pessoa Real', 'papel': 'Mãe de aluno', 'texto': 'Depoimento autorizado.'}]
+        with override_settings(DEPOIMENTOS=dep):
+            r = self.client.get(reverse('home'))
+            self.assertContains(r, 'O que dizem sobre nós')
+            self.assertContains(r, 'Depoimento autorizado.')
+
+    def test_galeria_tem_lightbox_e_home_nao_tem_quadro_vazio(self):
+        self.assertContains(self.client.get(reverse('galeria')), 'id="lightbox"')
+        home = self.client.get(reverse('home'))
+        self.assertContains(home, 'Ver galeria completa')
+        self.assertNotContains(home, 'Festival de encerramento')

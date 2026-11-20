@@ -38,4 +38,5 @@ def site(request):
         "redes_sociais": redes_sociais,
         "org": org,
         "numeros": getattr(settings, "NUMEROS_INSTITUCIONAIS", []),
+        "depoimentos": getattr(settings, "DEPOIMENTOS", []),
     }
