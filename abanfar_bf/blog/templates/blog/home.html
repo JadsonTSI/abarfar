@@ -81,13 +81,19 @@
 
         /* GALLERY */
         .gallery-section{padding:5.5rem 0;background:var(--section-bg)}
-        .gallery-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}
-        .gallery-item{border-radius:var(--radius-sm);overflow:hidden;position:relative;cursor:pointer;background:var(--ink)}
-        .gallery-item:first-child{grid-column:span 2}
-        .gallery-item img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease,opacity .3s ease;display:block;min-height:200px}
-        .gallery-placeholder{min-height:200px;background:linear-gradient(145deg,#2C2318,#1A1612);display:flex;align-items:center;justify-content:center}
-        .gallery-placeholder:first-child{min-height:280px}
-        .gallery-placeholder i{color:var(--gold);opacity:.3;font-size:3.5rem;transition:opacity var(--transition)}
+        .gallery-section .gallery-grid{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:210px;gap:1rem}
+        .gallery-section .gallery-item{border-radius:var(--radius-sm);overflow:hidden;position:relative;cursor:pointer;background:var(--ink)}
+        .gallery-section .gallery-item:first-child{grid-column:span 2;grid-row:span 2}
+        .gallery-section .gallery-item img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease,opacity .3s ease;display:block;position:absolute;inset:0}
+        .gallery-section .gallery-placeholder{display:flex;align-items:center;justify-content:center}
+        .gallery-section .gallery-placeholder i{color:var(--gold);opacity:.3;font-size:3.5rem}
+        .gallery-cta{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.4rem;text-align:center;text-decoration:none;padding:1rem;background:linear-gradient(145deg,#2C2318,#1A1612)!important;border:1px solid rgba(201,168,76,.35)}
+        .gallery-cta i.bi-images{font-size:2rem;color:var(--gold)}
+        .gallery-cta-title{font-family:'Playfair Display',serif;font-size:1.15rem;font-weight:700;color:var(--white)}
+        .gallery-cta-sub{font-family:'Libre Baskerville',serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-light)}
+        .gallery-cta:hover{border-color:var(--gold)}
+        .gallery-cta:hover .gallery-cta-title{color:var(--gold-light)}
+        @media(max-width:768px){.gallery-section .gallery-grid{grid-template-columns:1fr 1fr;grid-auto-rows:160px}}
         .gallery-item:hover img{transform:scale(1.07);opacity:.8}
         .gallery-item:hover .gallery-placeholder i{opacity:.6}
         .gallery-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(26,22,18,.75) 0%,transparent 55%);opacity:0;transition:opacity .3s ease;display:flex;align-items:flex-end;padding:1.2rem;z-index:2}
@@ -595,10 +601,11 @@
                 <i class="bi bi-image"></i>
                 <div class="gallery-overlay"><span class="gallery-overlay-text">Alunos em aula de música</span></div>
             </div>
-            <div class="gallery-item gallery-placeholder">
-                <i class="bi bi-image"></i>
-                <div class="gallery-overlay"><span class="gallery-overlay-text">Festival de encerramento</span></div>
-            </div>
+            <a href="{% url 'galeria' %}" class="gallery-item gallery-cta">
+                <i class="bi bi-images" aria-hidden="true"></i>
+                <span class="gallery-cta-title">Ver galeria completa</span>
+                <span class="gallery-cta-sub">Ensaios, apresentações e eventos <i class="bi bi-arrow-right"></i></span>
+            </a>
         </div>
     </div>
 </section>
@@ -606,67 +613,35 @@
 <!-- =============================================
      TESTIMONIALS
 ============================================= -->
+{% if depoimentos %}
 <section class="testimonials-section">
     <div class="container">
         <div class="row mb-5 reveal">
             <div class="col-lg-6">
                 <div class="section-label"><i class="bi bi-chat-quote"></i> Depoimentos</div>
                 <h2 class="section-title">O que dizem sobre nós</h2>
-                <div class="section-divider"><span>♪</span></div>
+                <div class="section-divider"><span aria-hidden="true">♪</span></div>
             </div>
         </div>
         <div class="row g-4">
+            {% for d in depoimentos %}
             <div class="col-md-4 reveal">
-                <div class="testimonial-card">
-                    <div class="testimonial-stars">★★★★★</div>
-                    <p class="testimonial-text">
-                        "A ABANFAR BF mudou a vida do meu filho. Ele entrou tímido e hoje se apresenta
-                        no palco com confiança. A música realmente transforma."
-                    </p>
-                    <div class="testimonial-author">
-                        <div class="author-avatar">M</div>
+                <figure class="testimonial-card m-0">
+                    <blockquote class="testimonial-text m-0">“{{ d.texto }}”</blockquote>
+                    <figcaption class="testimonial-author">
+                        <div class="author-avatar" aria-hidden="true">{{ d.nome|first }}</div>
                         <div>
-                            <div class="author-name">Maria das Graças</div>
-                            <div class="author-role">Mãe de aluno — Baía Formosa</div>
+                            <div class="author-name">{{ d.nome }}</div>
+                            <div class="author-role">{{ d.papel }}</div>
                         </div>
-                    </div>
-                </div>
+                    </figcaption>
+                </figure>
             </div>
-            <div class="col-md-4 reveal">
-                <div class="testimonial-card">
-                    <div class="testimonial-stars">★★★★★</div>
-                    <p class="testimonial-text">
-                        "Aprendi a tocar flauta aqui com 12 anos. Hoje faço parte da Orquestra Filarmônica.
-                        Esse projeto abriu portas que eu nunca imaginei."
-                    </p>
-                    <div class="testimonial-author">
-                        <div class="author-avatar">L</div>
-                        <div>
-                            <div class="author-name">Lucas Ferreira</div>
-                            <div class="author-role">Músico — ex-aluno</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 reveal">
-                <div class="testimonial-card">
-                    <div class="testimonial-stars">★★★★★</div>
-                    <p class="testimonial-text">
-                        "Ver essas crianças tocando no palco é emocionante. A ABANFAR BF faz um trabalho
-                        essencial pela nossa comunidade há mais de 10 anos."
-                    </p>
-                    <div class="testimonial-author">
-                        <div class="author-avatar">A</div>
-                        <div>
-                            <div class="author-name">Ana Beatriz</div>
-                            <div class="author-role">Professora — apoiadora</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            {% endfor %}
         </div>
     </div>
 </section>
+{% endif %}
 
 <!-- =============================================
      SUPPORT CTA
