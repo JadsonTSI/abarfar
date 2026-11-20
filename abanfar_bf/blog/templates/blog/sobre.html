@@ -258,38 +258,25 @@
                 <div class="section-label">Fundação e Trajetória</div>
                 <h2 class="mb-4" style="font-family:'Playfair Display', serif; font-size:2.5rem; font-weight:700;">A música como agente de transformação social</h2>
                 <div class="post-detail-body" style="font-family:'Cormorant Garamond', serif; font-size:1.15rem; line-height:1.85">
-                    <p>A Associação de Bandas, Fanfarras e Regentes de Baía Formosa/RN (ABANFAR BF) é uma entidade sem fins lucrativos criada para preencher uma lacuna de acesso cultural na nossa comunidade. Desde o primeiro dia, acreditamos que todo jovem possui um talento que merece ser incentivado e lapidado.</p>
-                    <p>O trabalho de iniciação musical oferecido de forma 100% gratuita funciona como uma ferramenta pedagógica de inclusão e formação cidadã. Nossos alunos encontram nos ensaios diários um ambiente de colaboração, disciplina, desenvolvimento emocional e amor à arte, mantendo-os longe das vulnerabilidades sociais e impulsionando novas perspectivas de vida.</p>
+                    <p>A Associação de Bandas, Fanfarras e Regentes de Baía Formosa — ABANFAR — nasceu de uma prática que já existia antes de sua formalização. Nos anos de 2000 e 2001, a Igreja Evangélica Assembleia de Deus em Baía Formosa iniciou o ensino de música com o objetivo de formar a sua Orquestra. A iniciativa atraiu alunos não evangélicos e transformou-se em um movimento comunitário.</p>
+                    <p>Desse trabalho surgiu, em 2007, a Banda Renascer, que apresentou aos músicos locais o universo das bandas e fanfarras, dos desfiles cívicos e dos festivais. Ainda sem personalidade jurídica, o grupo inspirou a criação de bandas escolares no município, como a Banda Escolar Professor Antônio Joaquim da Silva, da Escola Municipal Manoel Germano dos Santos.</p>
+                    <p>Em 2013, a participação em festivais da Federação de Bandas e Fanfarras do Estado do Rio Grande do Norte evidenciou a necessidade de organizar formalmente o que o grupo já realizava: aulas teóricas, aulas práticas e formação de bandas. Em 1º de novembro de 2014 foi constituída a ABANFAR, com estatuto social registrado em 6 de janeiro de 2015 — associação de direito privado, apartidária, filantrópica, sem fins lucrativos e por prazo indeterminado.</p>
+                    <p>Sem sede própria, a ABANFAR consolidou sua atuação por meio de parcerias com escolas municipais — Escola Municipal Manoel Germano dos Santos, Escola Municipal João Batista de Mendonça e, atualmente, Escola Municipal João Anacleto Filho, onde funciona há mais de quatro anos o projeto “Música e Escola”. As aulas acontecem nos espaços das escolas no turno da noite, com trabalho voluntário de instrutores desde o início. A sede administrativa fica na Rua João Freire do Nascimento, nº 52.</p>
+                    <p>Ao longo de mais de uma década, a ABANFAR firmou-se como instituição de referência em educação musical e inclusão social em Baía Formosa, atendendo prioritariamente estudantes da rede pública municipal e ampliando o acesso à cultura por meio da música.</p>
                 </div>
             </div>
             <div class="col-lg-6">
                 <div class="p-4" style="background:var(--section-bg); border-radius:var(--radius-lg); border:1px solid var(--gray-line); box-shadow:var(--shadow-soft)">
-                    <h3 class="mb-3" style="font-family:'Playfair Display', serif; font-weight:700; color:var(--gold-dim)">Nosso Impacto em Números</h3>
+                    <h3 class="mb-3" style="font-family:'Playfair Display', serif; font-weight:700; color:var(--gold-dim)">A ABANFAR em números</h3>
                     <div class="row g-4 text-center mt-2">
+                        {% for n in numeros %}
                         <div class="col-6">
                             <div class="stat-item">
-                                <span class="stat-number" style="font-size:3rem">12+</span>
-                                <span class="stat-label">Anos de Atuação</span>
+                                <span class="stat-number" style="font-size:2.6rem">{{ n.valor }}</span>
+                                <span class="stat-label">{{ n.rotulo }}</span>
                             </div>
                         </div>
-                        <div class="col-6">
-                            <div class="stat-item">
-                                <span class="stat-number" style="font-size:3rem">500+</span>
-                                <span class="stat-label">Alunos Atendidos</span>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="stat-item">
-                                <span class="stat-number" style="font-size:3rem">150+</span>
-                                <span class="stat-label">Instrumentos Ativos</span>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="stat-item">
-                                <span class="stat-number" style="font-size:3rem">5+</span>
-                                <span class="stat-label">Grupos Musicais</span>
-                            </div>
-                        </div>
+                        {% endfor %}
                     </div>
                 </div>
             </div>
@@ -340,30 +327,58 @@
         <div class="timeline">
             <div class="timeline-item left">
                 <div class="timeline-content">
-                    <span class="timeline-year">2014</span>
-                    <h4 class="timeline-title">Fundação da ABANFAR BF</h4>
-                    <p class="timeline-desc">Início das atividades em Baía Formosa/RN por iniciativa de regentes e voluntários com foco no resgate de tradições de bandas.</p>
+                    <span class="timeline-year">2000–2001</span>
+                    <h4 class="timeline-title">Início do ensino de música</h4>
+                    <p class="timeline-desc">A Igreja Evangélica Assembleia de Deus em Baía Formosa começa a ensinar música para formar sua Orquestra; a iniciativa atrai alunos de toda a comunidade.</p>
                 </div>
             </div>
             <div class="timeline-item right">
                 <div class="timeline-content">
-                    <span class="timeline-year">2017</span>
-                    <h4 class="timeline-title">Primeiras Apresentações Cívicas</h4>
-                    <p class="timeline-desc">A consolidação dos ensaios culminou em desfiles marcantes e no reconhecimento público da relevância social do projeto na cidade.</p>
+                    <span class="timeline-year">2007</span>
+                    <h4 class="timeline-title">Banda Renascer</h4>
+                    <p class="timeline-desc">Surge a Banda Renascer, que apresenta aos músicos locais o universo das bandas e fanfarras, dos desfiles cívicos e dos festivais.</p>
                 </div>
             </div>
             <div class="timeline-item left">
                 <div class="timeline-content">
-                    <span class="timeline-year">2021</span>
-                    <h4 class="timeline-title">Orquestra de Flautas e Iniciação Infantil</h4>
-                    <p class="timeline-desc">Expansão pedagógica com a introdução do projeto de flauta doce, permitindo a musicalização de crianças em idades mais precoces.</p>
+                    <span class="timeline-year">2013</span>
+                    <h4 class="timeline-title">Festivais da Federação do RN</h4>
+                    <p class="timeline-desc">A participação em festivais da Federação de Bandas e Fanfarras do RN mostra a necessidade de organizar formalmente o trabalho.</p>
                 </div>
             </div>
             <div class="timeline-item right">
                 <div class="timeline-content">
-                    <span class="timeline-year">2026</span>
-                    <h4 class="timeline-title">Modernização e Novo Portal</h4>
-                    <p class="timeline-desc">Lançamento do portal de transparência, digitalização da gestão de instrumentos e expansão das vagas para novas turmas.</p>
+                    <span class="timeline-year">2014</span>
+                    <h4 class="timeline-title">Fundação da ABANFAR</h4>
+                    <p class="timeline-desc">Viagem ao Campeonato Estadual de Bandas e Fanfarras de Pernambuco, em Recife. Em 1º de novembro, a ABANFAR é constituída e nasce a Banda Musical Francisco Magalhães.</p>
+                </div>
+            </div>
+            <div class="timeline-item left">
+                <div class="timeline-content">
+                    <span class="timeline-year">2015</span>
+                    <h4 class="timeline-title">Estatuto registrado</h4>
+                    <p class="timeline-desc">Em 6 de janeiro, o estatuto social da associação é registrado.</p>
+                </div>
+            </div>
+            <div class="timeline-item right">
+                <div class="timeline-content">
+                    <span class="timeline-year">2016</span>
+                    <h4 class="timeline-title">Vice-campeã em Recife</h4>
+                    <p class="timeline-desc">A Banda Musical Francisco Magalhães conquista o vice-campeonato na Copa dos Campeões, em Recife (PE).</p>
+                </div>
+            </div>
+            <div class="timeline-item left">
+                <div class="timeline-content">
+                    <span class="timeline-year">2023</span>
+                    <h4 class="timeline-title">Orquestra Doce Som</h4>
+                    <p class="timeline-desc">Em julho, é lançada a Orquestra Doce Som, com a flauta doce como instrumento inicial.</p>
+                </div>
+            </div>
+            <div class="timeline-item right">
+                <div class="timeline-content">
+                    <span class="timeline-year">2024</span>
+                    <h4 class="timeline-title">Orquestra Filarmônica</h4>
+                    <p class="timeline-desc">Em 1º de julho, é concretizada a Orquestra Filarmônica, aberta a alunos de todos os níveis.</p>
                 </div>
             </div>
         </div>

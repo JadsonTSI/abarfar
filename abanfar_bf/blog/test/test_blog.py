@@ -189,7 +189,7 @@ class LgpdETransparenciaTests(TestCase):
     def test_programas_do_rodape_levam_a_secao_certa(self):
         html = self.client.get(reverse('home')).content.decode()
         projetos = self.client.get(reverse('projetos')).content.decode()
-        for ancora in ('musicalizacao-infantil', 'orquestra-de-flautas', 'banda-francisco-magalhaes', 'orquestra-filarmonica'):
+        for ancora in ('educacao-musical', 'orquestra-doce-som', 'banda-francisco-magalhaes', 'orquestra-filarmonica'):
             self.assertIn(f'/projetos/#{ancora}', html)
             self.assertIn(f'id="{ancora}"', projetos)
         self.assertNotIn('Ensino de Teoria Musical', html)
@@ -210,3 +210,27 @@ class LgpdETransparenciaTests(TestCase):
             r = self.client.get(reverse('home'))
             self.assertContains(r, 'CNPJ 12.345.678/0001-90')
             self.assertContains(r, 'https://wa.me/5584999990000')
+
+
+class HistoriaOficialTests(TestCase):
+    def test_numeros_iguais_na_home_e_no_sobre(self):
+        from django.conf import settings
+        home = self.client.get(reverse('home')).content.decode()
+        sobre = self.client.get(reverse('sobre')).content.decode()
+        for n in settings.NUMEROS_INSTITUCIONAIS:
+            self.assertIn(n['rotulo'], home)
+            self.assertIn(n['rotulo'], sobre)
+        for antigo in ('500+', '150+', '100+', 'Alunos formados'):
+            self.assertNotIn(antigo, home + sobre)
+
+    def test_linha_do_tempo_com_marcos_oficiais(self):
+        sobre = self.client.get(reverse('sobre')).content.decode()
+        for marco in ('2000–2001', 'Banda Renascer', '1º de novembro', '6 de janeiro', 'Copa dos Campeões', 'Orquestra Doce Som', '1º de julho'):
+            self.assertIn(marco, sobre)
+
+    def test_nomes_oficiais_dos_grupos(self):
+        projetos = self.client.get(reverse('projetos')).content.decode()
+        self.assertIn('Orquestra Doce Som', projetos)
+        self.assertIn('todos os níveis', projetos)
+        self.assertNotIn('Orquestra de Flautas', projetos)
+        self.assertNotIn('banca interna', projetos)

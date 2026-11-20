@@ -1502,3 +1502,8 @@ img { max-width: 100%; }
 .pagination-custom .page-btn.disabled { opacity: .4; pointer-events: none; }
 
 :focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+/* Números do topo da home em grade 2×2 no celular (antes quebravam 2 + 1 + 1) */
+@media (max-width: 575.98px) {
+    .hero-stats { display: grid !important; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.2rem 1.5rem; }
+}
