@@ -210,7 +210,7 @@ ORGANIZACAO = {
     "razao_social": "Associação de Bandas, Fanfarras e Regentes de Baía Formosa/RN",
     "sigla": "ABANFAR BF",
     "cnpj": "",                 # ex.: "00.000.000/0001-00"
-    "endereco": "",             # ex.: "Rua X, 123 — Centro, Baía Formosa/RN, CEP 59194-000"
+    "endereco": "Rua João Freire do Nascimento, nº 52 — Baía Formosa/RN",  # sede administrativa
     "cidade": "Baía Formosa — RN",
     "email": "contato@abanfarbf.org",
     "telefone": "",             # ex.: "(84) 99999-9999"
@@ -220,3 +220,13 @@ ORGANIZACAO = {
     "encarregado_nome": "",
     "encarregado_email": "",    # vazio = usa o e-mail de contato
 }
+
+
+# Números exibidos na Home e na página Sobre (fonte única: não repetir nos templates).
+# Use só números com fonte (ex.: a história oficial da associação).
+NUMEROS_INSTITUCIONAIS = [
+    {"valor": "2014", "rotulo": "Ano de fundação"},
+    {"valor": "3", "rotulo": "Grupos musicais"},
+    {"valor": "3 anos", "rotulo": "De formação gratuita"},
+    {"valor": "~40", "rotulo": "Músicos na Banda"},
+]

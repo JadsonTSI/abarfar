@@ -33,4 +33,9 @@ def site(request):
     numero = "".join(ch for ch in org.get("whatsapp", "") if ch.isdigit())
     org["whatsapp_url"] = f"https://wa.me/{numero}" if numero else ""
     org["encarregado_email"] = org.get("encarregado_email") or org.get("email", "")
-    return {"painel_url": painel_url, "redes_sociais": redes_sociais, "org": org}
+    return {
+        "painel_url": painel_url,
+        "redes_sociais": redes_sociais,
+        "org": org,
+        "numeros": getattr(settings, "NUMEROS_INSTITUCIONAIS", []),
+    }

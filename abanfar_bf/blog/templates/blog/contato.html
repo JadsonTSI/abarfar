@@ -175,8 +175,8 @@
                     <div class="contact-info-box">
                         <div class="contact-info-icon"><i class="bi bi-geo-alt-fill"></i></div>
                         <div class="contact-info-text">
-                            <h4>Nossa Sede</h4>
-                            <p>Baía Formosa — RN, Brasil<br>Centro Comunitário de Cultura</p>
+                            <h4>Sede administrativa</h4>
+                            <p>{% if org.endereco %}{{ org.endereco }}{% else %}{{ org.cidade }}{% endif %}<br><small>As aulas acontecem à noite na Escola Municipal João Anacleto Filho.</small></p>
                         </div>
                     </div>
                     

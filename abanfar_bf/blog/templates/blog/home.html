@@ -208,22 +208,14 @@
                     </a>
                 </div>
                 <div class="hero-stats">
+                    {% for n in numeros %}
                     <div class="stat-item">
-                        <span class="stat-number">10+</span>
-                        <span class="stat-label">Anos de história</span>
+                        <span class="stat-number">{{ n.valor }}</span>
+                        <span class="stat-label">{{ n.rotulo }}</span>
                     </div>
-                    <div class="stat-item">
-                        <span class="stat-number">4</span>
-                        <span class="stat-label">Projetos ativos</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number">100+</span>
-                        <span class="stat-label">Alunos formados</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number">∞</span>
-                        <span class="stat-label">Sonhos cultivados</span>
-                    </div>
+                    {% endfor %}
+                </div>
+            </div>
                 </div>
             </div>
             <div class="col-lg-5 d-none d-lg-flex justify-content-center">
@@ -249,14 +241,14 @@
         <span class="strip-item"><i class="bi bi-music-note"></i> Iniciação Musical</span>
         <span class="strip-item"><i class="bi bi-people-fill"></i> Inclusão Social</span>
         <span class="strip-item"><i class="bi bi-award-fill"></i> Educação e Cidadania</span>
-        <span class="strip-item"><i class="bi bi-music-note-beamed"></i> Orquestra de Flautas</span>
+        <span class="strip-item"><i class="bi bi-music-note-beamed"></i> Orquestra Doce Som</span>
         <span class="strip-item"><i class="bi bi-megaphone-fill"></i> Banda Francisco Magalhães</span>
         <span class="strip-item"><i class="bi bi-stars"></i> Baía Formosa — RN</span>
         <span class="strip-item"><i class="bi bi-heart-fill"></i> Fundada em 2014</span>
         <span class="strip-item"><i class="bi bi-music-note"></i> Iniciação Musical</span>
         <span class="strip-item"><i class="bi bi-people-fill"></i> Inclusão Social</span>
         <span class="strip-item"><i class="bi bi-award-fill"></i> Educação e Cidadania</span>
-        <span class="strip-item"><i class="bi bi-music-note-beamed"></i> Orquestra de Flautas</span>
+        <span class="strip-item"><i class="bi bi-music-note-beamed"></i> Orquestra Doce Som</span>
         <span class="strip-item"><i class="bi bi-megaphone-fill"></i> Banda Francisco Magalhães</span>
         <span class="strip-item"><i class="bi bi-stars"></i> Baía Formosa — RN</span>
         <span class="strip-item"><i class="bi bi-heart-fill"></i> Fundada em 2014</span>
@@ -286,15 +278,15 @@
                     <span class="program-number">01</span>
                     <div class="program-icon"><i class="bi bi-music-note-list"></i></div>
                     <div class="program-title">Programa de Educação Musical</div>
-                    <p class="program-desc">Iniciação musical de 3 anos que acompanha o aluno do primeiro contato com a música até a formação completa.</p>
+                    <p class="program-desc">Ensino gratuito em três fases — musicalização, curso básico e extensão musical — unindo teoria e prática instrumental.</p>
                 </div>
             </div>
             <div class="col-md-6 col-lg-3 reveal">
                 <div class="program-card">
                     <span class="program-number">02</span>
                     <div class="program-icon"><i class="bi bi-soundwave"></i></div>
-                    <div class="program-title">Orquestra de Flautas Doce</div>
-                    <p class="program-desc">Porta de entrada ao mundo musical para crianças e adolescentes, desenvolvendo sensibilidade e coordenação.</p>
+                    <div class="program-title">Orquestra Doce Som</div>
+                    <p class="program-desc">Lançada em 2023, usa a flauta doce como instrumento inicial e atende estudantes das redes municipal, estadual e particular.</p>
                 </div>
             </div>
             <div class="col-md-6 col-lg-3 reveal">
@@ -302,7 +294,7 @@
                     <span class="program-number">03</span>
                     <div class="program-icon"><i class="bi bi-megaphone"></i></div>
                     <div class="program-title">Banda Musical Francisco Magalhães</div>
-                    <p class="program-desc">Cidadania, disciplina e amor à música reunindo jovens em um ambiente colaborativo e transformador.</p>
+                    <p class="program-desc">Primeira formação da associação, fundada em 2014. Cerca de 40 integrantes, tricampeã em São Gonçalo do Amarante (RN).</p>
                 </div>
             </div>
             <div class="col-md-6 col-lg-3 reveal">
@@ -310,7 +302,7 @@
                     <span class="program-number">04</span>
                     <div class="program-icon"><i class="bi bi-stars"></i></div>
                     <div class="program-title">Orquestra Filarmônica</div>
-                    <p class="program-desc">O ápice da formação, congregando os músicos mais avançados em apresentações de alto nível para a comunidade.</p>
+                    <p class="program-desc">Desde 2024, reúne percussão, sopros, cordas e instrumentos harmônicos, acolhendo alunos de todos os níveis.</p>
                 </div>
             </div>
         </div>
@@ -444,14 +436,14 @@
                             <div class="project-icon"><i class="bi bi-music-note-list"></i></div>
                             <div>
                                 <div class="project-name">Educação Musical</div>
-                                <div class="project-desc">Programa de 3 anos de formação</div>
+                                <div class="project-desc">Formação gratuita em 3 anos</div>
                             </div>
                         </div>
                         <div class="project-list-item">
                             <div class="project-icon"><i class="bi bi-soundwave"></i></div>
                             <div>
-                                <div class="project-name">Orquestra de Flautas Doce</div>
-                                <div class="project-desc">Musicalização infantil e juvenil</div>
+                                <div class="project-name">Orquestra Doce Som</div>
+                                <div class="project-desc">Flauta doce como instrumento inicial</div>
                             </div>
                         </div>
                         <div class="project-list-item">
@@ -465,7 +457,7 @@
                             <div class="project-icon"><i class="bi bi-stars"></i></div>
                             <div>
                                 <div class="project-name">Orquestra Filarmônica</div>
-                                <div class="project-desc">Nível avançado de formação</div>
+                                <div class="project-desc">Aberta a alunos de todos os níveis</div>
                             </div>
                         </div>
                     </div>
